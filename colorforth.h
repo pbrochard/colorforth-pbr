@@ -61,6 +61,9 @@ enum opcode
   OP_SYSTEM,
   OP_ECHO_SET,
 
+  /* Network extentsion */
+  OP_SERVER_START,
+
   /* Last non opcode - do not remove! */
   __LAST_NOT_AN_OPCODE__,
 };

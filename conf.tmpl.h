@@ -11,6 +11,9 @@
 // Embed lib.cf
 #define __EMBED_LIB_CF
 
+// Enable network
+#define __NETWORK
+
 // Various sizes
 #define STACK_SIZE 30
 #define R_STACK_SIZE 30
@@ -29,12 +32,14 @@ struct state;
 extern void init_os_utils(struct state *s);
 extern void init_dict_utils(struct state *s);
 extern void init_io_utils(struct state *s);
+extern void init_network(struct state *s);
 extern void embed_lib_cf(struct state *s);
 
 #define LOAD_EXTENTIONS                         \
   init_os_utils(state);                         \
   init_dict_utils(state);                       \
   init_io_utils(state);                         \
+  init_network(state);                          \
   embed_lib_cf(state);
 
 

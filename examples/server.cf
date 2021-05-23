@@ -1,0 +1,8 @@
+~
+:s1 ~" test host!!!" ^;
+:s2 ~" azertyuiop qsd" ^;
+:s3 ~" tyry dhffhf" ^;
+~
+s3 6000 server-start
+
+bye
