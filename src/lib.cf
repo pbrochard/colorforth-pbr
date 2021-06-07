@@ -28,8 +28,12 @@
 |cells ^cell * ;
 :cells ^cells ;
 
+:noname> ^here @ ;
+
 (loop)
-:times (xt n -) ^1- over execute dup when times 2drop ;
+:times-loop (xt n -) ^1- over execute dup when times-loop ;
+:e-times (ent n -) ^swap code> swap
+:times (xt n -) ^times-loop 2drop ;
 
 (rendering)
 :cr ^10 emit ;
@@ -44,14 +48,14 @@
   emit ;
 
 :<dumpc> ^ 2>R dup c@ dup v-emit space . tab 1+ 2R> ;
-:<dumpl> ^ 2>R '<dumpc> ^12 times cr 2R> ;
-:dump  (a -) ^ cr '<dumpl> ^10 times drop cr ;
+:<dumpl> ^ 2>R '<dumpc> ^12 e-times cr 2R> ;
+:dump  (a -) ^ cr '<dumpl> ^10 e-times drop cr ;
 
 :alloc (n - a) ^here @ swap over + here ! ;
 
 (create null-terminated string)
 :"init ^here @ cell + ;
-:"loop ^dup key dup ~key " ^= when ; swap c! 1 + "loop ;
+:"loop ^dup key dup ~key " >> ^= when ; swap c! 1 + "loop ;
 :"done ^drop drop here @ - dup (null ^1 + alloc swap cell - over ! ;
 :" ^"init "loop "done ;
 
@@ -68,7 +72,7 @@
 :cmd ^cell + system ;
 
 (marker/forget)
-:marker ^latest @  i-latest @   here @ 8 cells + ;
+:marker ^latest @  i-latest @   here @ 8 cells +   >> >> >> ;
 :forget ^latest !  i-latest !   here ! ;
 
 (math)

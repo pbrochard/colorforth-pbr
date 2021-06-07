@@ -28,6 +28,13 @@ see(struct state *s, struct entry *entry)
   {
     char display_next_sc = 0;
     cf_printf(s, ":%.*s ", (int)entry->name_len, entry->name);
+
+    if (!entry->code)
+    {
+      cf_printf(s, "<empty>\n");
+      return;
+    }
+
     for (size_t i = 0, done = 0; !done; i++)
     {
       struct entry *entry_ = (struct entry*) entry->code[i].this;
