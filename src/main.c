@@ -38,16 +38,17 @@ main(int argc, char *argv[])
 {
   init_terminal();
 
-  struct state *state = colorforth_newstate();
+  struct state state;
+  colorforth_newstate(&state);
 
-  parse_command_line(state, argc, argv);
+  parse_command_line(&state, argc, argv);
 
-  while (!state->done)
+  while (!state.done)
   {
-    parse_colorforth(state, cf_getchar(state));
+    parse_colorforth(&state, cf_getchar(&state));
   }
 
-  free_state(state);
+  free_state(&state);
 
   reset_terminal();
 

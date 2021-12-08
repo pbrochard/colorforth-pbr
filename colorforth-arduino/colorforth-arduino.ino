@@ -2,7 +2,7 @@
 #include "cf-stdio.h"
 
 String readString;
-struct state *state;
+struct state state;
 
 void setup() {
   Serial.begin(9600);
@@ -11,9 +11,9 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  state = colorforth_newstate();
+  colorforth_newstate(&state);
 
-  Serial.println("colorForth started!");
+  Serial.println(F("colorForth started!"));
 }
 
 void loop() {
@@ -21,6 +21,6 @@ void loop() {
   while (Serial.available()) {
     delay(2);  //delay to allow byte to arrive in input buffer
     char c = Serial.read();
-    parse_colorforth(state, c);
+    parse_colorforth(&state, c);
   }
 }

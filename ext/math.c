@@ -5,134 +5,134 @@
 void
 div_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 / n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 / n1);
 }
 
 void
 mod_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 % n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 % n1);
 }
 
 void
 slash_mod_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 / n1); push(s->stack, n2 % n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 / n1); push(&s->stack, n2 % n1);
 }
 
 void
 start_slash_fn(struct state *s)
 {
-  const cell c = pop(s->stack);
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 * n1 / c);
+  const cell c = pop(&s->stack);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 * n1 / c);
 }
 
 void
 lshift_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 << n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 << n1);
 }
 
 void
 rshift_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 >> n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 >> n1);
 }
 
 void
 sup_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 > n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 > n1);
 }
 
 void
 inf_equal_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 <= n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 <= n1);
 }
 
 void
 sup_equal_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 >= n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 >= n1);
 }
 
 void
 not_equal_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 != n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 != n1);
 }
 
 void
 or_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 || n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 || n1);
 }
 
 void
 and_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n2 && n1);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n2 && n1);
 }
 
 void
 min_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n1 < n2 ? n1 : n2);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n1 < n2 ? n1 : n2);
 }
 
 void
 max_fn(struct state *s)
 {
-  const cell n1 = pop(s->stack);
-  const cell n2 = pop(s->stack);
-  push(s->stack, n1 > n2 ? n1 : n2);
+  const cell n1 = pop(&s->stack);
+  const cell n2 = pop(&s->stack);
+  push(&s->stack, n1 > n2 ? n1 : n2);
 }
 
 void
 rand_fn(struct state *s)
 {
-  push(s->stack, rand());
+  push(&s->stack, rand());
 }
 
 void
 srand_fn(struct state *s)
 {
-  const cell seed = pop(s->stack);
+  const cell seed = pop(&s->stack);
   srand(seed);
 }
 
 void
 random_fn(struct state *s)
 {
-  const cell n = pop(s->stack);
-  push(s->stack, n != 0 ? rand() % n : 0);
+  const cell n = pop(&s->stack);
+  push(&s->stack, n != 0 ? rand() % n : 0);
 }
 
 void

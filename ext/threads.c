@@ -34,16 +34,16 @@ clone_state(struct state *state)
   struct state *clone = calloc(1, sizeof(*state));
   clone->color = execute;
 
-  clone->dict.entries = state->dict.entries;
+  clone->dict.entries = &state->dict.entries;
   clone->dict.latest = state->dict.latest;
 
   clone->inlined_dict.entries = state->inlined_dict.entries;
   clone->inlined_dict.latest = state->inlined_dict.latest;
 
-  clone->stack = calloc(1, sizeof(struct stack));
-  init_stack(clone->stack, STACK_SIZE);
+  // clone.stack = calloc(1, sizeof(struct stack));
+  init_stack(clone.stack, STACK_SIZE);
 
-  clone->r_stack = calloc(1, sizeof(struct stack));
+  // clone->r_stack = calloc(1, sizeof(struct stack));
   init_stack(clone->r_stack, R_STACK_SIZE);
 
   clone->heap = state->heap;
@@ -68,7 +68,7 @@ clone_state(struct state *state)
 void
 free_clone_state(struct state *clone)
 {
-  free(clone->stack);
+  free(clone.stack);
   free(clone->r_stack);
   free(clone);
 }
@@ -101,12 +101,12 @@ perform_thread(void *arg)
 void
 thread_run(struct state *state)
 {
-  cell n = pop(state->stack);
-  struct entry *entry = (struct entry *) pop(state->stack);
+  cell n = pop(state.stack);
+  struct entry *entry = (struct entry *) pop(state.stack);
 
   if (n >= MAX_THREAD) {
     cf_printf(state, "Too many threads. At most %d allowed\n", MAX_THREAD);
-    push(state->stack, -1);
+    push(state.stack, -1);
     return;
   }
 
@@ -117,7 +117,7 @@ thread_run(struct state *state)
 
   pthread_create(&thread_args[n].pthread, NULL, perform_thread, (void *) &thread_args[n]);
 
-  push(state->stack, n);
+  push(state.stack, n);
 }
 
 void
@@ -132,7 +132,7 @@ thread_join_all(struct state *state)
 void
 thread_join(struct state *state)
 {
-  cell n = pop(state->stack);
+  cell n = pop(state.stack);
 
   pthread_join(thread_args[n].pthread, NULL);
 }
@@ -140,7 +140,7 @@ thread_join(struct state *state)
 void
 thread_kill(struct state *state)
 {
-  cell n = pop(state->stack);
+  cell n = pop(state.stack);
 
   pthread_kill(thread_args[n].pthread, SIGUSR1);
   pthread_join(thread_args[n].pthread, NULL);
@@ -154,7 +154,7 @@ thread_kill(struct state *state)
 void
 thread_lock(struct state *state)
 {
-  cell n = pop(state->stack);
+  cell n = pop(state.stack);
 
   sem_wait(&locks[n]);
 }
@@ -162,7 +162,7 @@ thread_lock(struct state *state)
 void
 thread_unlock(struct state *state)
 {
-  cell n = pop(state->stack);
+  cell n = pop(state.stack);
 
   sem_post(&locks[n]);
 }

@@ -2,6 +2,8 @@
 #ifndef __CONF_H
 #define __CONF_H
 
+typedef long cell;
+
 // Enable register variable
 #define __USE_REGISTER
 

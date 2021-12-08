@@ -31,7 +31,7 @@ parse_from_file(struct state *s, char *filename)
 void
 echo_set(struct state *s)
 {
-  s->echo_on = pop(s->stack);
+  s->echo_on = pop(&s->stack);
 }
 
 int
@@ -51,26 +51,26 @@ file_size(char *filename)
 void
 file_size_fn(struct state *s)
 {
-  char *filename = CFSTRING2C(pop(s->stack));
+  char *filename = CFSTRING2C(pop(&s->stack));
 
   int size = file_size(filename);
 
   if (size == -1) cf_printf(s, "Unable to read '%s'\n", filename);
 
-  push(s->stack, file_size(filename));
+  push(&s->stack, file_size(filename));
 }
 
 void
 load_file(struct state *s)
 {
-  char *filename = CFSTRING2C(pop(s->stack));
-  char *buf = (char *) (pop(s->stack));
+  char *filename = CFSTRING2C(pop(&s->stack));
+  char *buf = (char *) (pop(&s->stack));
   int size = file_size(filename);
 
   if (size == -1)
   {
     cf_printf(s, "Unable to read '%s'\n", filename);
-    push(s->stack, -1);
+    push(&s->stack, -1);
     return;
   }
 
@@ -79,7 +79,7 @@ load_file(struct state *s)
   if (!fp)
   {
     cf_printf(s, "Unable to read '%s'\n", filename);
-    push(s->stack, -1);
+    push(&s->stack, -1);
     return;
   }
 
@@ -88,7 +88,7 @@ load_file(struct state *s)
   {
     free(buf);
     cf_printf(s, "Unable to read '%s'\n", filename);
-    push(s->stack, -1);
+    push(&s->stack, -1);
     return;
   }
 
@@ -101,8 +101,8 @@ load_file(struct state *s)
 void
 save_file(struct state *s)
 {
-  char *filename = CFSTRING2C(pop(s->stack));
-  cell value = pop(s->stack);
+  char *filename = CFSTRING2C(pop(&s->stack));
+  cell value = pop(&s->stack);
   char *str = CFSTRING2C(value);
 
   FILE *fp = fopen(filename, "w");
@@ -110,7 +110,7 @@ save_file(struct state *s)
   if (!fp)
   {
     cf_printf(s, "Unable to read '%s'\n", filename);
-    push(s->stack, -1);
+    push(&s->stack, -1);
     return;
   }
 
@@ -122,7 +122,7 @@ save_file(struct state *s)
 void
 included_file(struct state *s)
 {
-  char *filename = CFSTRING2C(pop(s->stack));
+  char *filename = CFSTRING2C(pop(&s->stack));
   parse_from_file(s, filename);
 }
 

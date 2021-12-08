@@ -6,7 +6,7 @@
 void
 parse(struct state *s)
 {
-  const int c = pop(s->stack);
+  const int c = pop(&s->stack);
   parse_colorforth(s, c);
 }
 

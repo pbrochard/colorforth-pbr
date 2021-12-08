@@ -126,7 +126,7 @@ disassemble(struct state *s)
 void
 see_fn(struct state *s)
 {
-    struct entry *entry_ = (struct entry*)pop(s->stack);
+    struct entry *entry_ = (struct entry*)pop(&s->stack);
     see(s, entry_);
 }
 
@@ -136,8 +136,8 @@ fullroom(struct state *s)
   cf_printf(s, "-------- ROOM -------------------------------------------\n");
   cf_printf(s, "Cell size is %u bytes / %u bits\n", (unsigned int) sizeof(cell), (unsigned int) sizeof(cell) * 8);
 
-  cf_printf(s, "The circular stack size is %d cells\n", s->stack->lim + 1);
-  cf_printf(s, "The circular return stack size is %d cells\n", s->r_stack->lim + 1);
+  cf_printf(s, "The circular stack size is %d cells\n", &s->stack.lim + 1);
+  cf_printf(s, "The circular return stack size is %d cells\n", s->r_stack.lim + 1);
   cf_printf(s, "Maximm length of a word is %d chars\n", TIB_SIZE);
 
   cf_printf(s, "--\n");
@@ -159,9 +159,9 @@ fullroom(struct state *s)
 void
 patch_entry (struct state *s)
 {
-  struct entry *entry = (struct entry*)pop(s->stack);
-  struct entry *to = (struct entry*)pop(s->stack);
-  struct entry *from = (struct entry*)pop(s->stack);
+  struct entry *entry = (struct entry*)pop(&s->stack);
+  struct entry *to = (struct entry*)pop(&s->stack);
+  struct entry *from = (struct entry*)pop(&s->stack);
 
   char is_test = 0;
 

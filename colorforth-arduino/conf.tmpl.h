@@ -2,6 +2,12 @@
 #ifndef __CONF_H
 #define __CONF_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef long cell;
+
 // Enable colors in the terminal
 // #define __ECHO_COLOR
 
@@ -28,15 +34,14 @@
 // #define __USE_REGISTER
 
 // Various sizes
-#define STACK_SIZE 30
-#define R_STACK_SIZE 30
+#define STACK_SIZE 10
 
-#define DICT_SIZE 80
-#define INLINED_DICT_SIZE 10
+#define DICT_SIZE 36
+#define INLINED_DICT_SIZE 8
 
-#define HEAP_SIZE 800
+#define HEAP_SIZE 510
 
-#define TIB_SIZE 32
+#define TIB_SIZE 16
 
 // Number of bits in a char
 #define CHAR_BIT 8
@@ -65,5 +70,9 @@ struct state;
 //   init_ext_math_utils(state);                   \
 //   init_mp_math_utils(state);                    \
 //   init_threads_utils(state);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __CONF_H */

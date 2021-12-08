@@ -7,6 +7,9 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "Arduino.h"
+#include <avr/pgmspace.h>
+
 #include "colorforth.h"
 #include "cf-stdio.h"
 
@@ -16,13 +19,13 @@
 
 struct prefix_map prefix_map[MAX_PREFIX];
 
-#define define_register(N) case OP_##N##_STORE: { N = pop(s->stack); break; } \
-  case OP_##N##_LOAD: { push(s->stack, N); break; }                     \
-  case OP_##N##_ADD: { N += pop(s->stack); break; }                     \
+#define define_register(N) case OP_##N##_STORE: { N = pop(&s->stack); break; } \
+  case OP_##N##_LOAD: { push(&s->stack, N); break; }                     \
+  case OP_##N##_ADD: { N += pop(&s->stack); break; }                     \
   case OP_##N##_INC: { N += 1; break; }                                 \
   case OP_##N##_DEC: { N -= 1; break; }                                 \
-  case OP_##N##_R_POP: { N = pop(s->r_stack); break; }                  \
-  case OP_##N##_R_PUSH: { push(s->r_stack, N); break; }
+  case OP_##N##_R_POP: { N = pop(&s->r_stack); break; }                  \
+  case OP_##N##_R_PUSH: { push(&s->r_stack, N); break; }
 
 #define define_register_primitive(N) define_primitive_inlined(state, #N"@", OP_##N##_LOAD); \
   define_primitive_inlined(state, #N"!", OP_##N##_STORE);               \
@@ -87,25 +90,31 @@ quit(struct state *state, char ask)
 }
 
 void
-cf_fatal_error(struct state *state, const char* format, ...)
+cf_fatal_error(struct state *state, char id)
 {
-  va_list arg;
-
-  va_start (arg, format);
-  vfprintf(stdout, format, arg);
-  va_end (arg);
+  cf_printf(state, "E%d\n", id);
   if (state)
   {
     echo_color(state, ' ', COLOR_CLEAR);
   }
+  cf_fflush();
   reset_terminal();
   exit(1);
+}
+
+void *
+cf_calloc(struct state *state, size_t nmemb, size_t size, char id)
+{
+  void *ptr = calloc(nmemb, size);
+  if (!ptr) cf_fatal_error(state, id);
+
+  return ptr;
 }
 
 void
 init_stack(struct stack *stack, int len)
 {
-  stack->cells = calloc(len, sizeof(cell));
+  //stack->cells = cf_calloc(stack, len, sizeof(cell), 10);
   stack->sp = 0;
   stack->lim = len - 1;
 }
@@ -246,7 +255,7 @@ define_primitive_generic(struct state *s, struct dictionary *dict, char name[],
   dict->latest++;
   struct entry *entry = dict->latest;
   entry->name_len = strlen(name);
-  entry->name = calloc(1, entry->name_len);
+  entry->name = cf_calloc(s, 1, entry->name_len, 11);
   memcpy(entry->name, name, entry->name_len);
   entry->code = s->here;
   entry->code->opcode = opcode;
@@ -296,7 +305,7 @@ define_generic(struct state *s, struct dictionary *dict)
   dict->latest++;
   struct entry *entry = dict->latest;
   entry->name_len = s->tib.len;
-  entry->name = calloc(1, entry->name_len);
+  entry->name = cf_calloc(s, 1, entry->name_len, 12);
   memcpy(entry->name, s->tib.buf, s->tib.len);
   entry->code = s->here;
 }
@@ -387,7 +396,7 @@ compile_literal(struct state *s)
 {
   struct code *code =  (struct code *)s->here;
   code->opcode = OP_NUMBER;
-  code->value = pop(s->stack);
+  code->value = pop(&s->stack);
   s->here = (struct code *)s->here + 1;
 }
 
@@ -397,7 +406,7 @@ execute_(struct state *s, struct entry *entry)
   // cf_printf(s, "-> %s\n", entry->name);
   struct code *pc = entry->code;
 
-  push(s->r_stack, 0);
+  push(&s->r_stack, 0);
 
   short choose_state = 0;
 
@@ -416,7 +425,7 @@ execute_(struct state *s, struct entry *entry)
     {
       case OP_RETURN:
       {
-        struct code *code = (struct code *)pop(s->r_stack);
+        struct code *code = (struct code *)pop(&s->r_stack);
         if (code)
         {
           pc = code;
@@ -430,19 +439,19 @@ execute_(struct state *s, struct entry *entry)
 
       case OP_R_PUSH:
       {
-        push(s->r_stack, pop(s->stack));
+        push(&s->r_stack, pop(&s->stack));
         break;
       }
 
       case OP_R_POP:
       {
-        push(s->stack, pop(s->r_stack));
+        push(&s->stack, pop(&s->r_stack));
         break;
       }
 
       case OP_R_FETCH:
       {
-        push(s->stack, s->r_stack->cells[s->r_stack->sp]);
+        push(&s->stack, s->r_stack.cells[s->r_stack.sp]);
         break;
       }
 
@@ -456,89 +465,89 @@ execute_(struct state *s, struct entry *entry)
 
       case OP_DUP:
       {
-        push(s->stack, s->stack->cells[s->stack->sp]);
+        push(&s->stack, s->stack.cells[s->stack.sp]);
         break;
       }
 
       case OP_DROP:
       {
-        pop(s->stack);
+        pop(&s->stack);
         break;
       }
 
       case OP_SWAP:
       {
-        const cell n1 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        push(s->stack, n1);
-        push(s->stack, n2);
+        const cell n1 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        push(&s->stack, n1);
+        push(&s->stack, n2);
         break;
       }
 
       case OP_OVER:
       {
-        const cell n1 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        push(s->stack, n2);
-        push(s->stack, n1);
-        push(s->stack, n2);
+        const cell n1 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        push(&s->stack, n2);
+        push(&s->stack, n1);
+        push(&s->stack, n2);
         break;
       }
 
       case OP_ROT:
       {
-        const cell n3 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        const cell n1 = pop(s->stack);
-        push(s->stack, n2);
-        push(s->stack, n3);
-        push(s->stack, n1);
+        const cell n3 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        const cell n1 = pop(&s->stack);
+        push(&s->stack, n2);
+        push(&s->stack, n3);
+        push(&s->stack, n1);
         break;
       }
 
       case OP_MINUS_ROT:
       {
-        const cell n3 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        const cell n1 = pop(s->stack);
-        push(s->stack, n3);
-        push(s->stack, n1);
-        push(s->stack, n2);
+        const cell n3 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        const cell n1 = pop(&s->stack);
+        push(&s->stack, n3);
+        push(&s->stack, n1);
+        push(&s->stack, n2);
         break;
       }
 
       case OP_NIP:
       {
-        const cell n2 = pop(s->stack);
-        pop(s->stack);
-        push(s->stack, n2);
+        const cell n2 = pop(&s->stack);
+        pop(&s->stack);
+        push(&s->stack, n2);
         break;
       }
 
       case OP_LOAD:
       {
-        push(s->stack, *(cell*)pop(s->stack));
+        push(&s->stack, *(cell*)pop(&s->stack));
         break;
       }
 
       case OP_STORE:
       {
-        cell *ptr = (cell*)pop(s->stack);
-        cell n = pop(s->stack);
+        cell *ptr = (cell*)pop(&s->stack);
+        cell n = pop(&s->stack);
         *ptr = n;
         break;
       }
 
       case OP_CLOAD:
       {
-        push(s->stack, *(char*)pop(s->stack));
+        push(&s->stack, *(char*)pop(&s->stack));
         break;
       }
 
       case OP_CSTORE:
       {
-        char *ptr = (char*)pop(s->stack);
-        char n = pop(s->stack);
+        char *ptr = (char*)pop(&s->stack);
+        char n = pop(&s->stack);
         *ptr = n;
         break;
       }
@@ -551,7 +560,7 @@ execute_(struct state *s, struct entry *entry)
           pc++;
         }
 
-        push(s->r_stack, (cell)pc);
+        push(&s->r_stack, (cell)pc);
         pc = entry_->code - 1;
         break;
       }
@@ -573,7 +582,7 @@ execute_(struct state *s, struct entry *entry)
       case OP_NUMBER:
       case OP_TICK_NUMBER:
       {
-        push(s->stack, pc->value);
+        push(&s->stack, pc->value);
 
         if (choose_state) {
           choose_state = 0;
@@ -584,61 +593,61 @@ execute_(struct state *s, struct entry *entry)
 
       case OP_ADD:
       {
-        const cell n1 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        push(s->stack, n1 + n2);
+        const cell n1 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        push(&s->stack, n1 + n2);
         break;
       }
 
       case OP_SUB:
       {
-        const cell n1 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        push(s->stack, n2 - n1);
+        const cell n1 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        push(&s->stack, n2 - n1);
         break;
       }
 
       case OP_MUL:
       {
-        const cell n1 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        push(s->stack, n1 * n2);
+        const cell n1 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        push(&s->stack, n1 * n2);
         break;
       }
 
       case OP_EQUAL:
       {
-        const cell n1 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        push(s->stack, n1 == n2);
+        const cell n1 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        push(&s->stack, n1 == n2);
         break;
       }
 
       case OP_LESS:
       {
-        const cell n1 = pop(s->stack);
-        const cell n2 = pop(s->stack);
-        push(s->stack, n2 < n1);
+        const cell n1 = pop(&s->stack);
+        const cell n2 = pop(&s->stack);
+        push(&s->stack, n2 < n1);
         break;
       }
 
       case OP_WHEN:
       {
-        const cell n = pop(s->stack);
+        const cell n = pop(&s->stack);
         if (!n) pc++;
         break;
       }
 
       case OP_UNLESS:
       {
-        const cell n = pop(s->stack);
+        const cell n = pop(&s->stack);
         if (n) pc++;
         break;
       }
 
       case OP_CHOOSE:
       {
-        const cell n = pop(s->stack);
+        const cell n = pop(&s->stack);
         if (n)
         {
           choose_state = 1;
@@ -658,52 +667,52 @@ execute_(struct state *s, struct entry *entry)
 
       case OP_EMIT:
       {
-        cf_putchar(s, (char)pop(s->stack));
+        cf_putchar(s, (char)pop(&s->stack));
         break;
       }
 
       case OP_KEY:
       {
-        push(s->stack, (char)cf_getchar(s));
+        push(&s->stack, (char)cf_getchar(s));
         break;
       }
 
       case OP_CELL:
       {
-        push(s->stack, sizeof(cell));
+        push(&s->stack, sizeof(cell));
         break;
       }
 
       case OP_GET_ENTRY_CODE:
       {
-        struct entry *entry_ = (struct entry*)pop(s->stack);
-        push(s->stack, (cell)entry_->code);
+        struct entry *entry_ = (struct entry*)pop(&s->stack);
+        push(&s->stack, (cell)entry_->code);
         break;
       }
 
       case OP_EXECUTE:
       {
-        struct code *code_ = (struct code*)pop(s->stack);
-        push(s->r_stack, (cell)pc);
+        struct code *code_ = (struct code*)pop(&s->stack);
+        push(&s->r_stack, (cell)pc);
         pc = code_ - 1;
         break;
       }
 
       case OP_HERE:
       {
-        push(s->stack, (cell)&s->here);
+        push(&s->stack, (cell)&s->here);
         break;
       }
 
       case OP_LATEST:
       {
-        push(s->stack, (cell)&s->dict.latest);
+        push(&s->stack, (cell)&s->dict.latest);
         break;
       }
 
       case OP_I_LATEST:
       {
-        push(s->stack, (cell)&s->inlined_dict.latest);
+        push(&s->stack, (cell)&s->inlined_dict.latest);
         break;
       }
 
@@ -725,14 +734,14 @@ execute_(struct state *s, struct entry *entry)
 
       case OP_PRINT_TOS:
       {
-        cf_print_cell(s,pop(s->stack));
+        cf_print_cell(s,pop(&s->stack));
         cf_fflush();
         break;
       }
 
       case OP_DOT_S:
       {
-        dot_s(s, s->stack);
+        dot_s(s, &s->stack);
         break;
       }
 
@@ -761,7 +770,7 @@ execute(struct state *s)
     cell n = 0;
     if (tib_to_number(s, &n))
     {
-      push(s->stack, n);
+      push(&s->stack, n);
     }
     else
     {
@@ -776,7 +785,7 @@ tick(struct state *s)
   struct entry *entry = find_entry(s, &s->dict);
   if (entry)
   {
-    push(s->stack, (cell)entry);
+    push(&s->stack, (cell)entry);
   }
   else
   {
@@ -912,7 +921,7 @@ define_prefix(char c, void (*fn)(struct state *s), char * color, short reset)
 
   if (n_prefix >= MAX_PREFIX)
   {
-    cf_fatal_error(NULL, "Too many prefix. Exiting!\n");
+    cf_fatal_error(NULL, E_TOO_MANY_PREFIX);
   }
 
   prefix_map[n_prefix].c = c;
@@ -936,27 +945,28 @@ parse_from_embed_lib_cf(struct state *state)
 }
 #endif /* __EMBED_LIB_CF */
 
-struct state*
-colorforth_newstate(void)
+//struct state*
+void
+colorforth_newstate(struct state *state)
 {
-  struct state *state = calloc(1, sizeof(*state));
+  //struct state *state = cf_calloc(NULL, 1, sizeof(*state), 0);
   state->color = execute;
 
   state->base = 10;
 
-  state->stack = calloc(1, sizeof(struct stack));
-  init_stack(state->stack, STACK_SIZE);
+  //&state->stack = cf_calloc(state, 1, sizeof(struct stack), 1);
+  init_stack(&state->stack, STACK_SIZE);
 
-  state->r_stack = calloc(1, sizeof(struct stack));
-  init_stack(state->r_stack, R_STACK_SIZE);
+  //state->r_stack = cf_calloc(state, 1, sizeof(struct stack), 2);
+  init_stack(&state->r_stack, STACK_SIZE);
 
-  state->dict.entries = calloc(DICT_SIZE, sizeof(struct entry));
+  //state->dict.entries = cf_calloc(state, DICT_SIZE, sizeof(struct entry), 3);
   state->dict.latest = state->dict.entries - 1;
 
-  state->inlined_dict.entries = calloc(INLINED_DICT_SIZE, sizeof(struct entry));
+  // state->inlined_dict.entries = cf_calloc(state, INLINED_DICT_SIZE, sizeof(struct entry), 4);
   state->inlined_dict.latest = state->inlined_dict.entries - 1;
 
-  state->heap = calloc(1, HEAP_SIZE);
+  //state->heap = cf_calloc(state, 1, HEAP_SIZE, 5);
   state->here = state->heap;
 
   state->coll = 0; state->line = 1;
@@ -974,8 +984,11 @@ colorforth_newstate(void)
   define_prefix('`', compile_tick,   COLOR_BLUE,    0);
   define_prefix(',', compile_inline, COLOR_CYAN,    0);
 
+  char NOP_STR[] PROGMEM  = "nop";
+  char  PROGMEM DOT_STR[] = ".";
+
   define_primitive(state, "nop", OP_NOP);
-  define_primitive(state, ".", OP_PRINT_TOS);
+  define_primitive(state, DOT_STR, OP_PRINT_TOS);
   define_primitive(state, "dup", OP_DUP);
   define_primitive(state, "over", OP_OVER);
   define_primitive(state, "swap", OP_SWAP);
@@ -1035,17 +1048,15 @@ colorforth_newstate(void)
   echo_color(state, '~', COLOR_YELLOW);
   state->coll = 0; state->line = 1;
   state->echo_on = 1;
-
-  return state;
 }
 
 void
 free_state(struct state* state)
 {
-  free(state->heap);
-  free(state->inlined_dict.entries);
-  free(state->dict.entries);
-  free(state->r_stack);
-  free(state->stack);
+  // free(state->heap);
+  // free(state->inlined_dict.entries);
+  // free(state->dict.entries);
+  // free(state->r_stack);
+  // free(&state->stack);
   free(state);
 }

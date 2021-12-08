@@ -4,20 +4,20 @@
 void
 system_fn(struct state *s)
 {
-  push(s->stack, system((char*)pop(s->stack)));
+  push(&s->stack, system((char*)pop(&s->stack)));
 }
 
 void
 c_alloc(struct state *s)
 {
-  const unsigned int size = (unsigned int)pop(s->stack);
-  push(s->stack, (cell)calloc(1, size));
+  const unsigned int size = (unsigned int)pop(&s->stack);
+  push(&s->stack, (cell)calloc(1, size));
 }
 
 void
 c_free(struct state *s)
 {
-  free((char *)pop(s->stack));
+  free((char *)pop(&s->stack));
 }
 
 void

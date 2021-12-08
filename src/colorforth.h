@@ -20,10 +20,6 @@ extern "C" {
 #include <mp-math.h>
 #endif
 
-typedef long cell;
-
-#define CELL_FMT "ld"
-
 #define MAX_PREFIX 10
 
 #define define_register_OP(N) OP_##N##_LOAD, OP_##N##_STORE, OP_##N##_ADD, \
@@ -90,6 +86,11 @@ enum opcode
   __LAST_PRIMITIVE_OP_CODE__
 };
 
+enum ERROR_IDS
+{
+  E_TOO_MANY_PREFIX = 1
+};
+
 // terminal input buffer
 struct tib
 {
@@ -115,7 +116,7 @@ struct entry
 struct stack
 {
   // circular stack
-  cell *cells;
+  cell cells[STACK_SIZE];
   // stack position
   int sp;
   int lim;
@@ -123,19 +124,26 @@ struct stack
 
 struct dictionary
 {
-  struct entry *entries;
+  struct entry entries[DICT_SIZE];
+  struct entry *latest;
+};
+
+
+struct inlined_dictionary
+{
+  struct entry entries[INLINED_DICT_SIZE];
   struct entry *latest;
 };
 
 struct state
 {
   void (*color)(struct state *s);
-  struct stack *stack;
-  struct stack *r_stack;
+  struct stack stack;
+  struct stack r_stack;
   struct tib tib;
   struct dictionary dict;
   struct dictionary inlined_dict;
-  void *heap;
+  char heap[HEAP_SIZE];
   void *here;
 
   char base;
@@ -183,7 +191,8 @@ extern void define_prefix(char c, void (*fn)(struct state *s), char * color, sho
 extern void define_primitive_extension(struct state *s, char name[], void (*fn)(struct state *s));
 
 extern void quit(struct state *state, char ask);
-extern struct state* colorforth_newstate(void);
+//extern struct state* colorforth_newstate(void);
+extern void colorforth_newstate(struct state* state);
 extern void free_state(struct state* state);
 
 extern void parse_colorforth(struct state *state, int c);

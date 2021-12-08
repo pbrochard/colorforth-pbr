@@ -30,7 +30,7 @@ init_mpstack(struct mpstack *stack, int len)
 void
 mpsize(struct state *state)
 {
-  push(state->stack, sizeof(mpz_t));
+  push(&state->stack, sizeof(mpz_t));
 }
 
 static void
@@ -190,7 +190,7 @@ void
 msup(struct state *s)
 {
   const int psp = get_s_psp(s);
-  push(s->stack, mpz_cmp(s_cells(s, psp), s_cells(s, s_sp(s))) > 0);
+  push(&s->stack, mpz_cmp(s_cells(s, psp), s_cells(s, s_sp(s))) > 0);
   s_sp(s) = get_psp(psp, s_lim(s));
 }
 
@@ -198,7 +198,7 @@ void
 minf(struct state *s)
 {
   const int psp = get_s_psp(s);
-  push(s->stack, mpz_cmp(s_cells(s, psp), s_cells(s, s_sp(s))) < 0);
+  push(&s->stack, mpz_cmp(s_cells(s, psp), s_cells(s, s_sp(s))) < 0);
   s_sp(s) = get_psp(psp, s_lim(s));
 }
 
@@ -206,7 +206,7 @@ void
 mequal(struct state *s)
 {
   const int psp = get_s_psp(s);
-  push(s->stack, mpz_cmp(s_cells(s, psp), s_cells(s, s_sp(s))) == 0);
+  push(&s->stack, mpz_cmp(s_cells(s, psp), s_cells(s, s_sp(s))) == 0);
   s_sp(s) = get_psp(psp, s_lim(s));
 }
 
@@ -214,13 +214,13 @@ void
 mload(struct state *s)
 {
   s_sp(s) = get_s_nsp(s);
-  mpz_set(s_cells(s, s_sp(s)), *(mpz_t*)pop(s->stack));
+  mpz_set(s_cells(s, s_sp(s)), *(mpz_t*)pop(&s->stack));
 }
 
 void
 mstore(struct state *s)
 {
-  mpz_t *ptr = (mpz_t*)pop(s->stack);
+  mpz_t *ptr = (mpz_t*)pop(&s->stack);
   mpz_init(*ptr);
   mpz_set(*ptr, s_cells(s, s_sp(s)));
   s_sp(s) = get_s_psp(s);
