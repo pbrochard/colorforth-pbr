@@ -6,6 +6,21 @@
 :height ~64 variable ^ ;
 :width ~128 variable ^ ;
 
+:x ^;
+:y ^cell + ;
+:type
+:dir ^2 cells + ;
+
+:player ~3 variables ^;
+:enemies ~100 3 * variables ^ ;
+:n-enemy ~0 variable ^;
+:enemy# ~3 cells >> ^ * ;
+:enemy ^enemy# enemies + ;
+
+:<with-enemy> ^ ;
+:with-enemies-loop ^<with-enemy>   I++ I@ n-enemy @ < when with-enemies-loop ;
+:with-enemies `<with-enemy> ^is  I>R  0 I! with-enemies-loop  R>I ;
+
 :row ,width ^@ * ;
 
 ~width @ height @ * dup
@@ -35,46 +50,33 @@
 
 :.. ^blank-color ~key . >> ^emit ;
 :.# ^wall-color ~key # >> ^emit ;
-:.* ^star-color ~key * >> ^emit ;
 :.@ ^player-color ~key @ >> ^emit ;
 :.- ^player-color ~key - >> ^emit ;
 :.| ^player-color ~key | >> ^emit ;
 :./ ^player-color ~key / >> ^emit ;
 :.\ ^player-color ~key \ >> ^emit ;
+:.* ^star-color ~key * >> ^emit ;
+:.dead* ^blank-color ~key * >> ^emit ;
 
-~here @ '.. ~c>! '.# ~c>!  '.* ~c>!  '.@ ~c>! '.- ~c>!  '.| ~c>!  './ ~c>!  '.\ ~c>!
+~here @ '.. ~c>! '.# ~c>!  '.@ ~c>! '.- ~c>!  '.| ~c>!  './ ~c>!  '.\ ~c>!
+        '.dead* ~c>!  '.* ~c>!
 :.cell ^world@ cells ~>> ^+ @ execute ;
 
 :.world ^at-00
   `.cell `<world-h> ^is   `cr `<world-v> ^is
   world-loop  star-color  cr .s ;
 
-:player ~3 variables ^;
-
-:x ^;
-:y ^cell + ;
-:dir ^2 cells + ;
-
 :player? ^player x ?   player y ?   player dir ? cr ;
 
-:dir-nw ^7 -1 -1 ;   :dir-n ^5 0 -1 ;  :dir-ne ^6 1 -1 ;
-:dir-w  ^4 -1  0 ;                     :dir-e  ^4 1  0 ;
-:dir-sw ^6 -1  1 ;   :dir-s ^5 0  1 ;  :dir-se ^7 1  1 ;
+:dir-nw ^6 -1 -1 ;   :dir-n ^4 0 -1 ;  :dir-ne ^5 1 -1 ;
+:dir-w  ^3 -1  0 ;                     :dir-e  ^3 1  0 ;
+:dir-sw ^5 -1  1 ;   :dir-s ^4 0  1 ;  :dir-se ^6 1  1 ;
 
 ~here @ 'dir-nw ~c>!  'dir-n ~c>!  'dir-ne ~c>!  'dir-e  ~c>!
         'dir-se  ~c>! 'dir-s ~c>!  'dir-sw ~c>!  'dir-w ~c>!
 :dir@ ^cells ~>> ^+ @  execute ;
 
 :sword@ ^player dir @ dir@   player y @ + height @ mod swap   player x @ + width @ mod swap ;
-
-
-:render-cell ^2dup static-world@ -rot world! ;
-:render-player ^3 player x @ player y @ world! ;
-:render-sword ^sword@ world! ;
-
-:render-world `render-cell `<world-h> ^is `nop `<world-v> ^is
-   world-loop render-player render-sword ;
-
 
 :turn ^player dir @ + 8 mod player dir ! ;
 :turn-left; ^-1 turn ;; ;
@@ -83,7 +85,11 @@
 :player-x! ^player x ! ;
 :player-y! ^player y ! ;
 
-:valid? ^static-world@ 0 = ;
+:on-enemy? ^.s I@ enemies y @ .s bye ;
+:on-enemies? `on-enemy? ^with-enemies ;
+:valid? ~( x y - )^
+    1111 -rot .s
+    2dup .s static-world@ 0 = -rot .s on-enemies? 0 = and .s bye ;
 
 :move-x ^player x @ + width  @ mod   dup player y @  valid? choose player-x! drop ;
 :move-y ^player y @ + height @ mod   player x @ over valid? choose player-y! drop ;
@@ -114,7 +120,32 @@
    dup 27 = when bye
 ;
 
-:run ^render-world .world  key move drop run ;
+~( Enemies )
+:add-enemy ~( type x y -) ^n-enemy @ enemy y !   n-enemy @  enemy x !   n-enemy @  enemy type !   n-enemy 1+! ;
+
+:enemy-x! ^I@ enemy x ! ;
+:enemy-move-x ^I@ enemy x @ + dup I@ enemy y @ valid? choose enemy-x! drop ;
+
+:move-enemy ^player x @  I@ enemy x @ - sign enemy-move-x ;
+
+:move-enemies ^I>R 0 I! `move-enemy ^with-enemies R>I ;
+
+
+:render-cell ^2dup static-world@ -rot world! ;
+:render-player ^2 player x @ player y @ world! ;
+:render-sword ^sword@ world! ;
+
+~here @ 7 >c!  8 >c!
+:type>cell ~ >> ^+ c@ ;
+
+:render-enemy-loop ^I@ enemy type @ type>cell  I@ enemy x @  I@ enemy y @  world!
+   I++ I@ n-enemy @ < when render-enemy-loop ;
+:render-enemy ^I>R 0 I! render-enemy-loop R>I ;
+
+:render-world `render-cell `<world-h> ^is `nop `<world-v> ^is
+   world-loop render-enemy render-player render-sword .world ;
+
+:run ^render-world key move move-enemies drop run ;
 
 
 ~\ Patterns
@@ -130,8 +161,8 @@
 
 :. ^0 world!! ;
 :+ ^1 world!! ;
-:* ^2 world!! ; ~\ TODO: enemy
 :P ^world-x @ player x !   world-y @ player y ! ;
+:* ^1 world-x @ world-y @  add-enemy  world-x 1+! ;
 
 :.s ~( n -) ^. 1- dup when .s drop ;
 :h-+ ~( n -) ^+   1- dup when h-+ drop ;
