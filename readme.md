@@ -9,14 +9,14 @@
 ### 2 + 2 = 5 joke
 [![asciicast](https://asciinema.org/a/442906.svg)](https://asciinema.org/a/442906)
 
-###On Linux Ubuntu, the makefile.unix file not working with gnu make, and I compilated using these:
+### On Linux Ubuntu, the makefile.unix file not working with gnu make, and I compilated using these:
 
-apt-get install libgmp3-dev
+colorforth-pbr$apt-get install libgmp3-dev
  
-cp conf.tmpl.h conf.h
+colorforth-pbr$cp conf.tmpl.h conf.h
   
-gcc -fPIE -std=gnu99 -O3 -Wall -Werror -Wextra -pedantic -s -Wno-missing-bra
-Wno-missing-field-initializers -Wno-unused-parameter -I. -Isrc -Iext -o colorforth src/main.c src/colorforth.c src/
-dio.c src/color.c src/lib.c ext/os.c ext/dict.c ext/io.c ext/parser.c ext/time.c ext/math.c ext/ext-math.c ext/mp-m
+colorforth-pbr$ gcc -fPIE -std=gnu99 -O3 -Wall -Werror -Wextra -pedantic -s -Wno-missing-braces -
+Wno-missing-field-initializers -Wno-unused-parameter -I. -Isrc -Iext -o colorforth src/main.c src/colorforth.c src/cf-st
+dio.c src/color.c src/lib.c ext/os.c ext/dict.c ext/io.c ext/parser.c ext/time.c ext/math.c ext/ext-math.c ext/mp-math.c
  ext/threads.c -lgmp -lpthread
  
