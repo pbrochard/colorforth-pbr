@@ -1,6 +1,13 @@
 %
 ~\ usage: cat lib.cf | ./colorforth examples/colorize.cf -e "without-prefix colorize bye" | less -r
 
+:cl ( current line ) ~1 variable ,;
+:ol ( offset line ) ~1 variable ,;
+:sw ( screen width ) ~10 variable ,;
+:crp ( cursor position ) ~0 variable ,;
+:crx ( cursor column ) ~0 variable ,;
+:cry ( cursor line) ~0 variable ,;
+
 :[esc0 ^27 emit ~key [ [,] ^emit ~key 0 [,] ,;
 :[esc1 ^[esc0 emit ~key 1 [,] ^emit ~key ; [,] ^emit ,;
 :[esc  ^[esc1 ~key 9 [,] ^emit ,;
@@ -27,25 +34,31 @@
 :with-prefix `nop `<stop> ^is ,;
 
 :<getchar> ^getchar ,;
+:<emit>
+:hide ^drop ,;
 
-:dump-loop ^<getchar> dup emit over = ~nif ^dump-loop ~then ^drop ,;
-:dump-to-char ^swap emit dump-loop yellow! 1 prefix? ! ,;
+:dump-loop ^<getchar> dup <emit> over = ~nif ^dump-loop ~then ^drop ,;
+:dump-to-char ^swap <emit> dump-loop yellow! 1 prefix? ! ,;
 
 :done? ^dup eof? ~if ^drop clear! ;;; ~then ,;
 
 :<.char>
 :.char
+   ^cl @ ol @ >= ~if ^`emit `<emit> ^is ~then
+   ^cl @ ol @ sw @ + >= ~if ^`hide `<emit> ^is ~then
+   ^dup 10 = ~if ^cl 1+! ~then
+
    ^string? @ ~if
-      ^dup 32 = ~if key " [,] ^magenta! dump-to-char ~else ^emit ~then
+      ^dup 32 = ~if key " [,] ^magenta! dump-to-char ~else ^<emit> ~then
       ^0 string? ! ,;
    ~then
 
-   ^dup 32 = over 10 = or ~if ^1 prefix? ! emit ,; ~then
+   ^dup 32 = over 10 = or ~if ^1 prefix? ! <emit> ,; ~then
 
    ^dup ~key \ [,] ^= ~if ^white! 10 dump-to-char ,; ~then
    ^dup ~key " [,] ^= ~if ^1 string? ! ~then
 
-   ^prefix? @ ~nif ^emit ,; ~then
+   ^prefix? @ ~nif ^<emit> ,; ~then
 
    ^0 prefix? !
 
@@ -57,6 +70,6 @@
    ^dup ~key , [,] ^= ~if ^cyan! <stop> ~then
    ^dup ~key ( [,] ^= ~if ^white! ~then
 
-   ^emit ,;
+   ^<emit> ,;
 
 :colorize ^<getchar> done? <.char> colorize ,;
