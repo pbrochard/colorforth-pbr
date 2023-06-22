@@ -111,8 +111,7 @@ clear_tib (struct state *s){
 void
 dump_words(struct state *s, struct dictionary *dict)
 {
-  //for (struct entry *entry = dict->latest; entry != dict->entries - 1; entry--)
-  for (int i = dict->latest; i > 0; i--)
+  for (int i = dict->latest; i >= 0; i--)
   {
     struct entry entry = dict->entries[i];
 

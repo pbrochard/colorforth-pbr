@@ -22,7 +22,7 @@ define_primitive(s, ENTRY_NAME("*"), OP_MUL);
 define_primitive(s, ENTRY_NAME("="), OP_EQUAL);
 define_primitive(s, ENTRY_NAME("<"), OP_LESS);
 define_primitive(s, ENTRY_NAME("bye"), OP_BYE);
-// define_primitive(s, ENTRY_NAME("words"), OP_WORDS);
+define_primitive(s, ENTRY_NAME("words"), OP_WORDS);
 define_primitive(s, ENTRY_NAME("emit"), OP_EMIT);
 define_primitive(s, ENTRY_NAME("key"), OP_KEY);
 // define_primitive(s, ENTRY_NAME("@"), OP_LOAD);

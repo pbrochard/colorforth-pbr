@@ -415,16 +415,16 @@ case OP_BYE:
   return;
 }
 
-//       case OP_WORDS:
-//       {
-//         words(s);
-//         break;
-//       }
-//
-//       case OP_NOP: {
-//         break;
-//       }
-//
+case OP_WORDS:
+{
+  words(s);
+  break;
+}
+
+case OP_NOP: {
+  break;
+}
+
 case OP_PRINT_TOS:
 {
   ENSURE_STACK_MIN(1);
