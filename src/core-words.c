@@ -321,27 +321,20 @@ case OP_EMIT:
   break;
 }
 
-//       case OP_KEY:
-//       {
-//         ENSURE_STACK_MAX(1);
-//         PUSH((char)cf_getchar(s));
-//         break;
-//       }
-//
-//       case OP_CELL:
-//       {
-//         ENSURE_STACK_MAX(1);
-//         PUSH(sizeof(cell));
-//         break;
-//       }
-//
-//       case OP_CODE_LEN:
-//       {
-//         ENSURE_STACK_MAX(1);
-//         PUSH(sizeof(struct code));
-//         break;
-//       }
-//
+case OP_KEY:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH((char)cf_getchar(s));
+  break;
+}
+
+case OP_CELL:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH(sizeof(cell));
+  break;
+}
+
 //       case OP_GET_ENTRY_CODE:
 //       {
 //         ENSURE_STACK_MIN(1);

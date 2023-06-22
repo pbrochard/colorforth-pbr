@@ -24,13 +24,12 @@ define_primitive(s, ENTRY_NAME("<"), OP_LESS);
 define_primitive(s, ENTRY_NAME("bye"), OP_BYE);
 // define_primitive(s, ENTRY_NAME("words"), OP_WORDS);
 define_primitive(s, ENTRY_NAME("emit"), OP_EMIT);
-// define_primitive(s, ENTRY_NAME("key"), OP_KEY);
+define_primitive(s, ENTRY_NAME("key"), OP_KEY);
 // define_primitive(s, ENTRY_NAME("@"), OP_LOAD);
 // define_primitive(s, ENTRY_NAME("!"), OP_STORE);
 // define_primitive(s, ENTRY_NAME("c@"), OP_CLOAD);
 // define_primitive(s, ENTRY_NAME("c!"), OP_CSTORE);
-// define_primitive(s, ENTRY_NAME("cell"), OP_CELL);
-// define_primitive(s, ENTRY_NAME("#code"), OP_CODE_LEN);
+define_primitive(s, ENTRY_NAME("cell"), OP_CELL);
 // define_primitive(s, ENTRY_NAME("here"), OP_HERE);
 // define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
 //
