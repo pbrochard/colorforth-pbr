@@ -37,7 +37,7 @@ define_primitive(s, ENTRY_NAME("cell"), OP_CELL);
 // define_primitive(s, ENTRY_NAME("[`]"), OP_COMPILE_INLINE);
 // define_primitive(s, ENTRY_NAME("[,]"), OP_COMPILE_LITERAL);
 // define_primitive(s, ENTRY_NAME("code>"), OP_GET_ENTRY_CODE);
-// define_primitive(s, ENTRY_NAME("execute"), OP_EXECUTE);
+define_primitive(s, ENTRY_NAME("execute"), OP_EXECUTE);
 // define_primitive(s, ENTRY_NAME("execute*"), OP_EXECUTE_STAR);
 // define_primitive(s, ENTRY_NAME("cva>"), OP_GET_CVA);
 //

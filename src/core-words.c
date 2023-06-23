@@ -343,16 +343,17 @@ case OP_CELL:
 //         break;
 //       }
 //
-//       case OP_EXECUTE:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         ENSURE_R_STACK_MAX(1);
-//         struct code *code_ = (struct code*)POP();
-//         R_PUSH((cell)pc);
-//         pc = code_ - 1;
-//         break;
-//       }
-//
+
+case OP_EXECUTE:
+{
+  ENSURE_STACK_MIN(1);
+  ENSURE_R_STACK_MAX(1);
+  cell entry_index = POP();
+  R_PUSH(pc + sizeof(opcode_t));
+  pc = ENTRY(entry_index)->offset;
+  continue;
+}
+
 //       // Like execute but leave xt on the stack
 //       case OP_EXECUTE_STAR:
 //       {
