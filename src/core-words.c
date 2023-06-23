@@ -234,7 +234,7 @@ case OP_IF:
 }
 
 // Tail call optimized if (to be used with the latest entry)
-case OP_IF_STAR:
+case OP_IF_TAIL_CALL:
 {
   ENSURE_STACK_MIN(2);
   POP2();
@@ -275,7 +275,7 @@ case OP_IF_NOT:
 }
 
 // Tail call optimized if-not
-case OP_IF_NOT_STAR:
+case OP_IF_NOT_TAIL_CALL:
 {
   ENSURE_STACK_MIN(2);
   POP2();
