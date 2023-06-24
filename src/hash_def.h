@@ -46,9 +46,11 @@ typedef hash_t opcode_t;
 #define OP_LOAD                      (opcode_t) 0x400064C0                // @
 #define OP_STORE                     (opcode_t) 0x210033F3                // !
 #define OP_CLOAD                     (opcode_t) 0x72F4F1DB                // c@
-#define OP_CSTORE_                   (opcode_t) 0xD1F58768                // c!
+#define OP_CSTORE                    (opcode_t) 0xD1F58768                // c!
 #define OP_CELL                      (opcode_t) 0x1415DDAC                // cell
 #define OP_HERE                      (opcode_t) 0xD786E25E                // here
+#define OP_HERE_ADDR                 (opcode_t) 0xAE504314                // &here
+#define OP_HEAP_ADDR                 (opcode_t) 0x89705C80                // &heap
 #define OP_LATEST                    (opcode_t) 0xA307AFAB                // latest
 #define OP_COMPILE                   (opcode_t) 0x12AD19B0                // [^]
 #define OP_COMPILE_INLINE            (opcode_t) 0x56B201EA                // [`]

@@ -92,38 +92,38 @@ case OP_NIP:
   break;
 }
 
-//       case OP_LOAD:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         CELLS[SP] = *(cell*) CELLS[SP];
-//         break;
-//       }
-//
-//       case OP_STORE:
-//       {
-//         ENSURE_STACK_MIN(2);
-//         cell *ptr = (cell*) CELLS[SP];
-//         *ptr = CELLS[SP - 1];
-//         SP -= 2;
-//         break;
-//       }
-//
-//       case OP_CLOAD:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         CELLS[SP] = *(char*) CELLS[SP];
-//         break;
-//       }
-//
-//       case OP_CSTORE:
-//       {
-//         ENSURE_STACK_MIN(2);
-//         char *ptr = (char*) CELLS[SP];
-//         *ptr = CELLS[SP - 1];
-//         SP -= 2;
-//         break;
-//       }
-//
+case OP_LOAD:
+{
+  ENSURE_STACK_MIN(1);
+  CELLS[SP] = *(cell*) CELLS[SP];
+  break;
+}
+
+case OP_STORE:
+{
+  ENSURE_STACK_MIN(2);
+  cell *ptr = (cell*) CELLS[SP];
+  *ptr = CELLS[SP - 1];
+  SP -= 2;
+  break;
+}
+
+case OP_CLOAD:
+{
+  ENSURE_STACK_MIN(1);
+  CELLS[SP] = *(char*) CELLS[SP];
+  break;
+}
+
+case OP_CSTORE:
+{
+  ENSURE_STACK_MIN(2);
+  char *ptr = (char*) CELLS[SP];
+  *ptr = CELLS[SP - 1];
+  SP -= 2;
+  break;
+}
+
 case OP_CALL:
 {
   pc += sizeof(opcode_t);
@@ -363,21 +363,35 @@ case OP_EXECUTE:
 //         pc = (struct code*)CELLS[SP] - 1;
 //         break;
 //       }
-//
-//       case OP_HERE:
-//       {
-//         ENSURE_STACK_MAX(1);
-//         PUSH((cell)&s->here);
-//         break;
-//       }
-//
-//       case OP_LATEST:
-//       {
-//         ENSURE_STACK_MAX(1);
-//         PUSH((cell)&s->dict.latest);
-//         break;
-//       }
-//
+
+case OP_HERE:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH(s->here);
+  break;
+}
+
+case OP_HERE_ADDR:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH((cell)&s->here);
+  break;
+}
+
+case OP_HEAP_ADDR:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH((cell)&s->heap);
+  break;
+}
+
+case OP_LATEST:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH(s->dict.latest);
+  break;
+}
+
 //       case OP_GET_CVA: // Code value address
 //       {
 //         ENSURE_STACK_MIN(1);
