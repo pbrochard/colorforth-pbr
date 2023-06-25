@@ -213,7 +213,7 @@ execute_(struct state *s, struct entry *entry)
       }
 
 #include "core-words.c"
-      //#include "lib-words.c"
+#include "lib-words.c"
       //#include "extensions-words.c"
 
       default:
@@ -406,6 +406,7 @@ colorforth_newstate(void)
   s->file_stream = NULL;
 
 #include "define-core.c"
+#include "define-lib.c"
 
   s->color = execute;
   echo_color(s, '~', COLOR_YELLOW);

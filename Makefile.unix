@@ -6,8 +6,8 @@ default: colorforth
 
 SRC=src/main.c src/colorforth.c \
 	src/cf-stdio.c \
-	src/color.c #\
-#	src/lib.c \
+	src/color.c \
+	src/lib.c #\
 #	ext/load-ext.c \
 #	ext/io.c \
 #	ext/parser.c
@@ -24,7 +24,9 @@ SRC=src/main.c src/colorforth.c \
 
 INCLUDED_SRC=src/utils.c \
 	src/core-words.c \
-	src/define-core.c
+	src/define-core.c \
+	src/define-lib.c \
+	src/lib-words.c
 
 SRC_H=src/colorforth.h \
 	conf.h \
