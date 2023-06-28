@@ -1,3 +1,5 @@
+// The author disclaims copyright to this source code.
+
 case OP_BASE: {
   ENSURE_STACK_MAX(1);
   PUSH((cell) &s->base);

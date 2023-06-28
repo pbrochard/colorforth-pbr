@@ -35,9 +35,9 @@ define_primitive(s, ENTRY_NAME("&here"), OP_HERE_ADDR);
 define_primitive(s, ENTRY_NAME("&heap"), OP_HEAP_ADDR);
 define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
 
-// define_primitive(s, ENTRY_NAME("[^]"), OP_COMPILE);
-// define_primitive(s, ENTRY_NAME("[`]"), OP_COMPILE_INLINE);
-// define_primitive(s, ENTRY_NAME("[,]"), OP_COMPILE_LITERAL);
+define_primitive(s, ENTRY_NAME("[^]"), OP_COMPILE);
+//define_primitive(s, ENTRY_NAME("[`]"), OP_COMPILE_INLINE);
+define_primitive(s, ENTRY_NAME("[,]"), OP_COMPILE_LITERAL);
 
 define_primitive(s, ENTRY_NAME("code>"), OP_GET_ENTRY_CODE);
 define_primitive(s, ENTRY_NAME("execute"), OP_EXECUTE);

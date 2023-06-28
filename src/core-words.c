@@ -410,14 +410,14 @@ case OP_LATEST:
   break;
 }
 
-//       case OP_COMPILE:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         struct entry *entry_ = (struct entry*)POP();
-//         compile_entry(s, entry_);
-//         break;
-//       }
-//
+case OP_COMPILE:
+{
+  ENSURE_STACK_MIN(1);
+  cell entry_index = POP();
+  compile_entry(s, entry_index);
+  break;
+}
+
 //       case OP_COMPILE_INLINE:
 //       {
 //         ENSURE_STACK_MIN(1);
@@ -425,15 +425,15 @@ case OP_LATEST:
 //         inline_entry(s, entry_);
 //         break;
 //       }
-//
-//       case OP_COMPILE_LITERAL:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         cell n = POP();
-//         compile_literal(s, n);
-//         break;
-//       }
-//
+
+case OP_COMPILE_LITERAL:
+{
+  ENSURE_STACK_MIN(1);
+  cell n = POP();
+  compile_literal(s, n);
+  break;
+}
+
 case OP_BYE:
 {
   quit(s);
