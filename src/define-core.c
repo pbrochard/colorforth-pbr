@@ -5,7 +5,6 @@ define_prefix('^', compile,        COLOR_GREEN,   0);
 define_prefix('~', execute,        COLOR_YELLOW,  0);
 define_prefix('\'', tick,          COLOR_BLUE,    0);
 define_prefix('`', compile_tick,   COLOR_BLUE,    0);
-// define_prefix(',', compile_inline, COLOR_CYAN,    0);
 
 define_primitive(s, ENTRY_NAME("nop"), OP_NOP);
 define_primitive(s, ENTRY_NAME("."), OP_PRINT_TOS);
@@ -36,7 +35,6 @@ define_primitive(s, ENTRY_NAME("&heap"), OP_HEAP_ADDR);
 define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
 
 define_primitive(s, ENTRY_NAME("[^]"), OP_COMPILE);
-//define_primitive(s, ENTRY_NAME("[`]"), OP_COMPILE_INLINE);
 define_primitive(s, ENTRY_NAME("[,]"), OP_COMPILE_LITERAL);
 
 define_primitive(s, ENTRY_NAME("code>"), OP_GET_ENTRY_CODE);

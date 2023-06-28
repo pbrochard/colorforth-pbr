@@ -398,14 +398,6 @@ case OP_COMPILE:
   break;
 }
 
-//       case OP_COMPILE_INLINE:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         struct entry *entry_ = (struct entry*)POP();
-//         inline_entry(s, entry_);
-//         break;
-//       }
-
 case OP_COMPILE_LITERAL:
 {
   ENSURE_STACK_MIN(1);

@@ -74,7 +74,6 @@ typedef double number_t;
 #define R_STACK_SIZE 30
 
 #define DICT_SIZE 10000
-#define INLINED_DICT_SIZE 1000
 
 #define HEAP_SIZE 40960
 

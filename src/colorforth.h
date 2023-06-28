@@ -111,7 +111,6 @@ enum errors {
   RSTACK_ERROR               =   3,
   RSTACK_INIT_ERROR          =   4,
   DICT_ERROR                 =   5,
-  INLINE_DICT_ERROR          =   6,
   HEAP_ERROR                 =   7,
 
   PRIMITIVE_ERROR            =  11,

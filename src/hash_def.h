@@ -53,7 +53,6 @@ typedef hash_t opcode_t;
 #define OP_HEAP_ADDR                 (opcode_t) 0x89705C80                // &heap
 #define OP_LATEST                    (opcode_t) 0xA307AFAB                // latest
 #define OP_COMPILE                   (opcode_t) 0x12AD19B0                // [^]
-#define OP_COMPILE_INLINE            (opcode_t) 0x56B201EA                // [`]
 #define OP_COMPILE_LITERAL           (opcode_t) 0x176F15FE                // [,]
 #define OP_GET_ENTRY_CODE            (opcode_t) 0x3BC9871                 // code>
 #define OP_EXECUTE                   (opcode_t) 0x54DA4CCF                // execute

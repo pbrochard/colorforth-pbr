@@ -133,20 +133,6 @@ compile_entry(struct state *s, cell entry_index)
   }
 }
 
-// static void
-// inline_entry(struct state *s, struct entry *entry)
-// {
-//   for (size_t i = 0, done = 0; !done; i++)
-//   {
-//     // inline OP_RETURN in first position
-//     if (entry->code[i].opcode == OP_RETURN && i > 0)
-//     {
-//       break;
-//     }
-//     compile_code(s, entry->code[i].opcode, entry->code[i].value);
-//   }
-// }
-
 static void
 compile_literal(struct state *s, cell n)
 {

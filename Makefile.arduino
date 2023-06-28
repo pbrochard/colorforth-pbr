@@ -21,14 +21,12 @@ src/conf.tmpl.h:
 nano: src/conf.tmpl.h
 	sed -i 's%\(.*STACK_SIZE\).*%\1 10%' arduino/conf.h
 	sed -i 's%\(.*DICT_SIZE\).*%\1 50%' arduino/conf.h
-	sed -i 's%\(.*INLINED_DICT_SIZE\).*%\1 10%' arduino/conf.h
 	sed -i 's%\(.*HEAP_SIZE\).*%\1 600%' arduino/conf.h
 	sed -i 's%\(TIB_SIZE.*\)%\1\n#define BUF_SIZE 64%' arduino/conf.h
 
 mega: src/conf.tmpl.h
 	sed -i 's%\(.*STACK_SIZE\).*%\1 30%' arduino/conf.h
 	sed -i 's%\(.*DICT_SIZE\).*%\1 80%' arduino/conf.h
-	sed -i 's%\(.*INLINED_DICT_SIZE\).*%\1 20%' arduino/conf.h
 	sed -i 's%\(.*HEAP_SIZE\).*%\1 3000%' arduino/conf.h
 	sed -i 's%\(TIB_SIZE.*\)%\1\n#define BUF_SIZE 128%' arduino/conf.h
 
