@@ -198,26 +198,6 @@ case OP_LESS:
   break;
 }
 
-//       case OP_BRANCH:
-//       {
-//         pc = (struct code*)pc->value;
-//         continue;
-//       }
-//
-//       case OP_ZBRANCH:
-//       {
-//         POP1();
-//         if (!p1) { pc = (struct code*)pc->value; continue; }
-//         break;
-//       }
-//
-//       case OP_NBRANCH:
-//       {
-//         POP1();
-//         if (p1) { pc = (struct code*)pc->value; continue; }
-//         break;
-//       }
-
 // Conditions: p2=flag p1=offset
 case OP_IF:
 {

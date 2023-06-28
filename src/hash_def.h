@@ -60,9 +60,6 @@ typedef hash_t opcode_t;
 #define OP_EXECUTE_STAR              (opcode_t) 0x78A70C7F                // execute*
 #define OP_C_EXECUTE                 (opcode_t) 0xABF1EDF8                // c>execute
 #define OP_C_EXECUTE_STAR            (opcode_t) 0x7FD96196                // c>execute*
-#define OP_BRANCH                    (opcode_t) 0x65C38130                // branch
-#define OP_ZBRANCH                   (opcode_t) 0x84502A20                // 0branch
-#define OP_NBRANCH                   (opcode_t) 0xB041B3B2                // nbranch
 #define OP_IF                        (opcode_t) 0x790405D7                // if
 #define OP_IF_TAIL_CALL              (opcode_t) 0x7E556D47                // if*
 #define OP_IF_EXIT                   (opcode_t) 0x6D555284                // if;

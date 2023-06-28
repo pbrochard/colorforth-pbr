@@ -45,10 +45,6 @@ define_primitive(s, ENTRY_NAME("execute*"), OP_EXECUTE_STAR);
 define_primitive(s, ENTRY_NAME("c>execute"), OP_C_EXECUTE);
 define_primitive(s, ENTRY_NAME("c>execute*"), OP_C_EXECUTE_STAR);
 
-// define_primitive(s, ENTRY_NAME("branch"), OP_BRANCH);
-// define_primitive(s, ENTRY_NAME("0branch"), OP_ZBRANCH);
-// define_primitive(s, ENTRY_NAME("nbranch"), OP_NBRANCH);
-
 define_primitive(s, ENTRY_NAME("if"), OP_IF);
 define_primitive(s, ENTRY_NAME("if*"), OP_IF_TAIL_CALL);
 define_primitive(s, ENTRY_NAME("if;"), OP_IF_EXIT);
