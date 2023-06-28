@@ -335,14 +335,12 @@ case OP_CELL:
   break;
 }
 
-//       case OP_GET_ENTRY_CODE:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         struct entry *entry_ = (struct entry*)POP();
-//         PUSH((cell)entry_->code);
-//         break;
-//       }
-//
+case OP_GET_ENTRY_CODE:
+{
+  POP1();
+  PUSH(ENTRY(p1)->offset);
+  break;
+}
 
 case OP_EXECUTE:
 {
@@ -354,15 +352,35 @@ case OP_EXECUTE:
   continue;
 }
 
-//       // Like execute but leave xt on the stack
-//       case OP_EXECUTE_STAR:
-//       {
-//         ENSURE_STACK_MIN(1);
-//         ENSURE_R_STACK_MAX(1);
-//         R_PUSH((cell)pc);
-//         pc = (struct code*)CELLS[SP] - 1;
-//         break;
-//       }
+// Like execute but leave xt on the stack
+case OP_EXECUTE_STAR:
+{
+  ENSURE_STACK_MIN(1);
+  ENSURE_R_STACK_MAX(1);
+  R_PUSH(pc + sizeof(opcode_t));
+  pc = ENTRY(CELLS[SP])->offset;
+  continue;
+}
+
+case OP_C_EXECUTE:
+{
+  ENSURE_STACK_MIN(1);
+  ENSURE_R_STACK_MAX(1);
+  const cell offset = POP();
+  R_PUSH(pc + sizeof(opcode_t));
+  pc = offset;
+  continue;
+}
+
+case OP_C_EXECUTE_STAR:
+{
+  ENSURE_STACK_MIN(1);
+  ENSURE_R_STACK_MAX(1);
+  const cell offset = CELLS[SP];
+  R_PUSH(pc + sizeof(opcode_t));
+  pc = offset;
+  continue;
+}
 
 case OP_HERE:
 {
@@ -392,14 +410,6 @@ case OP_LATEST:
   break;
 }
 
-//       case OP_GET_CVA: // Code value address
-//       {
-//         ENSURE_STACK_MIN(1);
-//         struct code *code = (struct code *) POP();
-//         PUSH((cell) &code->value);
-//         break;
-//       }
-//
 //       case OP_COMPILE:
 //       {
 //         ENSURE_STACK_MIN(1);

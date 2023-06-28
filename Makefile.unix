@@ -23,8 +23,8 @@ SRC=src/main.c src/colorforth.c \
 #	ext/sdl.c
 
 INCLUDED_SRC=src/utils.c \
-	src/core-words.c \
 	src/define-core.c \
+	src/core-words.c \
 	src/define-lib.c \
 	src/lib-words.c
 

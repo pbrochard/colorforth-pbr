@@ -38,11 +38,13 @@ define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
 // define_primitive(s, ENTRY_NAME("[^]"), OP_COMPILE);
 // define_primitive(s, ENTRY_NAME("[`]"), OP_COMPILE_INLINE);
 // define_primitive(s, ENTRY_NAME("[,]"), OP_COMPILE_LITERAL);
-// define_primitive(s, ENTRY_NAME("code>"), OP_GET_ENTRY_CODE);
+
+define_primitive(s, ENTRY_NAME("code>"), OP_GET_ENTRY_CODE);
 define_primitive(s, ENTRY_NAME("execute"), OP_EXECUTE);
-// define_primitive(s, ENTRY_NAME("execute*"), OP_EXECUTE_STAR);
-// define_primitive(s, ENTRY_NAME("cva>"), OP_GET_CVA);
-//
+define_primitive(s, ENTRY_NAME("execute*"), OP_EXECUTE_STAR);
+define_primitive(s, ENTRY_NAME("c>execute"), OP_C_EXECUTE);
+define_primitive(s, ENTRY_NAME("c>execute*"), OP_C_EXECUTE_STAR);
+
 // define_primitive(s, ENTRY_NAME("branch"), OP_BRANCH);
 // define_primitive(s, ENTRY_NAME("0branch"), OP_ZBRANCH);
 // define_primitive(s, ENTRY_NAME("nbranch"), OP_NBRANCH);

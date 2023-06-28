@@ -13,33 +13,6 @@ hash_fn (struct state *s)
 }
 
 void
-get_base_addr (struct state *s)
-{
-
-  PUSH((cell) &s->base);
-}
-
-void
-is (struct state *s)
-{
-  POP2();
-  struct entry *entry_from = (struct entry*)p1;
-  struct entry *entry_to = (struct entry*)p2;
-
-  entry_from->offset = entry_to->offset;
-}
-
-void
-c_is (struct state *s)
-{
-  //  POP2();
-//  struct entry *entry_from = (struct entry*)p1;
-//  struct code *offset_to = (struct code*)p2;
-//
-//  entry_from->offset = offset_to;
-}
-
-void
 hide_entry (struct state *s)
 {
   struct entry *entry = (struct entry*)POP();
