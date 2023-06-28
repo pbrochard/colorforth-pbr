@@ -24,13 +24,13 @@ case OP_R_FETCH:
   break;
 }
 
-// #ifdef __USE_REGISTER
-//       define_register(A);
-//       define_register(B);
-//       define_register(C);
-//       define_register(I);
-//       define_register(J);
-// #endif
+#ifdef __USE_REGISTER
+define_register(A);
+define_register(B);
+define_register(C);
+define_register(I);
+define_register(J);
+#endif
 
 case OP_DUP:
 {

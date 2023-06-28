@@ -18,22 +18,13 @@ extern void display_clash_found(struct state *s, char clash_found);
 struct prefix_map prefix_map[MAX_PREFIX];
 
 #define define_register(N)                                                     \
-  case OP_##N##_STORE: { ENSURE_STACK_MIN(1);  N = POP(); break; }      \
-  case OP_##N##_LOAD: { ENSURE_STACK_MAX(1);   PUSH(N); break; }        \
-  case OP_##N##_ADD: { ENSURE_STACK_MIN(1);    N += POP(); break; }     \
-  case OP_##N##_INC: { N += 1; break; }                                        \
-  case OP_##N##_DEC: { N -= 1; break; }                                        \
-  case OP_##N##_R_POP: { ENSURE_R_STACK_MIN(1); N = R_POP(); break; }   \
-  case OP_##N##_R_PUSH: { ENSURE_R_STACK_MAX(1); R_PUSH(N); break; }
-
-#define define_register_primitive(N)                                    \
-  define_primitive(s, REG_##N##_LOAD_HASH,        ENTRY_NAME(#N"@"), OP_##N##_LOAD); \
-  define_primitive(s, REG_##N##_STORE_HASH,       ENTRY_NAME(#N"!"), OP_##N##_STORE); \
-  define_primitive(s, REG_##N##_ADD_STORE_HASH,   ENTRY_NAME(#N"+!"), OP_##N##_ADD); \
-  define_primitive(s, REG_##N##_ADD_ADD_HASH,     ENTRY_NAME(#N"++"), OP_##N##_INC); \
-  define_primitive(s, REG_##N##_SUB_SUB_HASH,     ENTRY_NAME(#N"--"), OP_##N##_DEC); \
-  define_primitive(s, REG_##N##_TO_R_HASH,        ENTRY_NAME(#N">R"), OP_##N##_R_PUSH); \
-  define_primitive(s, REG_R_TO_##N##_HASH,        ENTRY_NAME("R>"#N), OP_##N##_R_POP);
+  case OP_REG_##N##_STORE: { ENSURE_STACK_MIN(1);  N = POP(); break; }         \
+  case OP_REG_##N##_LOAD: { ENSURE_STACK_MAX(1);   PUSH(N); break; }    \
+  case OP_REG_##N##_ADD: { ENSURE_STACK_MIN(1);    N += POP(); break; } \
+  case OP_REG_##N##_INC: { N += 1; break; }                             \
+  case OP_REG_##N##_DEC: { N -= 1; break; }                             \
+  case OP_REG_R_TO_##N##_ : { ENSURE_R_STACK_MIN(1); N = R_POP(); break; } \
+  case OP_REG_##N##_TO_R: { ENSURE_R_STACK_MAX(1); R_PUSH(N); break; }
 
 #include "utils.c"
 
@@ -172,14 +163,14 @@ execute_(struct state *s, struct entry *entry)
   ENSURE_R_STACK_MAX(1);
   R_PUSH(-1);
 
-// #ifdef __USE_REGISTER
-//   register cell A = 0;
-//   register cell B = 0;
-//   register cell C = 0;
-//   register cell I = 0;
-//   register cell J = 0;
-// #endif
-//
+#ifdef __USE_REGISTER
+  register cell A = 0;
+  register cell B = 0;
+  register cell C = 0;
+  register cell I = 0;
+  register cell J = 0;
+#endif
+
 
   // don't forget to COMPILE a return!!!!
   while(1)

@@ -64,17 +64,26 @@ define_primitive(s, ENTRY_NAME("clear"), OP_CLEAR);
 
 // init_lib(s);
 
-//#ifdef __USE_REGISTER
-//  // A, B, C, I and J registers are state global
-//  define_register_primitive(A);
-//  define_register_primitive(B);
-//  define_register_primitive(C);
-//  define_register_primitive(I);
-//  define_register_primitive(J);
-//  // I, J, K counter
-//  // A, B, C, X, Y just register
-//#endif
+#ifdef __USE_REGISTER
+
+#define define_register_primitive(N)                              \
+  define_primitive(s, ENTRY_NAME(#N"@"), OP_REG_##N##_LOAD);      \
+  define_primitive(s, ENTRY_NAME(#N"!"), OP_REG_##N##_STORE);     \
+  define_primitive(s, ENTRY_NAME(#N"+!"), OP_REG_##N##_ADD);      \
+  define_primitive(s, ENTRY_NAME(#N"++"), OP_REG_##N##_INC);      \
+  define_primitive(s, ENTRY_NAME(#N"--"), OP_REG_##N##_DEC);      \
+  define_primitive(s, ENTRY_NAME(#N">R"), OP_REG_##N##_TO_R);   \
+  define_primitive(s, ENTRY_NAME("R>"#N), OP_REG_R_TO_##N##_);
+
 //
+// //  // A, B, C, I and J registers are state global
+define_register_primitive(A);
+define_register_primitive(B);
+define_register_primitive(C);
+define_register_primitive(I);
+define_register_primitive(J);
+#endif
+
 //#ifdef __USE_EXTENSIONS
 //  load_extensions(s);
 //#endif

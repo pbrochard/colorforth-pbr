@@ -233,47 +233,47 @@ typedef hash_t opcode_t;
 // Register A
 #define OP_REG_A_LOAD                (opcode_t) 0x66A0AFE9                // A@
 #define OP_REG_A_STORE               (opcode_t) 0xC5A14576                // A!
-#define OP_REG_A_ADD_STORE           (opcode_t) 0x57EF066B                // A+!
-#define OP_REG_A_ADD_ADD             (opcode_t) 0x51EEFCF9                // A++
-#define OP_REG_A_SUB_SUB             (opcode_t) 0x77FE4355                // A--
+#define OP_REG_A_ADD                 (opcode_t) 0x57EF066B                // A+!
+#define OP_REG_A_INC                 (opcode_t) 0x51EEFCF9                // A++
+#define OP_REG_A_DEC                 (opcode_t) 0x77FE4355                // A--
 #define OP_REG_A_TO_R                (opcode_t) 0x2D43D1F                 // A>R
-#define OP_REG_R_TO_A                (opcode_t) 0x9311A63B                // R>A
+#define OP_REG_R_TO_A_               (opcode_t) 0x9311A63B                // R>A
 
 // Register B
 #define OP_REG_B_LOAD                (opcode_t) 0x8CA32A52                // B@
 #define OP_REG_B_STORE               (opcode_t) 0xADA35E45                // B!
-#define OP_REG_B_ADD_STORE           (opcode_t) 0x603C1122                // B+!
-#define OP_REG_B_ADD_ADD             (opcode_t) 0x663C1A94                // B++
-#define OP_REG_B_SUB_SUB             (opcode_t) 0x603793F4                // B--
+#define OP_REG_B_ADD                 (opcode_t) 0x603C1122                // B+!
+#define OP_REG_B_INC                 (opcode_t) 0x663C1A94                // B++
+#define OP_REG_B_DEC                 (opcode_t) 0x603793F4                // B--
 #define OP_REG_B_TO_R                (opcode_t) 0x755808AE                // B>R
-#define OP_REG_R_TO_B                (opcode_t) 0x9411A7CE                // R>B
+#define OP_REG_R_TO_B_               (opcode_t) 0x9411A7CE                // R>B
 
 // Register C
 #define OP_REG_C_LOAD                (opcode_t) 0xB2A5A4BB                // C@
 #define OP_REG_C_STORE               (opcode_t) 0xD1A5D588                // C!
-#define OP_REG_C_ADD_STORE           (opcode_t) 0xCD007A95                // C+!
-#define OP_REG_C_ADD_ADD             (opcode_t) 0xD3008407                // C++
-#define OP_REG_C_SUB_SUB             (opcode_t) 0xCD04F7C3                // C--
+#define OP_REG_C_ADD                 (opcode_t) 0xCD007A95                // C+!
+#define OP_REG_C_INC                 (opcode_t) 0xD3008407                // C++
+#define OP_REG_C_DEC                 (opcode_t) 0xCD04F7C3                // C--
 #define OP_REG_C_TO_R                (opcode_t) 0xDBE4BBB5                // C>R
-#define OP_REG_R_TO_C                (opcode_t) 0x9511A961                // R>C
+#define OP_REG_R_TO_C_               (opcode_t) 0x9511A961                // R>C
 
 // Register I
 #define OP_REG_I_LOAD                (opcode_t) 0x96B48331                // I@
 #define OP_REG_I_STORE               (opcode_t) 0xB5B4B3FE                // I!
-#define OP_REG_I_ADD_STORE           (opcode_t) 0xAE5EC4B3                // I+!
-#define OP_REG_I_ADD_ADD             (opcode_t) 0xB85ED471                // I++
-#define OP_REG_I_SUB_SUB             (opcode_t) 0x5E6D514D                // I--
+#define OP_REG_I_ADD                 (opcode_t) 0xAE5EC4B3                // I+!
+#define OP_REG_I_INC                 (opcode_t) 0xB85ED471                // I++
+#define OP_REG_I_DEC                 (opcode_t) 0x5E6D514D                // I--
 #define OP_REG_I_TO_R                (opcode_t) 0x79924CA7                // I>R
-#define OP_REG_R_TO_I                (opcode_t) 0x8B1199A3                // R>I
+#define OP_REG_R_TO_I_               (opcode_t) 0x8B1199A3                // R>I
 
 // Register J
 #define OP_REG_J_LOAD                (opcode_t) 0xBCB6FD9A                // J@
 #define OP_REG_J_STORE               (opcode_t) 0xDDB7318D                // J!
-#define OP_REG_J_ADD_STORE           (opcode_t) 0x374A69AA                // J+!
-#define OP_REG_J_ADD_ADD             (opcode_t) 0x2D4A59EC                // J++
-#define OP_REG_J_SUB_SUB             (opcode_t) 0xA74509CC                // J--
+#define OP_REG_J_ADD                 (opcode_t) 0x374A69AA                // J+!
+#define OP_REG_J_INC                 (opcode_t) 0x2D4A59EC                // J++
+#define OP_REG_J_DEC                 (opcode_t) 0xA74509CC                // J--
 #define OP_REG_J_TO_R                (opcode_t) 0xCC15E5D6                // J>R
-#define OP_REG_R_TO_J                (opcode_t) 0x8C119B36                // R>J
+#define OP_REG_R_TO_J_               (opcode_t) 0x8C119B36                // R>J
 // <-- END AUTOGEN PART -->
 
 #endif /* __HASH_DEF */
