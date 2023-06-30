@@ -87,7 +87,3 @@ define_register_primitive(J);
 //#ifdef __USE_EXTENSIONS
 //  load_extensions(s);
 //#endif
-//
-//#ifdef __EMBED_LIB_CF
-//  parse_from_embed_lib_cf(s);
-//#endif /* __EMBED_LIB_CF */

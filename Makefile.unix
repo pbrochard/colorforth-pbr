@@ -31,7 +31,6 @@ INCLUDED_SRC=src/utils.c \
 SRC_H=src/colorforth.h \
 	conf.h \
 	src/hash_def.h \
-	src/lib.cf.h \
 	src/cf-stdio.h \
 	src/color.h
 
@@ -49,10 +48,6 @@ optim_cpl:
 
 conf.h: src/conf.tmpl.h
 	cp src/conf.tmpl.h conf.h
-
-src/lib.cf.h: src/lib.tmpl.cf
-	cp src/lib.tmpl.cf lib.cf
-	xxd -i lib.cf src/lib.cf.h
 
 colorforth: Makefile $(SRC) $(INCLUDED_SRC) $(EXT_SRC) $(SRC_H)
 	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth $(SRC) $(EXT_SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
@@ -90,4 +85,4 @@ clean:
 	rm -f colorforth colorforth-unsafe
 
 mrproper: clean
-	rm -f conf.h src/lib.cf src/lib.cf.h
+	rm -f conf.h src/lib.cf

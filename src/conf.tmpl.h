@@ -36,9 +36,6 @@ typedef long cell;
 // Enable colors in the terminal
 #define __ECHO_COLOR
 
-// Embed lib.cf
-#define __EMBED_LIB_CF
-
 // Use extensions
 #define __USE_EXTENSIONS
 
