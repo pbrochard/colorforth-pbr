@@ -4,3 +4,5 @@ conf.h
 lib.cf
 colorforth-arduino/conf.h
 *.hex
+ext/define-ext.c
+ext/ext-words.c
