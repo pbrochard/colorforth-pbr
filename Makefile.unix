@@ -33,6 +33,7 @@ INCLUDED_SRC=src/utils.c \
 SRC_H=src/colorforth.h \
 	conf.h \
 	src/hash_def.h \
+	ext/ext-hash_def.h \
 	src/cf-stdio.h \
 	src/color.h
 
