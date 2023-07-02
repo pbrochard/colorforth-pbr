@@ -191,7 +191,7 @@ execute_(struct state *s, struct entry *entry)
 
 #include "core-words.c"
 #include "lib-words.c"
-      //#include "extensions-words.c"
+#include "ext-words.c"
 
       default:
       {
@@ -354,6 +354,40 @@ parse_colorforth(struct state *s, int c)
   }
 }
 
+void
+parse_space(struct state *s)
+{
+  char *old_str_stream = s->str_stream;
+  FILE *old_file_stream = s->file_stream;
+
+  s->str_stream = NULL;
+  s->file_stream = NULL;
+
+  parse_colorforth(s, ' '); parse_colorforth(s, '~');
+
+  s->str_stream = old_str_stream;
+  s->file_stream = old_file_stream;
+}
+
+void
+parse_from_string(struct state *s, char *str)
+{
+  char *old_stream = s->str_stream;
+
+  s->str_stream = str;
+  int c;
+  while((c = (char) cf_getchar(s)) != 0 && !s->done)
+  {
+    parse_colorforth(s, c);
+  }
+
+  parse_colorforth(s, ' ');
+
+  s->str_stream = old_stream;
+
+  parse_space(s);
+}
+
 struct state*
 colorforth_newstate(void)
 {
@@ -384,6 +418,7 @@ colorforth_newstate(void)
 
 #include "define-core.c"
 #include "define-lib.c"
+#include "define-ext.c"
 
   s->color = execute;
   echo_color(s, '~', COLOR_YELLOW);
