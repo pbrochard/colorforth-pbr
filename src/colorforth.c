@@ -235,11 +235,37 @@ tick(struct state *s)
   }
 
   ENSURE_STACK_MAX(1);
-  PUSH(entry_index);
+  PUSH(ENTRY(entry_index)->offset);
 }
 
 static void
 compile_tick(struct state *s)
+{
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index == -1) {
+    unknow_word(s);
+    return;
+  }
+
+  STORE(OP_TICK_NUMBER, opcode_t);
+  STORE(ENTRY(entry_index)->offset, cell);
+}
+
+static void
+tick_entry(struct state *s)
+{
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index == -1) {
+    unknow_word(s);
+    return;
+  }
+
+  ENSURE_STACK_MAX(1);
+  PUSH(entry_index);
+}
+
+static void
+compile_tick_entry(struct state *s)
 {
   cell entry_index = find_entry(s, &s->dict);
   if (entry_index == -1) {
@@ -290,6 +316,11 @@ parse_colorforth(struct state *s, int c)
       case '~': { s->color = execute; echo_color(s, c, COLOR_YELLOW); return; }
       case '\'': {
         s->color = s->color == execute ? tick : compile_tick;
+        echo_color(s, c, COLOR_BLUE);
+        return;
+      }
+      case '`': {
+        s->color = s->color == execute ? tick_entry : compile_tick_entry;
         echo_color(s, c, COLOR_BLUE);
         return;
       }

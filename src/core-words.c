@@ -140,13 +140,6 @@ case OP_TAIL_CALL:
   continue;
 }
 
-//       case OP_FUNCTION_CALL:
-//       {
-//         // Call extension function
-//         ((void (*)(struct state *s)) pc->value)(s);
-//         break;
-//       }
-
 case OP_NUMBER:
 case OP_TICK_NUMBER:
 {
@@ -208,7 +201,7 @@ case OP_IF:
 
   if (p2) {
     R_PUSH(pc);
-    pc = ENTRY(p1)->offset;
+    pc = p1;
   }
   continue;
 }
@@ -221,7 +214,7 @@ case OP_IF_TAIL_CALL:
 
   pc += sizeof(opcode_t);
 
-  if (p2) pc = ENTRY(p1)->offset;
+  if (p2) pc = p1;
   continue;
 }
 
@@ -234,7 +227,7 @@ case OP_IF_EXIT:
 
   if (p2) {
     R_PUSH(pc);
-    pc = ENTRY(p1)->offset;
+    pc = p1;
     R_SP -= 1;
   }
   continue;
@@ -249,7 +242,7 @@ case OP_IF_NOT:
 
   if (p2 == 0) {
     R_PUSH(pc);
-    pc = ENTRY(p1)->offset;
+    pc = p1;
   }
   continue;
 }
@@ -262,7 +255,7 @@ case OP_IF_NOT_TAIL_CALL:
 
   pc += sizeof(opcode_t);
 
-  if (p2 == 0) pc = ENTRY(p1)->offset;
+  if (p2 == 0) pc = p1;
   continue;
 }
 
@@ -275,7 +268,7 @@ case OP_IF_NOT_EXIT:
 
   if (p2 == 0) {
     R_PUSH(pc);
-    pc = ENTRY(p1)->offset;
+    pc = p1;
     R_SP -= 1;
   }
   continue;
@@ -289,7 +282,7 @@ case OP_IF_ELSE:
 
   pc += sizeof(opcode_t);
   R_PUSH(pc);
-  pc = p3 ? ENTRY(p2)->offset : ENTRY(p1)->offset;
+  pc = p3 ? p2 : p1;
   continue;
 }
 
@@ -326,33 +319,13 @@ case OP_EXECUTE:
 {
   ENSURE_STACK_MIN(1);
   ENSURE_R_STACK_MAX(1);
-  cell entry_index = POP();
-  R_PUSH(pc + sizeof(opcode_t));
-  pc = ENTRY(entry_index)->offset;
-  continue;
-}
-
-// Like execute but leave xt on the stack
-case OP_EXECUTE_STAR:
-{
-  ENSURE_STACK_MIN(1);
-  ENSURE_R_STACK_MAX(1);
-  R_PUSH(pc + sizeof(opcode_t));
-  pc = ENTRY(CELLS[SP])->offset;
-  continue;
-}
-
-case OP_C_EXECUTE:
-{
-  ENSURE_STACK_MIN(1);
-  ENSURE_R_STACK_MAX(1);
   const cell offset = POP();
   R_PUSH(pc + sizeof(opcode_t));
   pc = offset;
   continue;
 }
 
-case OP_C_EXECUTE_STAR:
+case OP_EXECUTE_STAR:
 {
   ENSURE_STACK_MIN(1);
   ENSURE_R_STACK_MAX(1);

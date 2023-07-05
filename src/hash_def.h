@@ -54,11 +54,9 @@ typedef hash_t opcode_t;
 #define OP_LATEST                    (opcode_t) 0xA307AFAB                // latest
 #define OP_COMPILE                   (opcode_t) 0x12AD19B0                // [^]
 #define OP_COMPILE_LITERAL           (opcode_t) 0x176F15FE                // [,]
-#define OP_GET_ENTRY_CODE            (opcode_t) 0x3BC9871                 // code>
-#define OP_EXECUTE                   (opcode_t) 0x54DA4CCF                // execute
-#define OP_EXECUTE_STAR              (opcode_t) 0x78A70C7F                // execute*
-#define OP_C_EXECUTE                 (opcode_t) 0xABF1EDF8                // c>execute
-#define OP_C_EXECUTE_STAR            (opcode_t) 0x7FD96196                // c>execute*
+#define OP_GET_ENTRY_CODE            (opcode_t) 0xC0F56CA5                // c>
+#define OP_EXECUTE                   (opcode_t) 0x61A52EA0                // call
+#define OP_EXECUTE_STAR              (opcode_t) 0x4108433E                // call*
 #define OP_IF                        (opcode_t) 0x790405D7                // if
 #define OP_IF_TAIL_CALL              (opcode_t) 0x7E556D47                // if*
 #define OP_IF_EXIT                   (opcode_t) 0x6D555284                // if;
