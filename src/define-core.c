@@ -1,11 +1,5 @@
 // The author disclaims copyright to this source code.
 
-define_prefix(':', define,         COLOR_RED,     1);
-define_prefix('^', compile,        COLOR_GREEN,   0);
-define_prefix('~', execute,        COLOR_YELLOW,  0);
-define_prefix('\'', tick,          COLOR_BLUE,    0);
-define_prefix('`', compile_tick,   COLOR_BLUE,    0);
-
 define_primitive(s, ENTRY_NAME("nop"), OP_NOP);
 define_primitive(s, ENTRY_NAME("."), OP_PRINT_TOS);
 define_primitive(s, ENTRY_NAME("dup"), OP_DUP);

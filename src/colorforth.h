@@ -21,8 +21,6 @@ extern "C" {
 #endif
 
 
-#define MAX_PREFIX 10
-
 // terminal input buffer
 struct tib
 {
@@ -143,9 +141,6 @@ extern cell find_entry(struct state *state, struct dictionary *dict);
 //extern struct entry* find_entry_by_code(struct dictionary *dict, struct code *code);
 //extern struct entry* find_entry_by_fn(struct dictionary *dict, struct code *code);
 extern void unknow_word (struct state *s);
-
-extern void define_prefix(char c, void (*fn)(struct state *s), char * color, short reset);
-extern void define_primitive_extension(struct state *s, hash_t hashed_name, char name[], void (*fn)(struct state *s));
 
 extern void compile_code(struct state *s, cell opcode, cell value);
 

@@ -15,8 +15,6 @@ extern char check_entry(struct state *s, struct entry *check_entry);
 extern void display_clash_found(struct state *s, char clash_found);
 #endif /* __CHECK_DICT */
 
-struct prefix_map prefix_map[MAX_PREFIX];
-
 #define define_register(N)                                                     \
   case OP_REG_##N##_STORE: { ENSURE_STACK_MIN(1);  N = POP(); break; }         \
   case OP_REG_##N##_LOAD: { ENSURE_STACK_MAX(1);   PUSH(N); break; }    \
@@ -282,29 +280,17 @@ free_dictionary(struct dictionary *dict)
 }
 
 void
-define_prefix(char c, void (*fn)(struct state *s), char * color, short reset)
-{
-  static int n_prefix = 0;
-
-  if (reset) n_prefix = 0;
-
-  if (n_prefix >= MAX_PREFIX) cf_fatal_error(NULL, 7);
-
-  prefix_map[n_prefix].c = c;
-  prefix_map[n_prefix].fn = fn;
-  prefix_map[n_prefix].color = color;
-  n_prefix += 1;
-}
-
-void
 parse_colorforth(struct state *s, int c)
 {
   if (s->tib.len == 0) {
-    for (int i = 0; i < MAX_PREFIX; i++)
-    {
-      if (prefix_map[i].c == c) {
-        s->color = prefix_map[i].fn;
-        echo_color(s, c, prefix_map[i].color);
+    // Handle prefix
+    switch(c) {
+      case ':': { s->color = define; echo_color(s, c, COLOR_RED); return; }
+      case '^': { s->color = compile; echo_color(s, c, COLOR_GREEN); return; }
+      case '~': { s->color = execute; echo_color(s, c, COLOR_YELLOW); return; }
+      case '\'': {
+        s->color = s->color == execute ? tick : compile_tick;
+        echo_color(s, c, COLOR_BLUE);
         return;
       }
     }
