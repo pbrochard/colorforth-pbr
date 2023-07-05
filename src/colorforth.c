@@ -315,12 +315,12 @@ parse_colorforth(struct state *s, int c)
       case '^': { s->color = compile; echo_color(s, c, COLOR_GREEN); return; }
       case '~': { s->color = execute; echo_color(s, c, COLOR_YELLOW); return; }
       case '\'': {
-        s->color = s->color == execute ? tick : compile_tick;
+        s->color = (s->color == execute || s->color == tick || s->color == tick_entry) ? tick : compile_tick;
         echo_color(s, c, COLOR_BLUE);
         return;
       }
       case '`': {
-        s->color = s->color == execute ? tick_entry : compile_tick_entry;
+        s->color = (s->color == execute || s->color == tick || s->color == tick_entry) ? tick_entry : compile_tick_entry;
         echo_color(s, c, COLOR_BLUE);
         return;
       }
