@@ -115,7 +115,7 @@ dump_words(struct state *s, struct dictionary *dict)
   {
     struct entry entry = dict->entries[i];
 
-    if (entry.name == NULL) continue;
+    if (entry.name == NULL || entry.opcode == 0) continue;
 
     s->tib.len = entry.name_len;
     memcpy(s->tib.buf, entry.name, entry.name_len);

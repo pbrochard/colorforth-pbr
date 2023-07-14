@@ -13,20 +13,6 @@ hash_fn (struct state *s)
 }
 
 void
-hide_entry (struct state *s)
-{
-  struct entry *entry = (struct entry*)POP();
-
-  entry->mode = HIDDEN;
-  //entry->name_hash = 0;
-#ifdef __KEEP_ENTRY_NAMES
-  free(entry->name);
-  entry->name = NULL;
-  entry->name_len = 0;
-#endif
-}
-
-void
 room (struct state *s)
 {
 //  const unsigned int defined = s->dict.latest - s->dict.entries + 1;
@@ -55,10 +41,6 @@ drop_room (struct state *s)
 //init_lib(struct state *state)
 //{
 //  define_primitive_extension(state, HASH_HASH,           ENTRY_NAME("hash"), hash_fn);
-//  define_primitive_extension(state, BASE_HASH,           ENTRY_NAME("base"), get_base_addr);
-//  define_primitive_extension(state, ENTRY_IS_HASH,       ENTRY_NAME("is"), is);
-//  define_primitive_extension(state, ENTRY_C_IS_HASH,     ENTRY_NAME("c>is"), c_is);
-//  define_primitive_extension(state, ENTRY_HIDE_HASH,     ENTRY_NAME("entry/hide"), hide_entry);
 //  define_primitive_extension(state, ROOM_HASH,           ENTRY_NAME("room"), room);
 //  define_primitive_extension(state, DROP_ROOM_HASH,      ENTRY_NAME("drop-room"), drop_room);
 //}

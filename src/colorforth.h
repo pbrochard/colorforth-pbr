@@ -31,7 +31,6 @@ struct tib
 enum entry_mode {
   CORE,
   CALL,
-  HIDDEN
 };
 
 struct entry;
