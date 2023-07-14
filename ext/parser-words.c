@@ -1,3 +1,5 @@
+// The author disclaims copyright to this source code.
+
 case OP_PARSE: {
   POP1();
   parse_colorforth(s, p1);

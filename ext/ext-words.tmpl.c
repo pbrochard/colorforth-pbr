@@ -3,3 +3,4 @@
 // Extensions system: include only what you need
 
 #include "parser-words.c"
+#include "io-words.c"

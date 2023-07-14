@@ -2,14 +2,6 @@
 #include "colorforth.h"
 #include "cf-stdio.h"
 
-//static char initialized = 0;
-
-//void
-//get_char(struct state *s)
-//{
-//  PUSH1(getchar());
-//}
-
 void
 parse_from_file(struct state *s, char *filename)
 {
@@ -34,12 +26,6 @@ parse_from_file(struct state *s, char *filename)
 
   parse_space(s);
 }
-
-//void
-//echo_addr(struct state *s)
-//{
-//  PUSH1((cell) &s->echo_on);
-//}
 
 int
 file_size(char *filename)
@@ -141,8 +127,6 @@ file_size(char *filename)
 //{
 //  if (initialized) return;
 //
-//  define_primitive_extension(state, GETCHAR_HASH,        ENTRY_NAME("getchar"), get_char);
-//  define_primitive_extension(state, ECHO_ADDR_HASH,      ENTRY_NAME("echo"), echo_addr);
 //  define_primitive_extension(state, FILE_SUBSIZE_HASH,   ENTRY_NAME("file-size"), file_size_fn);
 //  define_primitive_extension(state, FILE_LOAD_HASH,      ENTRY_NAME("load"), load_file);
 //  define_primitive_extension(state, FILE_SAVE_HASH,      ENTRY_NAME("save"), save_file);
