@@ -167,6 +167,7 @@ execute_(struct state *s, struct entry *entry)
   register cell C = 0;
   register cell I = 0;
   register cell J = 0;
+  register cell K = 0;
 #endif
 
 

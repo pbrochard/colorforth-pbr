@@ -124,6 +124,18 @@ typedef hash_t opcode_t;
 #define OP_REG_J_DEC                 (opcode_t) 0xA74509CC                // J--
 #define OP_REG_J_TO_R                (opcode_t) 0xCC15E5D6                // J>R
 #define OP_REG_R_TO_J_               (opcode_t) 0x8C119B36                // R>J
+
+// Register K
+#define OP_REG_K_LOAD                (opcode_t) 0x62BA4183 // K@
+#define OP_REG_K_STORE               (opcode_t) 0x41BA0D90 // K!
+#define OP_REG_K_ADD                 (opcode_t) 0xA4FC55BD // K+!
+#define OP_REG_K_INC                 (opcode_t) 0x9AFC45FF // K++
+#define OP_REG_K_DEC                 (opcode_t) 0xB500EC1B // K--
+#define OP_REG_K_TO_R                (opcode_t) 0x93E0647D // K>R
+#define OP_REG_R_TO_K_               (opcode_t) 0x8D119CC9 // R>K
+
+#define OP_IJK_TO_R                  (opcode_t) 0x1B91C8D0 // IJK>R
+#define OP_R_TO_KJI                  (opcode_t) 0x22D5F650 // R>KJI
 // <-- END AUTOGEN PART -->
 
 #include "ext-hash_def.h"

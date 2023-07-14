@@ -68,12 +68,16 @@ define_primitive(s, ENTRY_NAME("clear"), OP_CLEAR);
   define_primitive(s, ENTRY_NAME("R>"#N), OP_REG_R_TO_##N##_);
 
 //
-// //  // A, B, C, I and J registers are state global
+// //  // A, B, C, I, J and K registers are state global
 define_register_primitive(A);
 define_register_primitive(B);
 define_register_primitive(C);
 define_register_primitive(I);
 define_register_primitive(J);
+define_register_primitive(K);
+
+define_primitive(s, ENTRY_NAME("IJK>R"), OP_IJK_TO_R);
+define_primitive(s, ENTRY_NAME("R>KJI"), OP_R_TO_KJI);
 #endif
 
 //#ifdef __USE_EXTENSIONS

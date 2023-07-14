@@ -30,6 +30,7 @@ define_register(B);
 define_register(C);
 define_register(I);
 define_register(J);
+define_register(K);
 #endif
 
 case OP_DUP:
@@ -416,3 +417,21 @@ case OP_CLEAR:
   SP = 0;
   break;
 }
+
+#ifdef __USE_REGISTER
+case OP_IJK_TO_R: {
+  ENSURE_R_STACK_MAX(1);
+  R_PUSH(K);
+  K = J;
+  J = I;
+  break;
+}
+
+case OP_R_TO_KJI: {
+  ENSURE_R_STACK_MIN(1);
+  I = J;
+  J = K;
+  K = R_POP();
+  break;
+}
+#endif
