@@ -28,7 +28,8 @@ INCLUDED_SRC=src/utils.c \
 	ext/define-ext.c \
 	ext/ext-words.c \
     ext/parser-words.c \
-	ext/io-words.c
+	ext/io-words.c \
+	ext/math-words.c
 
 
 SRC_H=src/colorforth.h \

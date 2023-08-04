@@ -104,7 +104,7 @@ define(struct state *s)
 
   entry->offset = s->here;
   entry->mode = CALL;
-  printf("\ndefine: %s offset=%ld\n", entry->name, entry->offset);
+  // printf("\ndefine: %s offset=%ld\n", entry->name, entry->offset);
 }
 
 static void
