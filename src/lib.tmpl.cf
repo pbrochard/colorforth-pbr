@@ -47,4 +47,18 @@
 :times ~( xt n - ) ^I>R I! IJK>R times-loop R>KJI R>I drop ;
 ~`times-loop ~entry/hide
 
+~( dump word )
+:emit. ^ drop 46 emit ;
+:v-emit ~( c - )
+  ^dup  32 < 'emit. ^if;
+  ^dup 128 < 'emit. ^if-not;
+  ^emit ;
+:.c ^dup v-emit space . tab ;
+:cr? ^dup 12 mod 0 = 'cr ^if ;
+
+:<dump> ~( a xt -) ^>R dup 119 I@ - cr? + c@ .c  R> ;
+:dump ~( a - ) ^'<dump> ^120 times drop ;
+~`emit. ~entry/hide `v-emit ~entry/hide `.c ~entry/hide
+`cr? ~entry/hide `<dump> ~entry/hide
+
 ~
