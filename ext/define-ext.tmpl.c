@@ -10,6 +10,13 @@ define_primitive(s, ENTRY_NAME("clear-tib"), OP_CLEAR_TIB);
 define_primitive(s, ENTRY_NAME("getchar"), OP_GETCHAR);
 define_primitive(s, ENTRY_NAME("echo"), OP_ECHO_ADDR);
 
+// time
+define_primitive(s, ENTRY_NAME("time"),    OP_TIME);    // t ime_fn);
+define_primitive(s, ENTRY_NAME("utime"),   OP_UTIME);   // utime_fn);
+define_primitive(s, ENTRY_NAME("sleep"),   OP_SLEEP);   // sleep_fn);
+define_primitive(s, ENTRY_NAME("mssleep"), OP_MSSLEEP); // mssleep_fn);
+
+
 // math
 define_primitive(s, ENTRY_NAME("/"),      OP_DIV); //, div_fn);
 define_primitive(s, ENTRY_NAME("mod"),    OP_MOD); //, mod_fn);

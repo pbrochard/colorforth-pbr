@@ -4,3 +4,5 @@
 
 #include "parser-words.c"
 #include "io-words.c"
+#include "time-words.c"
+#include "math-words.c"

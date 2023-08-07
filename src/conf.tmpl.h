@@ -2,6 +2,11 @@
 #ifndef __CONF_H
 #define __CONF_H
 
+#include <sys/time.h>
+#include <unistd.h>
+#include <time.h>
+
+
 typedef long cell;
 #define CELL_FMT "%ld"
 
