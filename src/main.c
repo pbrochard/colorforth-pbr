@@ -19,15 +19,15 @@ parse_command_line(struct state *s, int argc, char *argv[])
 
     if (nextIsEval)
     {
-      //parse_from_string(s, argv[i]);
+      parse_from_string(s, argv[i]);
       nextIsEval = 0;
       continue;
     }
 
-    //parse_from_file(s, argv[i]);
+    parse_from_file(s, argv[i]);
   }
 
-  //parse_colorforth(s, '~');
+  parse_colorforth(s, '~');
 }
 
 
