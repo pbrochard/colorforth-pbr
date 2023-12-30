@@ -16,6 +16,12 @@ define_primitive(s, ENTRY_NAME("utime"),   OP_UTIME);   // utime_fn);
 define_primitive(s, ENTRY_NAME("sleep"),   OP_SLEEP);   // sleep_fn);
 define_primitive(s, ENTRY_NAME("mssleep"), OP_MSSLEEP); // mssleep_fn);
 
+// dict
+define_primitive(s, ENTRY_NAME("see"),         OP_SEE); //, see_fn);
+define_primitive(s, ENTRY_NAME("disassemble"), OP_DISASSEMBLE); //, disassemble);
+define_primitive(s, ENTRY_NAME("fullroom"),    OP_FULLROOM); //, fullroom);
+define_primitive(s, ENTRY_NAME("entry/patch"), OP_ENTRY__PATCH); //, patch_entry);
+define_primitive(s, ENTRY_NAME("check-dict"),  OP_CHECK_DICT); //, check_dict);
 
 // math
 define_primitive(s, ENTRY_NAME("/"),      OP_DIV); //, div_fn);

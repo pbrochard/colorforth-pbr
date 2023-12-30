@@ -25,6 +25,7 @@ extern void display_clash_found(struct state *s, char clash_found);
   case OP_REG_##N##_TO_R: { ENSURE_R_STACK_MAX(1); R_PUSH(N); break; }
 
 #include "utils.c"
+#include "ext-functions.c"
 
 // 'hashed_name' is 'hash(name)' or 0x0 if names are kept
 // 'name' must be null-terminated.

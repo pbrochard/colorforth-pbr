@@ -168,6 +168,19 @@ find_entry_by_hash(struct dictionary *dict, hash_t opcode)
   return -1;
 }
 
+cell
+find_entry_by_offset(struct dictionary *dict, cell offset)
+{
+  for (int i = dict->latest; i >= 0; i--)
+  {
+    if (dict->entries[i].offset == offset)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
 // struct entry*
 // find_entry_by_code(struct dictionary *dict, struct code *code)
 // {
