@@ -26,6 +26,7 @@ define_primitive(s, ENTRY_NAME("cell"), OP_CELL);
 define_primitive(s, ENTRY_NAME("here"), OP_HERE);
 define_primitive(s, ENTRY_NAME("&here"), OP_HERE_ADDR);
 define_primitive(s, ENTRY_NAME("&heap"), OP_HEAP_ADDR);
+define_primitive(s, ENTRY_NAME("heap-size"), OP_HEAP_SIZE);
 define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
 
 define_primitive(s, ENTRY_NAME("[^]"), OP_COMPILE);

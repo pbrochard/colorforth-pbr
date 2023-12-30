@@ -51,6 +51,7 @@ typedef hash_t opcode_t;
 #define OP_HERE                      (opcode_t) 0xD786E25E                // here
 #define OP_HERE_ADDR                 (opcode_t) 0xAE504314                // &here
 #define OP_HEAP_ADDR                 (opcode_t) 0x89705C80                // &heap
+#define OP_HEAP_SIZE                 (opcode_t) 0xC2A05C60                // heap-size
 #define OP_LATEST                    (opcode_t) 0xA307AFAB                // latest
 #define OP_COMPILE                   (opcode_t) 0x12AD19B0                // [^]
 #define OP_COMPILE_LITERAL           (opcode_t) 0x176F15FE                // [,]

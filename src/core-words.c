@@ -357,6 +357,13 @@ case OP_HEAP_ADDR:
   break;
 }
 
+case OP_HEAP_SIZE:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH((cell)HEAP_SIZE);
+  break;
+}
+
 case OP_LATEST:
 {
   ENSURE_STACK_MAX(1);
