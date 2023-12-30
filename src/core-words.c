@@ -374,7 +374,8 @@ case OP_LATEST:
 case OP_COMPILE:
 {
   ENSURE_STACK_MIN(1);
-  cell entry_index = POP();
+  cell offset = POP();
+  cell entry_index = find_entry_by_offset(&s->dict, offset);
   compile_entry(s, entry_index);
   break;
 }
