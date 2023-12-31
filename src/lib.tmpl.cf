@@ -61,4 +61,25 @@
 ~`emit. ~entry/hide `v-emit ~entry/hide `.c ~entry/hide
 `cr? ~entry/hide `<dump> ~entry/hide
 
+~( variables )
+:alloc ~( n - a ) ^&here @ swap over + &here ! ;
+
+~cell alloc :dhere ~[,] ^;
+~heap-size dhere &heap + !
+
+:dalloc ~( n - a ) ^dhere &heap + @ swap - dup dhere &heap + ! ;
+
+:? ^@ . ;
+
+:constant
+:const ^[,] ;
+
+:variable
+:var ^cell dalloc dup [,] &heap + ! '&heap ^[^] '+ ^[^] ;
+
+:variables
+:vars ^cells dalloc [,] '&heap ^[^] '+ ^[^] ;
+
+:[] ^cells + ;
+
 ~
