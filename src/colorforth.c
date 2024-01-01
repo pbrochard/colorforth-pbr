@@ -10,6 +10,10 @@
 #include "colorforth.h"
 #include "cf-stdio.h"
 
+#define __SECTION_HASH_DEF
+#include "load-ext.c"
+#undef __SECTION_HASH_DEF
+
 #ifdef __CHECK_DICT
 extern char check_entry(struct state *s, struct entry *check_entry);
 extern void display_clash_found(struct state *s, char clash_found);
@@ -25,7 +29,10 @@ extern void display_clash_found(struct state *s, char clash_found);
   case OP_REG_##N##_TO_R: { ENSURE_R_STACK_MAX(1); R_PUSH(N); break; }
 
 #include "utils.c"
-#include "ext-functions.c"
+
+#define __SECTION_FUNCTION
+#include "load-ext.c"
+#undef __SECTION_FUNCTION
 
 // 'hashed_name' is 'hash(name)' or 0x0 if names are kept
 // 'name' must be null-terminated.
@@ -192,6 +199,10 @@ execute_(struct state *s, struct entry *entry)
 #include "core-words.c"
 #include "lib-words.c"
 #include "ext-words.c"
+
+#define __SECTION_SWITCH
+#include "load-ext.c"
+#undef __SECTION_SWITCH
 
       default:
       {
@@ -438,6 +449,10 @@ colorforth_newstate(void)
 #include "define-core.c"
 #include "define-lib.c"
 #include "define-ext.c"
+
+#define __SECTION_WORD_DEF
+#include "load-ext.c"
+#undef __SECTION_WORD_DEF
 
   s->color = execute;
   echo_color(s, '~', COLOR_YELLOW);

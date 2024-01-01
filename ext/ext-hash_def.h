@@ -1,13 +1,6 @@
 #ifndef __EXT_HASH_DEF
 #define __EXT_HASH_DEF
 
-// ext/dict.c
-#define OP_SEE                       (opcode_t) 0x519873B3                // see
-#define OP_DISASSEMBLE               (opcode_t) 0xF9B7D344                // disassemble
-#define OP_FULLROOM                  (opcode_t) 0x85D1BFBA                // fullroom
-#define OP_ENTRY__PATCH              (opcode_t) 0x8AC21565                // entry/patch
-#define OP_CHECK_DICT                (opcode_t) 0xC03D691F                // check-dict
-
 // ext/ext-math.c
 #define OP_FLOAT                     (opcode_t) 0xEF099DDA                // float
 #define OP_F_DOTS                    (opcode_t) 0xDF52D985                // f.s

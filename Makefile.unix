@@ -31,7 +31,6 @@ INCLUDED_SRC=src/utils.c \
 	ext/io-words.c \
     ext/time-words.c \
 	ext/math-words.c \
-	ext/dict-words.c \
 	ext/dict.c
 
 

@@ -1,6 +1,75 @@
 // The author disclaims copyright to this source code.
-#include <string.h>
 
+/**********************************************************************************
+ *   HASH DEF
+ *********************************************************************************/
+#ifdef __SECTION_HASH_DEF
+
+#define OP_SEE                       (opcode_t) 0x519873B3                // see
+#define OP_DISASSEMBLE               (opcode_t) 0xF9B7D344                // disassemble
+#define OP_FULLROOM                  (opcode_t) 0x85D1BFBA                // fullroom
+#define OP_ENTRY__PATCH              (opcode_t) 0x8AC21565                // entry/patch
+#define OP_CHECK_DICT                (opcode_t) 0xC03D691F                // check-dict
+
+#endif /* __SECTION_HASH_DEF */
+
+
+/**********************************************************************************
+ *   WORD DEF
+ *********************************************************************************/
+#ifdef __SECTION_WORD_DEF
+
+define_primitive(s, ENTRY_NAME("see"),         OP_SEE); //, see_fn);
+define_primitive(s, ENTRY_NAME("disassemble"), OP_DISASSEMBLE); //, disassemble);
+define_primitive(s, ENTRY_NAME("fullroom"),    OP_FULLROOM); //, fullroom);
+define_primitive(s, ENTRY_NAME("entry/patch"), OP_ENTRY__PATCH); //, patch_entry);
+define_primitive(s, ENTRY_NAME("check-dict"),  OP_CHECK_DICT); //, check_dict);
+
+#endif /* __SECTION_WORD_DEF */
+
+
+/**********************************************************************************
+ *   SWITCH DEF
+ *********************************************************************************/
+#ifdef __SECTION_SWITCH
+
+case OP_SEE: {
+  POP1();
+  cell entry_offset = p1;
+  cell entry_index = find_entry_by_offset(&s->dict, entry_offset);
+  see(s, entry_index);
+  break;
+}
+
+case OP_DISASSEMBLE: {
+  disassemble(s);
+  break;
+}
+
+case OP_FULLROOM: {
+  fullroom(s);
+  break;
+}
+
+// case OP_ENTRY__PATCH: {
+//   printf("ENTRY__PATCH");
+//   break;
+// }
+//
+// case OP_CHECK_DICT: {
+//   printf("CHECK_DICT");
+//   break;
+// }
+
+#endif /* __SECTION_SWITCH */
+
+
+/**********************************************************************************
+ *   FUNCTION DEF
+ *********************************************************************************/
+#ifdef __SECTION_FUNCTION
+
+#include <string.h>
 #include "colorforth.h"
 #include "cf-stdio.h"
 
@@ -231,3 +300,5 @@ fullroom(struct state *s) {
 // //
 // //   initialized = 1;
 // // }
+
+#endif /* __SECTION_FUNCTION */
