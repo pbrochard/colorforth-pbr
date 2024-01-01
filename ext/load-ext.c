@@ -2,4 +2,5 @@
 
 #include "parser.c"
 #include "io.c"
+#include "time.c"
 #include "dict.c"

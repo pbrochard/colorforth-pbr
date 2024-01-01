@@ -2,5 +2,4 @@
 //
 // Extensions system: include only what you need
 
-#include "time-words.c"
 #include "math-words.c"

@@ -124,10 +124,4 @@
 #define OP_THREAD__LOCK              (opcode_t) 0x91795D9A                // thread/lock
 #define OP_THREAD__UNLOCK            (opcode_t) 0xE4DECEBD                // thread/unlock
 
-// ext/time.c
-#define OP_TIME                      (opcode_t) 0xA16F62B9                // time
-#define OP_UTIME                     (opcode_t) 0x9592595E                // utime
-#define OP_SLEEP                     (opcode_t) 0xD91187F3                // sleep
-#define OP_MSSLEEP                   (opcode_t) 0xBAD535EF                // mssleep
-
 #endif /* __EXT_HASH_DEF */
