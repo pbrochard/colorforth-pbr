@@ -1,31 +1,53 @@
 // The author disclaims copyright to this source code.
-#include "colorforth.h"
-#include "cf-stdio.h"
 
-void
-parse_from_file(struct state *s, char *filename)
-{
-  s->tib.len = 0;
-  FILE *old_stream = s->file_stream;
-  s->file_stream = fopen(filename, "r");
-  if (!s->file_stream)
-  {
-    s->file_stream = old_stream;
-    cf_printf(s, "Unable to read '%s'\n", filename);
-    return;
-  }
+/**********************************************************************************
+ *   HASH DEF
+ *********************************************************************************/
+#ifdef __SECTION_HASH_DEF
 
-  int c;
-  while((c = cf_getchar(s)) != CF_EOF && !s->done)
-  {
-    parse_colorforth(s, c);
-  }
+#define OP_GETCHAR                   (opcode_t) 0x151AFB78                // getchar
+#define OP_ECHO_ADDR                 (opcode_t) 0xE63F83C1                // echo
+#define OP_FILE_SUBSIZE              (opcode_t) 0xD4DD4B30                // file-size
+#define OP_FILE_LOAD                 (opcode_t) 0xDE8C953C                // load
+#define OP_FILE_SAVE                 (opcode_t) 0x84B337FD                // save
+#define OP_INCLUDED                  (opcode_t) 0x7916FE10                // included
 
-  fclose(s->file_stream);
-  s->file_stream = old_stream;
+#endif /* __SECTION_HASH_DEF */
 
-  parse_space(s);
+
+/**********************************************************************************
+ *   WORD DEF
+ *********************************************************************************/
+#ifdef __SECTION_WORD_DEF
+
+define_primitive(s, ENTRY_NAME("getchar"), OP_GETCHAR);
+define_primitive(s, ENTRY_NAME("echo"), OP_ECHO_ADDR);
+
+#endif /* __SECTION_WORD_DEF */
+
+
+/**********************************************************************************
+ *   SWITCH DEF
+ *********************************************************************************/
+#ifdef __SECTION_SWITCH
+
+case OP_GETCHAR: {
+  PUSH1(getchar());
+  break;
 }
+
+case OP_ECHO_ADDR: {
+  PUSH1((cell) &s->echo_on);
+  break;
+}
+
+#endif /* __SECTION_SWITCH */
+
+
+/**********************************************************************************
+ *   FUNCTION DEF
+ *********************************************************************************/
+#ifdef __SECTION_FUNCTION
 
 int
 file_size(char *filename)
@@ -134,3 +156,5 @@ file_size(char *filename)
 //
 //  initialized = 1;
 //}
+
+#endif /* __SECTION_FUNCTION */

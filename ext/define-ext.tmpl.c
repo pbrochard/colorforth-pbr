@@ -2,10 +2,6 @@
 //
 // Extensions system: include only what you need
 
-// io
-define_primitive(s, ENTRY_NAME("getchar"), OP_GETCHAR);
-define_primitive(s, ENTRY_NAME("echo"), OP_ECHO_ADDR);
-
 // time
 define_primitive(s, ENTRY_NAME("time"),    OP_TIME);    // t ime_fn);
 define_primitive(s, ENTRY_NAME("utime"),   OP_UTIME);   // utime_fn);

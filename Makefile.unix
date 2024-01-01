@@ -7,8 +7,7 @@ default: colorforth
 SRC=src/main.c src/colorforth.c \
 	src/cf-stdio.c \
 	src/color.c \
-	src/lib.c \
-	ext/io.c
+	src/lib.c
 
 #EXT_SRC=ext/os.c \
 #	ext/dict.c \
@@ -27,8 +26,9 @@ INCLUDED_SRC=src/utils.c \
 	src/lib-words.c \
 	ext/define-ext.c \
 	ext/ext-words.c \
+	ext/load-ext.c \
     ext/parser.c \
-	ext/io-words.c \
+	ext/io.c \
     ext/time-words.c \
 	ext/math-words.c \
 	ext/dict.c

@@ -22,14 +22,6 @@
 #define OP_F_STORE                   (opcode_t) 0x45FCF9C9                // f!
 #define OP_F_INLINE                  (opcode_t) 0xBF067E82                // [f,]
 
-// ext/io.c
-#define OP_GETCHAR                   (opcode_t) 0x151AFB78                // getchar
-#define OP_ECHO_ADDR                 (opcode_t) 0xE63F83C1                // echo
-#define OP_FILE_SUBSIZE              (opcode_t) 0xD4DD4B30                // file-size
-#define OP_FILE_LOAD                 (opcode_t) 0xDE8C953C                // load
-#define OP_FILE_SAVE                 (opcode_t) 0x84B337FD                // save
-#define OP_INCLUDED                  (opcode_t) 0x7916FE10                // included
-
 // ext/load-ext.c
 #define OP_REQUIRE_IO                (opcode_t) 0x1019FCBE                // require-io
 #define OP_REQUIRE_PARSER            (opcode_t) 0x293B86D9                // require-parser

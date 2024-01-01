@@ -44,3 +44,29 @@ drop_room (struct state *s)
 //  define_primitive_extension(state, ROOM_HASH,           ENTRY_NAME("room"), room);
 //  define_primitive_extension(state, DROP_ROOM_HASH,      ENTRY_NAME("drop-room"), drop_room);
 //}
+
+
+void
+parse_from_file(struct state *s, char *filename)
+{
+  s->tib.len = 0;
+  FILE *old_stream = s->file_stream;
+  s->file_stream = fopen(filename, "r");
+  if (!s->file_stream)
+  {
+    s->file_stream = old_stream;
+    cf_printf(s, "Unable to read '%s'\n", filename);
+    return;
+  }
+
+  int c;
+  while((c = cf_getchar(s)) != CF_EOF && !s->done)
+  {
+    parse_colorforth(s, c);
+  }
+
+  fclose(s->file_stream);
+  s->file_stream = old_stream;
+
+  parse_space(s);
+}
