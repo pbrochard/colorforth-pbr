@@ -198,7 +198,6 @@ execute_(struct state *s, struct entry *entry)
 
 #include "core-words.c"
 #include "lib-words.c"
-#include "ext-words.c"
 
 #define __SECTION_SWITCH
 #include "load-ext.c"
@@ -448,7 +447,6 @@ colorforth_newstate(void)
 
 #include "define-core.c"
 #include "define-lib.c"
-#include "define-ext.c"
 
 #define __SECTION_WORD_DEF
 #include "load-ext.c"

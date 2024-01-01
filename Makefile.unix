@@ -24,8 +24,6 @@ INCLUDED_SRC=src/utils.c \
 	src/core-words.c \
 	src/define-lib.c \
 	src/lib-words.c \
-	ext/define-ext.c \
-	ext/ext-words.c \
 	ext/load-ext.c \
     ext/parser.c \
 	ext/io.c \
@@ -56,11 +54,8 @@ optim_cpl:
 conf.h: src/conf.tmpl.h
 	cp src/conf.tmpl.h conf.h
 
-ext/define-ext.c: ext/define-ext.tmpl.c
-	cp ext/define-ext.tmpl.c ext/define-ext.c
-
-ext/ext-words.c: ext/ext-words.tmpl.c
-	cp ext/ext-words.tmpl.c ext/ext-words.c
+ext/load-ext.c: ext/load-ext.tmpl.c
+	cp ext/load-ext.tmpl.c ext/load-ext.c
 
 colorforth: Makefile $(SRC) $(INCLUDED_SRC) $(EXT_SRC) $(SRC_H)
 	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth $(SRC) $(EXT_SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
