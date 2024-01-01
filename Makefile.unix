@@ -30,7 +30,7 @@ INCLUDED_SRC=src/utils.c \
     ext/parser.c \
 	ext/io.c \
     ext/time.c \
-	ext/math-words.c \
+	ext/math.c \
 	ext/dict.c
 
 

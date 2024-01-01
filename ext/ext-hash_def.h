@@ -35,26 +35,6 @@
 #define OP_REQUIRE_NETWORK           (opcode_t) 0xD11CB26C                // require-network
 #define OP_REQUIRE_SDL               (opcode_t) 0x86818FEF                // require-sdl
 
-// ext/math.c
-#define OP_DIV                       (opcode_t) 0x2F0049FD                // /
-#define OP_MOD                       (opcode_t) 0xD32A27E4                // mod
-#define OP_DIVMOD                    (opcode_t) 0x465A474B                // /mod
-#define OP_MUL_DIV                   (opcode_t) 0x4F683323                // */
-#define OP_LSHIFT                    (opcode_t) 0x346A9A70                // lshift
-#define OP_RSHIFT                    (opcode_t) 0xB6A4D846                // rshift
-#define OP_SUP                       (opcode_t) 0x3E00619A                // >
-#define OP_INF_EQUAL                 (opcode_t) 0xBD946CEB                // <=
-#define OP_SUP_EQUAL                 (opcode_t) 0x4199B9E5                // >=
-#define OP_INFSUP                    (opcode_t) 0xBE946E7E                // <>
-#define OP_OR                        (opcode_t) 0x8D132FDD                // or
-#define OP_AND                       (opcode_t) 0xADD16739                // and
-#define OP_MIN                       (opcode_t) 0xED395B5C                // min
-#define OP_MAX                       (opcode_t) 0xDB25B74E                // max
-#define OP_ABS                       (opcode_t) 0xB6B4F350                // abs
-#define OP_RAND                      (opcode_t) 0xE4758C3F                // rand
-#define OP_SRAND                     (opcode_t) 0x69BDC0A                 // srand
-#define OP_RANDOM                    (opcode_t) 0x5EB42A27                // random
-
 // ext/mp-math.c
 #define OP_MPZ                       (opcode_t) 0xE300F30D                // mpz
 #define OP_M_DOTS                    (opcode_t) 0xE18EAD58                // m.s
