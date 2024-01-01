@@ -2,8 +2,12 @@
 //
 // Extensions system: include only what you need
 
+#ifndef __MINIMAL_BUILD
+
 #include "math.c"
 #include "parser.c"
 #include "io.c"
 #include "time.c"
 #include "dict.c"
+
+#endif /* __MINIMAL_BUILD */
