@@ -27,7 +27,7 @@ INCLUDED_SRC=src/utils.c \
 	src/lib-words.c \
 	ext/define-ext.c \
 	ext/ext-words.c \
-    ext/parser-words.c \
+    ext/parser.c \
 	ext/io-words.c \
     ext/time-words.c \
 	ext/math-words.c \

@@ -100,10 +100,6 @@
 #define OP_C_SUBALLOC                (opcode_t) 0xF25B6721                // c-alloc
 #define OP_C_SUBFREE                 (opcode_t) 0x318C2312                // c-free
 
-// ext/parser.c
-#define OP_PARSE                     (opcode_t) 0x9555EDEF                // parse
-#define OP_CLEAR_TIB                 (opcode_t) 0xDE5DBC77                // clear-tib
-
 // ext/sdl.c
 #define OP_SDL_INIT                  (opcode_t) 0x92FE07C0                // sdl/init
 #define OP_SDL_CLOSE                 (opcode_t) 0xFAD1E96                 // sdl/close
