@@ -5,4 +5,4 @@ conf.h
 lib.cf
 colorforth-arduino/conf.h
 *.hex
-ext/load-ext.c
+ext/ext.c

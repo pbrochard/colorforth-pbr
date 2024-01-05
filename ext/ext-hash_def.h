@@ -22,19 +22,6 @@
 #define OP_F_STORE                   (opcode_t) 0x45FCF9C9                // f!
 #define OP_F_INLINE                  (opcode_t) 0xBF067E82                // [f,]
 
-// ext/load-ext.c
-#define OP_REQUIRE_IO                (opcode_t) 0x1019FCBE                // require-io
-#define OP_REQUIRE_PARSER            (opcode_t) 0x293B86D9                // require-parser
-#define OP_REQUIRE_OS                (opcode_t) 0x140AF880                // require-os
-#define OP_REQUIRE_DICT              (opcode_t) 0x2F05E7C2                // require-dict
-#define OP_REQUIRE_TIME              (opcode_t) 0x7AD67647                // require-time
-#define OP_REQUIRE_MATH              (opcode_t) 0xBCC8CAB4                // require-math
-#define OP_REQUIRE_EXT_MATH          (opcode_t) 0x90F5D17E                // require-ext-math
-#define OP_REQUIRE_MP_MATH           (opcode_t) 0x792EF708                // require-mp-math
-#define OP_REQUIRE_THREADS           (opcode_t) 0xB4207C0B                // require-threads
-#define OP_REQUIRE_NETWORK           (opcode_t) 0xD11CB26C                // require-network
-#define OP_REQUIRE_SDL               (opcode_t) 0x86818FEF                // require-sdl
-
 // ext/mp-math.c
 #define OP_MPZ                       (opcode_t) 0xE300F30D                // mpz
 #define OP_M_DOTS                    (opcode_t) 0xE18EAD58                // m.s
