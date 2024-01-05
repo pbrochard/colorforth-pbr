@@ -19,8 +19,7 @@ SRC=src/main.c src/colorforth.c \
 #	ext/sdl.c
 
 INCLUDED_SRC=src/utils.c \
-	src/define-core.c \
-	src/core-words.c \
+	src/core.c \
 	src/lib.c \
 	ext/ext.c \
     ext/parser.c \
@@ -32,8 +31,6 @@ INCLUDED_SRC=src/utils.c \
 
 SRC_H=src/colorforth.h \
 	conf.h \
-	src/hash_def.h \
-	ext/ext-hash_def.h \
 	src/cf-stdio.h \
 	src/color.h
 

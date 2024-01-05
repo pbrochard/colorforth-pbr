@@ -20,6 +20,10 @@ extern "C" {
 #include <mp-math.h>
 #endif
 
+#include <stdint.h>
+
+typedef uint32_t hash_t;
+typedef hash_t opcode_t;
 
 // terminal input buffer
 struct tib

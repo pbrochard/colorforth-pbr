@@ -24,8 +24,6 @@ typedef long cell;
 // Enable hashed names: reduce memory size but break words/see/disasemble
 #define __KEEP_ENTRY_NAMES
 
-#include "hash_def.h"
-
 #ifndef __MINIMAL_BUILD
 
 // Enable register variable
