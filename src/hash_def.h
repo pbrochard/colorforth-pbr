@@ -72,15 +72,6 @@ typedef hash_t opcode_t;
 #define OP_R_FETCH                   (opcode_t) 0x6CCB9A62                // R@
 #define OP_CLEAR                     (opcode_t) 0x93C5A06D                // clear
 
-// src/lib.c
-#define OP_HASH                      (opcode_t) 0x3475B2F0                // hash
-#define OP_BASE                      (opcode_t) 0x7D3CE245                // base
-#define OP_ENTRY_IS                  (opcode_t) 0x84041728                // is
-#define OP_ENTRY_C_IS                (opcode_t) 0x6F1B27F5                // c>is
-#define OP_ENTRY_HIDE                (opcode_t) 0x7C95E439                // entry/hide
-#define OP_ROOM                      (opcode_t) 0xE48409A3                // room
-#define OP_DROP_ROOM                 (opcode_t) 0xC57E1E23                // drop-room
-
 // Register A
 #define OP_REG_A_LOAD                (opcode_t) 0x66A0AFE9                // A@
 #define OP_REG_A_STORE               (opcode_t) 0xC5A14576                // A!

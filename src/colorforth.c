@@ -12,6 +12,7 @@
 
 #define __SECTION_HASH_DEF
 #include "load-ext.c"
+#include "lib.c"
 #undef __SECTION_HASH_DEF
 
 #ifdef __CHECK_DICT
@@ -32,6 +33,7 @@ extern void display_clash_found(struct state *s, char clash_found);
 
 #define __SECTION_FUNCTION
 #include "load-ext.c"
+#include "lib.c"
 #undef __SECTION_FUNCTION
 
 // 'hashed_name' is 'hash(name)' or 0x0 if names are kept
@@ -197,10 +199,10 @@ execute_(struct state *s, struct entry *entry)
       }
 
 #include "core-words.c"
-#include "lib-words.c"
 
 #define __SECTION_SWITCH
 #include "load-ext.c"
+#include "lib.c"
 #undef __SECTION_SWITCH
 
       default:
@@ -446,10 +448,10 @@ colorforth_newstate(void)
   s->file_stream = NULL;
 
 #include "define-core.c"
-#include "define-lib.c"
 
 #define __SECTION_WORD_DEF
 #include "load-ext.c"
+#include "lib.c"
 #undef __SECTION_WORD_DEF
 
   s->color = execute;
