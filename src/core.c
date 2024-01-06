@@ -63,7 +63,7 @@ case '`': {
 #define OP_CELL                      (opcode_t) 0x1415DDAC                // cell
 #define OP_HERE                      (opcode_t) 0xD786E25E                // here
 #define OP_HERE_ADDR                 (opcode_t) 0xAE504314                // &here
-#define OP_HEAP_ADDR                 (opcode_t) 0x89705C80                // &heap
+#define OP_HEAP                      (opcode_t) 0x89705C80                // &heap
 #define OP_HEAP_SIZE                 (opcode_t) 0xC2A05C60                // heap-size
 #define OP_LATEST                    (opcode_t) 0xA307AFAB                // latest
 #define OP_COMPILE                   (opcode_t) 0x12AD19B0                // [^]
@@ -175,7 +175,7 @@ define_primitive(s, ENTRY_NAME("c!"), OP_CSTORE);
 define_primitive(s, ENTRY_NAME("cell"), OP_CELL);
 define_primitive(s, ENTRY_NAME("here"), OP_HERE);
 define_primitive(s, ENTRY_NAME("&here"), OP_HERE_ADDR);
-define_primitive(s, ENTRY_NAME("&heap"), OP_HEAP_ADDR);
+define_primitive(s, ENTRY_NAME("&heap"), OP_HEAP);
 define_primitive(s, ENTRY_NAME("heap-size"), OP_HEAP_SIZE);
 define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
 
@@ -586,10 +586,10 @@ case OP_HERE_ADDR:
   break;
 }
 
-case OP_HEAP_ADDR:
+case OP_HEAP:
 {
-  ENSURE_STACK_MAX(1);
-  PUSH((cell)&s->heap);
+  ENSURE_STACK_MIN(1);
+  CELLS[SP] = (cell)&s->heap + CELLS[SP];
   break;
 }
 

@@ -65,9 +65,9 @@
 :alloc ~( n - a ) ^&here @ swap over + &here ! ;
 
 ~cell alloc :dhere ~[,] ^;
-~heap-size dhere &heap + !
+~heap-size dhere &heap !
 
-:dalloc ~( n - a ) ^dhere &heap + @ swap - dup dhere &heap + ! ;
+:dalloc ~( n - a ) ^dhere &heap @ swap - dup dhere &heap ! ;
 
 :? ^@ . ;
 
@@ -75,10 +75,10 @@
 :const ^[,] ;
 
 :variable
-:var ^cell dalloc dup [,] &heap + ! '&heap ^[^] '+ ^[^] ;
+:var ^cell dalloc dup [,] &heap ! '&heap ^[^] ;
 
 :variables
-:vars ^cells dalloc [,] '&heap ^[^] '+ ^[^] ;
+:vars ^cells dalloc [,] '&heap ^[^] ;
 
 :[] ^cells + ;
 
