@@ -22,10 +22,11 @@ INCLUDED_SRC=src/utils.c \
 	src/core.c \
 	src/lib.c \
 	ext/ext.c \
-    ext/parser.c \
+	ext/parser.c \
 	ext/io.c \
-    ext/time.c \
+	ext/time.c \
 	ext/math.c \
+	ext/math-float.c \
 	ext/dict.c
 
 

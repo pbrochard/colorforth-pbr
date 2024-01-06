@@ -12,10 +12,6 @@ extern "C" {
 
 #include "color.h"
 
-#ifdef __EXTENDED_MATH
-#include <ext-math.h>
-#endif
-
 #ifdef __MP_MATH
 #include <mp-math.h>
 #endif
@@ -58,6 +54,17 @@ struct stack
   int sp;
   int lim;
 };
+
+#ifdef __EXTENDED_MATH
+struct fstack
+{
+  // stack
+  number_t *cells;
+  // stack position
+  int sp;
+  int lim;
+};
+#endif
 
 struct dictionary
 {

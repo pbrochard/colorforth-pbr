@@ -10,6 +10,12 @@
 #include "colorforth.h"
 #include "cf-stdio.h"
 
+#ifdef __KEEP_ENTRY_NAMES
+#define ENTRY_NAME(name) (name)
+#else
+#define ENTRY_NAME(name) (NULL)
+#endif
+
 #define __SECTION_HASH_DEF
 #include "core.c"
 #include "ext.c"
@@ -326,19 +332,11 @@ parse_colorforth(struct state *s, int c)
   if (s->tib.len == 0) {
     // Handle prefix
     switch(c) {
-      case ':': { s->color = define; echo_color(s, c, COLOR_RED); return; }
-      case '^': { s->color = compile; echo_color(s, c, COLOR_GREEN); return; }
-      case '~': { s->color = execute; echo_color(s, c, COLOR_YELLOW); return; }
-      case '\'': {
-        s->color = (s->color == execute || s->color == tick || s->color == tick_entry) ? tick : compile_tick;
-        echo_color(s, c, COLOR_BLUE);
-        return;
-      }
-      case '`': {
-        s->color = (s->color == execute || s->color == tick || s->color == tick_entry) ? tick_entry : compile_tick_entry;
-        echo_color(s, c, COLOR_BLUE);
-        return;
-      }
+#define __SECTION_PREFIX_DEF
+#include "core.c"
+#include "ext.c"
+#include "lib.c"
+#undef __SECTION_PREFIX_DEF
     }
   }
 

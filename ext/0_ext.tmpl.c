@@ -5,6 +5,7 @@
 #ifndef __MINIMAL_BUILD
 
 #include "math.c"
+#include "math-float.c"
 #include "parser.c"
 #include "io.c"
 #include "time.c"
