@@ -88,7 +88,7 @@
 :cmove-loop ^
    >R   swap dup c@  >R  cmove-advance
    swap dup R>   swap c! cmove-advance
-   R> 1- dup 'cmove-loop ^if; 2drop drop
+   R> 1- dup 'cmove-loop ^if* 2drop drop
 ;
 
 :cmove ~( src dst n - ) ^
