@@ -6,16 +6,29 @@
 #ifdef __SECTION_PREFIX_DEF
 
 case ':': { s->color = define; echo_color(s, c, COLOR_RED); return; }
+
 case '^': { s->color = compile; echo_color(s, c, COLOR_GREEN); return; }
+
 case '~': { s->color = execute; echo_color(s, c, COLOR_YELLOW); return; }
+
 case '\'': {
   s->color = (s->color == execute || s->color == tick || s->color == tick_entry) ? tick : compile_tick;
   echo_color(s, c, COLOR_BLUE);
   return;
 }
+
 case '`': {
   s->color = (s->color == execute || s->color == tick || s->color == tick_entry) ? tick_entry : compile_tick_entry;
   echo_color(s, c, COLOR_BLUE);
+  return;
+}
+
+case '(': {
+  char count = 0;
+  while ((c = cf_getchar(s)) != ')' || count > 0) {
+    if (c == '(') count += 1;
+    else if (c == ')') count -= 1;
+  }
   return;
 }
 

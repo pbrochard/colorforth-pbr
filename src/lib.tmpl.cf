@@ -4,9 +4,6 @@
 :\ ^key 10 = '\ ^if-not* ;
 ~\ One line comment
 
-:( ^key ~key ) [,] ^= '( ^if-not* ;
-~( multilines comment )
-
 ~( boolean constant )
 :true   ^1 ;
 :false  ^0 ;
