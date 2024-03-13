@@ -351,11 +351,7 @@ parse_colorforth(struct state *s, int c)
     {
       // Have word.
       s->color(s);
-      for(size_t i = 0; i < s->tib.len; i++)
-      {
-        s->tib.buf[i] = 0;
-      }
-      s->tib.len = 0;
+      clear_tib(s);
     }
 
     return;
