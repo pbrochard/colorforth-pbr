@@ -91,7 +91,7 @@ see(struct state *s, cell entry_index)
     return;
   }
 
-  for (cell pc = entry->offset, i = 0, done = 0; !done; i++)
+  for (cell pc = entry->offset, done = 0; !done; )
   {
     const opcode_t opcode = HEAP(pc, opcode_t);
 
