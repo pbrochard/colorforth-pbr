@@ -17,7 +17,7 @@ cf_print_cell(struct state *s, cell cell)
       {
         cf_printf(s, "0 ");
       } else {
-        int i = CHAR_BIT * sizeof cell;
+        int i = CF_CHAR_BIT * sizeof cell;
         char output = 0;
         while(i--)
         {
