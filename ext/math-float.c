@@ -5,7 +5,7 @@
  *********************************************************************************/
 #ifdef __SECTION_PREFIX_DEF
 
-case '$': { s->color = define_float; echo_color(s, c, COLOR_YELLOW); return; }
+case '$': { s->color = define_float; echo_color(s, c, COLOR_MAGENTA); return; }
 
 #endif /* __SECTION_PREFIX_DEF */
 
