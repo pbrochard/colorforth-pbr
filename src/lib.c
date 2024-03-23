@@ -108,15 +108,6 @@ drop_room (struct state *s)
   SP -= 6;
 }
 
-//void
-//init_lib(struct state *state)
-//{
-//  define_primitive_extension(state, HASH_HASH,           ENTRY_NAME("hash"), hash_fn);
-//  define_primitive_extension(state, ROOM_HASH,           ENTRY_NAME("room"), room);
-//  define_primitive_extension(state, DROP_ROOM_HASH,      ENTRY_NAME("drop-room"), drop_room);
-//}
-
-
 void
 parse_from_file(struct state *s, char *filename)
 {
