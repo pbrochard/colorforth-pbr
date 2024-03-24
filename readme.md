@@ -16,12 +16,13 @@
 |                                                                                  &dhere
 |                                                                                    |
 v                                                                                    v
-code...;|code....;|code...;| ...FREE...  |quotation...;|string...0|array...|var|var|dhere|EndOfHeap
-^        ^         ^        ^           ^ ^             ^          ^        ^   ^   |
-|        |         |        |           | |             |          |        |   |   |
-|        |         |        \-> here    \-+-------------+----------+--------+---+---/
-|        |         \-> entry            | |             |          |        |   |
-|        \-> entry                      | \-> quotation |          \-> var  |   \-> var
-\-> entry                               |               \-> string          \-> var
-                                        \-> dhere
+code...;|code....;|code...;| ...FREE...  |quotation...;|string...0|array...|var|var|dhere|
+^        ^         ^        ^           ^ ^             ^          ^        ^   ^   |     ^
+|        |         |        |           | |             |          |        |   |   |     |
+|        |         |        \-> here    \-+-------------+----------+--------+---+---/     |
+|        |         \-> entry            | |             |          |        |   |         |
+|        \-> entry                      | \-> quotation |          \-> var  |   \-> var   |
+\-> entry                               |               \-> string          \-> var       |
+                                        \-> dhere                                         |
+                                                                            End of Heap <-/
 ```
