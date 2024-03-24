@@ -73,6 +73,10 @@ case '(': {
 #define OP_STORE                     (opcode_t) 0x210033F3                // !
 #define OP_CLOAD                     (opcode_t) 0x72F4F1DB                // c@
 #define OP_CSTORE                    (opcode_t) 0xD1F58768                // c!
+#define OP_HEAP_LOAD                 (opcode_t) 0xB1021F68                // h@
+#define OP_HEAP_STORE                (opcode_t) 0x520189DB                // h!
+#define OP_HEAP_CLOAD                (opcode_t) 0x800F2E13                // hc@
+#define OP_HEAP_CSTORE               (opcode_t) 0xDF0FC3A0                // hc!
 #define OP_CELL                      (opcode_t) 0x1415DDAC                // cell
 #define OP_HERE                      (opcode_t) 0xD786E25E                // here
 #define OP_HERE_ADDR                 (opcode_t) 0xAE504314                // &here
@@ -185,6 +189,10 @@ define_primitive(s, ENTRY_NAME("@"), OP_LOAD);
 define_primitive(s, ENTRY_NAME("!"), OP_STORE);
 define_primitive(s, ENTRY_NAME("c@"), OP_CLOAD);
 define_primitive(s, ENTRY_NAME("c!"), OP_CSTORE);
+define_primitive(s, ENTRY_NAME("h@"), OP_HEAP_LOAD);
+define_primitive(s, ENTRY_NAME("h!"), OP_HEAP_STORE);
+define_primitive(s, ENTRY_NAME("hc@"), OP_HEAP_CLOAD);
+define_primitive(s, ENTRY_NAME("hc!"), OP_HEAP_CSTORE);
 define_primitive(s, ENTRY_NAME("cell"), OP_CELL);
 define_primitive(s, ENTRY_NAME("here"), OP_HERE);
 define_primitive(s, ENTRY_NAME("&here"), OP_HERE_ADDR);
@@ -370,6 +378,36 @@ case OP_CSTORE:
   ENSURE_STACK_MIN(2);
   char *ptr = (char*) CELLS[SP];
   *ptr = CELLS[SP - 1];
+  SP -= 2;
+  break;
+}
+
+case OP_HEAP_LOAD:
+{
+  ENSURE_STACK_MIN(1);
+  CELLS[SP] = HEAP(CELLS[SP], cell);
+  break;
+}
+
+case OP_HEAP_STORE:
+{
+  ENSURE_STACK_MIN(2);
+  HEAP(CELLS[SP], cell) = CELLS[SP - 1];
+  SP -= 2;
+  break;
+}
+
+case OP_HEAP_CLOAD:
+{
+  ENSURE_STACK_MIN(1);
+  CELLS[SP] = HEAP(CELLS[SP], char);
+  break;
+}
+
+case OP_HEAP_CSTORE:
+{
+  ENSURE_STACK_MIN(2);
+  HEAP(CELLS[SP], char) = (char) CELLS[SP - 1];
   SP -= 2;
   break;
 }
@@ -602,7 +640,7 @@ case OP_HERE_ADDR:
 case OP_HEAP:
 {
   ENSURE_STACK_MIN(1);
-  CELLS[SP] = (cell)&s->heap + CELLS[SP];
+  CELLS[SP] = (cell) (s->heap + CELLS[SP]);
   break;
 }
 

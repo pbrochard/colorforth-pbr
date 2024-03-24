@@ -54,30 +54,26 @@
 :cr? ^dup 12 mod 0 = 'cr ^if ;
 
 :<dump> ~( a xt -) ^>R dup 119 I@ - cr? + c@ .c  R> ;
-:dump ~( a - ) ^'<dump> ^120 times drop ;
+:dump ~( a - ) ^'<dump> ^120 times drop cr cr ;
 ~`emit. ~entry/hide `v-emit ~entry/hide `.c ~entry/hide
 `cr? ~entry/hide `<dump> ~entry/hide
 
 ~( variables )
-:alloc ~( n - a ) ^&here @ swap over + &here ! ;
+~heap-size cell - :&dhere ~[,] ^;
+~&dhere cell - &dhere h!
+:dhere ^&dhere h@ ;
 
-~cell alloc :dhere ~[,] ^;
-~heap-size dhere &heap !
+:dalloc (n - a) ^dhere swap - dup &dhere h! ;
 
-:dalloc ~( n - a ) ^dhere &heap @ swap - dup dhere &heap ! ;
+:constant ^[,] ;
+:variable ^cell dalloc dup [,] h! ;
+
+:array ^cells dalloc dup [,] h! ;
+:[] ^cells + ;
+
+:ddump ^&heap dump ;
 
 :? ^@ . ;
-
-:constant
-:const ^[,] ;
-
-:variable
-:var ^cell dalloc dup [,] &heap ! '&heap ^[^] ;
-
-:variables
-:vars ^cells dalloc [,] '&heap ^[^] ;
-
-:[] ^cells + ;
 
 ~( mem move )
 :cmove-advance ^ 1+ ;
