@@ -68,7 +68,7 @@
 :constant ^[,] ;
 :variable ^cell dalloc dup [,] h! ;
 
-:array ^cells dalloc dup [,] h! ;
+:variables ^cells dalloc [,] ;
 :[] ^cells + ;
 
 :ddump ^&heap dump ;
