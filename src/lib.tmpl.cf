@@ -76,6 +76,8 @@
 :? ^@ . ;
 
 ~( mem move )
+:cmove-heap-to-addr (src dst n) ^>R >R &heap R> &heap R> ;
+
 :cmove-advance ^ 1+ ;
 
 :cmove-loop ^
@@ -84,14 +86,14 @@
    R> 1- dup 'cmove-loop ^if* 2drop drop
 ;
 
+:hcmove ( hsrc hdst n) ^cmove-heap-to-addr
 :cmove ~( src dst n - ) ^
    `cmove-advance `1+ ^is
    cmove-loop ;
 
+:hcmove> ( hsrc hdst n) ^cmove-heap-to-addr
 :cmove> ~( src dst n - ) ^
   1-  >R  R@  +  swap  R@  +  swap  R>  1+
   `cmove-advance `1- ^is
-  cmove-loop
-^;
-
+  cmove-loop ;
 ~

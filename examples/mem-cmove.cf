@@ -1,25 +1,27 @@
 %
+
 :buf ~100 variables ^;
-:buf? ^buf dump cr ;
+:buf? ^buf ddump cr ;
 
 ~
-key A buf c!
-key B buf 1 + c!
-key C buf 2 + c!
-key D buf 3 + c!
-key E buf 4 + c!
+key A buf hc!
+key B buf 1 + hc!
+key C buf 2 + hc!
+key D buf 3 + hc!
+key E buf 4 + hc!
 
 :test-cmove ^
    111 .s cr
    buf?
-   ^buf   buf 7 +   5 cmove ~( simple copy )
+   ^buf   buf 7 +   5 hcmove ( simple copy )
 
-   ^buf   buf 13 +  5 cmove   buf 13 +   buf 12 +  5 cmove ~( src dst > => ok )
-   ^buf   buf 24 +  5 cmove   buf 24 +   buf 25 +  5 cmove ~( src dst < => ko )
+   ^buf?
+   ^buf   buf 13 +  5 hcmove   buf 13 +   buf 12 +  5 hcmove ~( src dst > => ok )
+   ^buf   buf 24 +  5 hcmove   buf 24 +   buf 25 +  5 hcmove ~( src dst < => ko )
 
-   ^buf   buf 48 +  5 cmove>
-   ^buf   buf 61 +  5 cmove>  buf 61 +  buf 60 +  5 cmove> ~( src dst > => ko )
-   ^buf   buf 72 +  5 cmove>  buf 72 +  buf 73 +  5 cmove> ~( src dst < => ok )
+   ^buf   buf 48 +  5 hcmove>
+   ^buf   buf 61 +  5 hcmove>  buf 61 +  buf 60 +  5 hcmove> ~( src dst > => ko )
+   ^buf   buf 72 +  5 hcmove>  buf 72 +  buf 73 +  5 hcmove> ~( src dst < => ok )
    ^cr buf?
    .s
 ;
