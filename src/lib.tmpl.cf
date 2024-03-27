@@ -87,13 +87,22 @@
 ;
 
 :hcmove ( hsrc hdst n) ^cmove-heap-to-addr
-:cmove ~( src dst n - ) ^
+:cmove ( src dst n - ) ^
    `cmove-advance `1+ ^is
    cmove-loop ;
 
 :hcmove> ( hsrc hdst n) ^cmove-heap-to-addr
-:cmove> ~( src dst n - ) ^
+:cmove> ( src dst n - ) ^
   1-  >R  R@  +  swap  R@  +  swap  R>  1+
   `cmove-advance `1- ^is
   cmove-loop ;
+
+~( Zero terminated strings )
+:"done ^drop
+   0 1 dalloc hc!
+   swap - dup dalloc
+   dup >R swap hcmove R> ;
+
+:s" ^here dup dup
+:"loop ^key dup ~key " [,] ^= '"done ^if; over hc! 1+ "loop ;
 ~
