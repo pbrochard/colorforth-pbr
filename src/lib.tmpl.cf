@@ -51,10 +51,10 @@
   ^dup 128 < 'emit. ^if-not;
   ^emit ;
 :.c ^dup v-emit space . tab ;
-:cr? ^dup 12 mod 0 = 'cr ^if ;
+:cr? ^dup 16 mod 0 = 'cr ^if ;
 
-:<dump> ~( a xt -) ^>R dup 119 I@ - cr? + c@ .c  R> ;
-:dump ~( a - ) ^'<dump> ^120 times drop cr cr ;
+:<dump> ~( a xt -) ^>R dup 159 I@ - cr? + c@ .c  R> ;
+:dump ~( a - ) ^'<dump> ^160 times drop cr cr ;
 ~`emit. ~entry/hide `v-emit ~entry/hide `.c ~entry/hide
 `cr? ~entry/hide `<dump> ~entry/hide
 
