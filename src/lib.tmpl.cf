@@ -99,10 +99,14 @@
 
 ~( Zero terminated strings )
 :"done ^drop
-   0 1 dalloc hc!
-   swap - dup dalloc
-   dup >R swap hcmove R> ;
+   ^0 1 dalloc hc! (store 0)
+   ^swap - dup dup >R (compute length)
+   ^dalloc
+   ^R> cell dalloc h! (store length)
+   ^dup >R swap hcmove R> ;
 
 :s" ^here dup dup
 :"loop ^key dup ~key " [,] ^= '"done ^if; over hc! 1+ "loop ;
+
+:slength ^cell - h@ ;
 ~
