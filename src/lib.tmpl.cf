@@ -127,4 +127,8 @@
 :time/start ^utime [,] ;
 :time/end ^utime swap - 1000 / . ~c" ms elapsed" ^prn ;
 
+( hash )
+:hash" ^s" hash ;
+:.hash" ^base c@  hash" hex cr . cr base c! ;
+
 ~

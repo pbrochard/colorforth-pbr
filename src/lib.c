@@ -21,6 +21,7 @@
  *********************************************************************************/
 #ifdef __SECTION_WORD_DEF
 
+define_primitive(s, ENTRY_NAME("hash"), OP_HASH);
 define_primitive(s, ENTRY_NAME("base"), OP_BASE);
 define_primitive(s, ENTRY_NAME("is"), OP_ENTRY_IS);
 define_primitive(s, ENTRY_NAME("c>is"), OP_ENTRY_C_IS);
@@ -33,6 +34,12 @@ define_primitive(s, ENTRY_NAME("entry/hide"), OP_ENTRY_HIDE);
  *   SWITCH DEF
  *********************************************************************************/
 #ifdef __SECTION_SWITCH
+
+case OP_HASH: {
+  POP1();
+  PUSH((cell) hash(CFSTRING2C(p1)));
+  break;
+}
 
 case OP_BASE: {
   ENSURE_STACK_MAX(1);
