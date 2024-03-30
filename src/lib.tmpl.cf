@@ -94,7 +94,7 @@
   `cmove-advance `1- ^is
   cmove-loop ;
 
-~( Zero terminated strings )
+~( Zero terminated + counted strings )
 :"done ^drop
    ^0 1 dalloc hc! (store 0)
    ^swap - dup dup >R (compute length)
