@@ -122,4 +122,9 @@
 :sign ^dup 'sign/0 ^if-not; ^0 < 'sign/-1 'sign/1 ^if-else ;
 ~`sign/0 ~entry/hide `sign/1 ~entry/hide `sign/-1 ~entry/hide
 
+
+( time )
+:time/start ^utime [,] ;
+:time/end ^utime swap - 1000 / . ~c" ms elapsed" ^prn ;
+
 ~
