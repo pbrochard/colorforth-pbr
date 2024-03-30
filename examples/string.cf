@@ -1,11 +1,17 @@
-:hello ~s" Hello " variable ^;
-:world ~s" world!" variable ^;
+:.slength ^space slength . ;
+
+:hello ~s" Hello " constant ^;
+:world ~s" new world!" constant ^;
 
 ~
-hello h@ pr
-world h@ prn
+hello pr  hello .slength
+world dup npr   .slength
+
+hello npr world prn
 
 s" Another test..." nprn
-s" End!" prn
+s" End!" dup prn
+
+cell - ddump
 
 bye
