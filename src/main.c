@@ -8,6 +8,8 @@ extern void parse_from_file(struct state *s, char *filename);
 void
 parse_command_line(struct state *s, int argc, char *argv[])
 {
+  s->echo_on = 0;
+
   char nextIsEval = 0;
   for (int i = 1; i < argc; i++)
   {
@@ -26,6 +28,8 @@ parse_command_line(struct state *s, int argc, char *argv[])
 
     parse_from_file(s, argv[i]);
   }
+
+  s->echo_on = 1;
 
   parse_colorforth(s, '~');
 }
