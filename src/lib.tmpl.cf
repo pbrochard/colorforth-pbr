@@ -107,6 +107,8 @@
 :s" ^here dup dup
 :"loop ^key ."key dup ~key " [,] ^= '"done ^if; over hc! 1+ "loop ;
 
+:c" ^s" [,] ;
+
 :slength ^cell - h@ ;
 
 :pr (s - ) ^dup hc@ dup 0 = '2drop ^if; emit 1+ pr ;
