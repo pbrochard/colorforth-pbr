@@ -113,4 +113,11 @@
 :prn ^pr cr ;
 :npr ^cr pr ;
 :nprn ^cr pr cr ;
+
+
+( math )
+:sign/0 ^drop 0 ;   :sign/1 ^1 ;   :sign/-1 ^-1 ;
+:sign ^dup 'sign/0 ^if-not; ^0 < 'sign/-1 'sign/1 ^if-else ;
+~`sign/0 ~entry/hide `sign/1 ~entry/hide `sign/-1 ~entry/hide
+
 ~
