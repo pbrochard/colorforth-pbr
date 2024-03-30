@@ -1,0 +1,11 @@
+:hello ~s" Hello " variable ^;
+:world ~s" world!" variable ^;
+
+~
+hello h@ pr
+world h@ prn
+
+s" Another test..." nprn
+s" End!" prn
+
+bye
