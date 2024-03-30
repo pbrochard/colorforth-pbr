@@ -20,10 +20,10 @@
 :1+ ^1 ^+ ;
 :1- ^1 ^- ;
 
-:+! ^dup @ rot + swap ! ;
-:1+! ^dup @ 1+ swap ! ;
-:1-! ^dup @ 1- swap ! ;
-:cell+! ^dup @ cell + swap ! ;
+:+! ^dup h@ rot + swap h! ;
+:1+! ^dup h@ 1+ swap h! ;
+:1-! ^dup h@ 1- swap h! ;
+:cell+! ^dup h@ cell + swap h! ;
 
 :;; ^R> drop ;
 :;;; ^;; ;; ;
@@ -130,5 +130,14 @@
 ( hash )
 :hash" ^s" hash ;
 :.hash" ^base c@  hash" hex cr . cr base c! ;
+
+
+( eval )
+:ptr ~0 variable ^;
+:count ~0 variable ^;
+:loop ^ptr h@ hc@ parse  ptr 1+!  count 1-!  count h@ 'loop ^if* ;
+:eval ( string - ) ^clear-tib  dup ptr h!  .s slength .s  count h!  loop  32 parse ;
+~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
+
 
 ~
