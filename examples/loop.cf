@@ -1,11 +1,10 @@
-%
 :l ^I@ . ;
 ~'l ~10 times
 
 
 :l1 ^cr K@ . J@ . I@ . ;
-:l2 ^'l1 ^3 times  cr ;
-:l3 ^'l2 ^3 times cr ;
+:l2 'l1 ^3 times  cr ;
+:l3 'l2 ^3 times cr ;
 
 :test ^
    111 I! 222 J! 333 K!
@@ -16,4 +15,4 @@
 
 ~test .s
 
-~\ bye
+bye
