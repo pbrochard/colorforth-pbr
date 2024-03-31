@@ -68,7 +68,7 @@
 :variables ^cells dalloc [,] ;
 :[] ^cells + ;
 
-:ddump ^&heap dump ;
+:ddump ^dup 160 + heap-size min 160 - &heap dump ;
 
 :? ^@ . ;
 
