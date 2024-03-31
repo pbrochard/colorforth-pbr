@@ -187,7 +187,7 @@ fullroom(struct state *s) {
   cf_printf(s, "There is %u / %d (%u%%) entries defined in the dictionary\n", defined, DICT_SIZE,
             (defined*100/DICT_SIZE));
 
-  const unsigned int used = (char *)s->here - (char *)s->heap;
+  const unsigned int used = s->here;
   cf_printf(s, "There is %u / %d (%u%%) bytes used on the heap\n", used, HEAP_SIZE,
             (used*100/HEAP_SIZE));
   cf_printf(s, "---------------------------------------------------------\n");
