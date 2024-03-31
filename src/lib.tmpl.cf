@@ -140,5 +140,4 @@
 :eval ( string - ) ^clear-tib  dup ptr h!  .s slength .s  count h!  loop  32 parse ;
 ~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
 
-
 ~

@@ -27,7 +27,8 @@ INCLUDED_SRC=src/utils.c \
 	ext/time.c \
 	ext/math.c \
 	ext/math-float.c \
-	ext/dict.c
+	ext/dict.c \
+	ext/os.c
 
 
 SRC_H=src/colorforth.h \

@@ -10,5 +10,6 @@
 #include "io.c"
 #include "time.c"
 #include "dict.c"
+#include "os.c"
 
 #endif /* __MINIMAL_BUILD */

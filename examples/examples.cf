@@ -5,7 +5,7 @@
 ~msg pr cr
 ~msg ddump
 
-:uname ~c" uname -a" ^(cmd) ;
+:uname ~c" uname -a" ^system ;
 ~uname
 
 :square ^dup * ;
