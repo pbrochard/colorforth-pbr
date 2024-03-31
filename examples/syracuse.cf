@@ -1,51 +1,50 @@
-%
-\ Syracuse sequences
+~\ Syracuse sequences
 \   On an arbitrary positive integer:
 \     If the number is even, divide it by two.
 \     If the number is odd, triple it and add one.
 \     Repeat...
 \  This process will eventually reach the number 1
 
-:N ~0 variable ,;
-:n ~-1 variable ,;
-:time-in-alt ~0 variable ,;
-:max-alt ~0 variable ,;
+:N ~0 variable ^;
+:n ~-1 variable ^;
+:time-in-alt ~0 variable ^;
+:max-alt ~0 variable ^;
 
 :time-in-alt?! ^
-   time-in-alt @ `nop ,if; ^
-   dup N @ < `nop ,if-not; ^
-   n @ time-in-alt ! ,;
+   time-in-alt h@ 'nop ^if;
+   dup N h@ < 'nop ^if-not;
+   n h@ 1+ time-in-alt h! ;
 
 :max-alt?! ^
-   dup max-alt @ < `nop ,if; ^
-   dup max-alt ! ,;
+   dup max-alt h@ < 'nop ^if;
+   dup max-alt h! ;
 
-:record ^dup .  time-in-alt?!  max-alt?!  n 1+! ,;
+:record ^dup .  time-in-alt?!  max-alt?!  n 1+! ;
 
 :resume ^
    cr cr
-   ~c"   Flying time: " ^pr  n @ .
-   ~c"  |  Time in altitude: " ^pr  time-in-alt @ .
-   ~c"  |  Maximum altitude: " ^pr  max-alt @ .
+   ~c"   Flying time: " ^pr  n h@ .
+   ~c"  |  Time in altitude: " ^pr  time-in-alt h@ .
+   ~c"  |  Maximum altitude: " ^pr  max-alt h@ .
    ~c" -----------------------" ^cr pr
    cr cr
 ;
 
 
-:even ^2 / ,;
-:odd  ^3 * 1+ ,;
+:even ^2 / ;
+:odd  ^3 * 1+ ;
 
-:next ^dup 2 mod `odd even ,if-else  ,;
+:next ^dup 2 mod 'odd even ^if-else ;
 
-:loop ~( n - ) ^record dup 1 = `nop ,if; ^next loop ,;
+:loop ( n - ) ^record dup 1 = 'nop ^if; next loop ;
 
-:init ^N !  -1 n !  0 time-in-alt !  0 max-alt ! ,;
+:init ^N h!  -1 n h!  0 time-in-alt h!  0 max-alt h! ;
 
 :sy
-:syracuse ~( n - ) ^init  N @ loop  resume ,;
+:syracuse ( n - ) ^init  N h@ loop  resume ;
 
 ~
-" Usage: <N> sy(racuse)" nprn cr
+s" Usage: <N> sy(racuse)" nprn cr
 echo on
 127 syracuse
 15 syracuse
