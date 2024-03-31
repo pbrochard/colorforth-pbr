@@ -25,8 +25,7 @@
 :1-! ^dup h@ 1- swap h! ;
 :cell+! ^dup h@ cell + swap h! ;
 
-:;; ^R> drop ;
-:;;; ^;; ;; ;
+:;; ^R> R> 2drop ;
 
 :cells ^cell * ;
 
