@@ -41,6 +41,7 @@ quit(struct state *s)
 {
   s->done = 1;
   echo_color(s, ' ', COLOR_CLEAR);
+  cf_printf(s, "\n");
 }
 
 void
