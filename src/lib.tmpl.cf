@@ -71,6 +71,7 @@
 :[] ^cells + ;
 
 :? ^@ . ;
+:h? ^h@ . ;
 
 ~( mem move )
 :cmove-heap-to-addr (src dst n) ^>R >R &heap R> &heap R> ;
