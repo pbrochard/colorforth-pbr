@@ -55,6 +55,8 @@
 ~`emit. ~entry/hide `v-emit ~entry/hide `.c ~entry/hide
 `cr? ~entry/hide `<dump> ~entry/hide
 
+:ddump ^dup 160 + heap-size min 160 -  &heap dump ;
+
 ~( variables )
 ~heap-size cell - :&dhere ~[,] ^;
 ~&dhere cell - &dhere h!
@@ -67,8 +69,6 @@
 
 :variables ^cells dalloc [,] ;
 :[] ^cells + ;
-
-:ddump ^dup 160 + heap-size min 160 - &heap dump ;
 
 :? ^@ . ;
 
