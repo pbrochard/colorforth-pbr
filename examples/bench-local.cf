@@ -1,97 +1,98 @@
-%
-:nb ^10000000 ,;
+:nb ^10000000 ;
 
-~" * Variable:" ~prn
-:tm ~time/start ,;
+(~s" * Variable:" ~prn
+:tm ~time/start ^;
 
-:v1 ~0 variable ,;
-:v-inc ^v1 @ 1+ v1 ! ,;
-:loop ^v-inc 1- dup `loop ,if* ^drop ,;
+:v1 ~0 variable ^;
+:v-inc ^v1 h@ 1+ v1 h! ;
+:loop ^v-inc 1- dup 'loop ^if* ^drop ;
 
-:test ^nb loop v1 @ . ,;
+:test ^nb loop v1 h@ . ;
 ~
 test
 tm time/end
 
-~" * register load/store" ~nprn
-:tm ~time/start ,;
+~s" * register load/store" ~nprn
+:tm ~time/start ^;
 
-:v-inc ^A@ 1+ A! ,;
-:loop ^v-inc 1- dup `loop ,if* ^drop ,;
+:v-inc ^A@ 1+ A! ;
+:loop ^v-inc 1- dup 'loop ^if* ^drop ;
 
-:test ^0 A! nb loop A@ . ,;
+:test ^0 A! nb loop A@ . ;
 ~
 test
 tm time/end
 
-~" * register add" ~nprn
-:tm ~time/start ,;
-:v-inc ^1 A+! ,;
-:loop ^v-inc 1- dup `loop ,if* ^drop ,;
+~s" * register add" ~nprn
+:tm ~time/start ^;
+:v-inc ^1 A+! ;
+:loop ^v-inc 1- dup 'loop ^if* ^drop ;
 
-:test ^0 A! nb loop A@ . ,;
+:test ^0 A! nb loop A@ . ;
+~
+test
+tm time/end
+)
+~s" * register inc" ~nprn
+:tm ~time/start ^;
+
+:v-inc ^A++ ^;
+:loop ^v-inc 1- dup 'loop ^if* ^drop ;
+
+:test ^0 A! nb loop A@ . ;
 ~
 test
 tm time/end
 
-~" * register inc" ~nprn
-:tm ~time/start ,;
+~s" /!\ TODO: inline code /!\" nprn
 
-:v-inc ,A++ ,;
-:loop ^v-inc 1- dup `loop ,if* ^drop ,;
+~s" * inline register inc" ~nprn
+:tm ~time/start ^;
 
-:test ^0 A! nb loop A@ . ,;
+:loop ^v-inc ^1- dup 'loop ^if* ^drop ;
+
+:test ^0 A! ^nb loop A@ ^. ;
 ~
 test
 tm time/end
 
-~" * inline register inc" ~nprn
-:tm ~time/start ,;
+~s" * inline  1 -" ~nprn
+:tm ~time/start ^;
 
-:loop ,v-inc ^1- dup `loop ,if* ^drop ,;
+:loop ^v-inc ^1 - dup 'loop ^if* ^drop ;
 
-:test ^0 ,A! ^nb loop ,A@ ^. ,;
-~
-test
-tm time/end
-
-~" * inline  1 -" ~nprn
-:tm ~time/start ,;
-
-:loop ,v-inc ^1 - dup `loop ,if* ^drop ,;
-
-:test ^0 ,A! ^nb loop ,A@ ^. ,;
-~
-test
-tm time/end
-
-
-~" * second register for counter" ~nprn
-:tm ~time/start ,;
-
-:loop ,v-inc B-- B@ `loop ,if* ,;
-
-:test ^0 ,A! ^nb ,B! ^loop ,A@ ^. ,;
-~
-test
-tm time/end
-
-~" * inline register manually" ~nprn
-:tm ~time/start ,;
-
-:loop ,A++ B-- B@ `loop ,if* ,;
-
-:test ^0 ,A! ^nb ,B! ^loop ,A@ ^. ,;
+:test ^0 A! ^nb loop A@ . ;
 ~
 test
 tm time/end
 
 
-~" * times loop" ~nprn
-:tm ~time/start ,;
+~s" * second register for counter" ~nprn
+:tm ~time/start ^;
 
-:loop ,A++ ,;
-:test ^0 ,A! `loop ^nb times ,A@ ^. ,;
+:loop ^v-inc B-- B@ 'loop ^if* ;
+
+:test ^0 A! ^nb B! loop A@ . ;
+~
+test
+tm time/end
+
+~s" * inline register manually" ~nprn
+:tm ~time/start ^;
+
+:loop ^A++ B-- B@ 'loop ^if* ;
+
+:test ^0 A! ^nb B! ^loop A@ ^. ;
+~
+test
+tm time/end
+
+
+~s" * times loop" ~nprn
+:tm ~time/start ^;
+
+:loop ^A++ ;
+:test ^0 A! 'loop ^nb times A@ ^. ;
 ~
 test
 tm time/end
