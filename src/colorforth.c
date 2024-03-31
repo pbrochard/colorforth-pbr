@@ -53,9 +53,8 @@ define_primitive(struct state *s, char name[] __attribute__((unused)), hash_t ha
 
   if (entry_index != -1)
   {
-    struct entry *found_entry = ENTRY(entry_index);
-
 #ifdef __KEEP_ENTRY_NAMES
+    struct entry *found_entry = ENTRY(entry_index);
     cf_printf(s, "'%s' clash with '%s'\n", name, found_entry->name);
 #endif /* __KEEP_ENTRY_NAMES */
 
@@ -74,7 +73,7 @@ define_primitive(struct state *s, char name[] __attribute__((unused)), hash_t ha
 
 #ifdef __KEEP_ENTRY_NAMES
   entry->name_len = strlen(NON_NULL(name));
-  entry->name = cf_calloc(s, 1, entry->name_len, PRIMITIVE_ERROR);
+  entry->name = cf_calloc(s, 1, entry->name_len + 1, PRIMITIVE_ERROR);
   memcpy(entry->name, NON_NULL(name), entry->name_len);
 #endif
 
@@ -86,7 +85,7 @@ define_primitive(struct state *s, char name[] __attribute__((unused)), hash_t ha
   char *p = up_name;
   while((*p=toupper(*p))) p++;
 
-  cf_printf(s, "%20s <-> %-20lX   hashed_name=%-20lX | %20s_HASH %20lX\n", name, entry->opcode, hashed_name, up_name, hash(name));
+  cf_printf(s, "%20s <-> %-20lX   hashed_name=%-20lX | %20s_HASH %20lX | %20s\n", name, entry->opcode, hashed_name, up_name, hash(name), entry->name);
 
   free(up_name);
 #else
@@ -111,7 +110,7 @@ define(struct state *s)
 
 #ifdef __KEEP_ENTRY_NAMES
   entry->name_len = s->tib.len;
-  entry->name = cf_calloc(s, 1, entry->name_len, DEFINE_ERROR);
+  entry->name = cf_calloc(s, 1, entry->name_len + 1, DEFINE_ERROR);
   memcpy(entry->name, s->tib.buf, s->tib.len);
 
 #ifdef __LIVE_CHECK_DICT
