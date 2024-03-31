@@ -1,5 +1,3 @@
-%
-
 :buf ~100 variables ^;
 :buf? ^buf ddump cr ;
 
