@@ -1,7 +1,7 @@
 :.slength ^space slength . ;
 
-:hello ~s" Hello " constant ^;
-:world ~s" new world!" constant ^;
+:hello ~c" Hello " ^;
+:world ~c" new world!" ^;
 
 ~
 hello pr  hello .slength
