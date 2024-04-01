@@ -148,4 +148,13 @@
 :eval ( string - ) ^clear-tib  dup ptr h!  .s slength .s  count h!  loop  32 parse ;
 ~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
 
+( files )
+:aload ( filename - buf ) ^
+   dup file-size c-alloc
+   dup rot load ;
+
+:c-pr (s - ) ^dup c@ dup 0 = '2drop ^if; emit 1+ c-pr ;
+
+:str2buf (s - ptr len) ^dup &heap swap slength ;
+
 ~

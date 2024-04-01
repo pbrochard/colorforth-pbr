@@ -217,6 +217,7 @@ extern void *cf_calloc(struct state *state, size_t nmemb, size_t size, unsigned 
 #define PUSH3(p1, p2, p3) ENSURE_STACK_MAX(3); SP+=3; CELLS[SP-2]=p1; CELLS[SP-1]=p2; CELLS[SP]=p3
 
 #define CFSTRING2C(str) (&HEAP(str, char))
+#define CFSTRINGLEN(str) (HEAP(str - sizeof(cell), cell))
 
 #define define_register_OP(N) OP_##N##_LOAD, OP_##N##_STORE, OP_##N##_ADD, \
     OP_##N##_INC, OP_##N##_DEC, OP_##N##_R_PUSH, OP_##N##_R_POP
