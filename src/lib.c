@@ -49,13 +49,13 @@ case OP_BASE: {
 
 case OP_ENTRY_IS: {
   POP2();
-  ENTRY(p2)->offset = ENTRY(p1)->offset;
+  ENTRY(p1)->offset = ENTRY(p2)->offset;
   break;
 }
 
 case OP_ENTRY_C_IS: {
   POP2();
-  ENTRY(p2)->offset = p1;
+  ENTRY(p1)->offset = p2;
   break;
 }
 
