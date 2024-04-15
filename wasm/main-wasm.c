@@ -16,9 +16,9 @@ int
 main(int argc, char *argv[])
 {
   s = colorforth_newstate();
-  parse_from_string(s, " ");
-// 	parse_from_string(s, "cr s\" This is a colorForth inspired implementation\" prn\n");
-// 	parse_from_string(s, "s\"   source code: https://github.com/pbrochard/colorforth-pbr\" prn\n");
-// 	parse_from_string(s, "s\" Try for example: 2 2 + .\" prn\n");
-// 	parse_from_string(s, "cr s\" Here are the defined words:\" prn\n\n");
+  cf_printf(s, "This is a colorForth inspired implementation\n");
+  cf_printf(s, "   source code: https://github.com/pbrochard/colorforth-pbr\n");
+  cf_printf(s, "Try for example: 2 2 + .\n");
+  cf_printf(s, "Type `words` the see defined words:\n");
+  cf_printf(s, "~\n");
 }
