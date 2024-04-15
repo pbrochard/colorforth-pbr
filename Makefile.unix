@@ -14,7 +14,6 @@ SRC=src/main.c src/colorforth.c \
 #	ext/math.c \
 #	ext/ext-math.c \
 #	ext/mp-math.c \
-#	ext/threads.c \
 #	ext/network.c \
 #	ext/sdl.c
 
@@ -29,7 +28,8 @@ INCLUDED_SRC=src/utils.c \
 	ext/math-float.c \
 	ext/dict.c \
 	ext/os.c \
-	ext/threads.c
+	ext/threads.c \
+	ext/mp-math.c
 
 
 SRC_H=src/colorforth.h \

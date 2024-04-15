@@ -8,15 +8,10 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "conf.h"
-
-#include "color.h"
-
-#ifdef __MP_MATH
-#include <mp-math.h>
-#endif
-
 #include <stdint.h>
+
+#include "conf.h"
+#include "color.h"
 
 typedef uint32_t hash_t;
 typedef hash_t opcode_t;
@@ -64,7 +59,23 @@ struct fstack
   int sp;
   int lim;
 };
-#endif
+#endif /* __EXTENDED_MATH */
+
+
+#ifdef __MP_MATH
+
+#include <gmp.h>
+
+struct mpstack
+{
+  // circular stack
+  mpz_t *cells;
+  // stack position
+  int sp;
+  int lim;
+};
+
+#endif /* __MP_MATH */
 
 struct dictionary
 {

@@ -144,7 +144,7 @@ extern void init_fstack(struct fstack *stack, int len);
 #endif
 
 #ifdef __MP_MATH
-extern void init_mpstack(struct mpstack *stack, int len, unsigned char id);
+extern void init_mpstack(struct mpstack *stack, int len);
 #endif
 
 struct thread_args
@@ -192,7 +192,7 @@ clone_state(struct state *s)
 #endif
 
 #ifdef __MP_MATH
-  init_mpstack(&clone->mpstack, MPSTACK_SIZE, 135);
+  init_mpstack(&clone->mpstack, MPSTACK_SIZE);
 #endif
 
   return clone;

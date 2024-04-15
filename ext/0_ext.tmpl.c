@@ -12,5 +12,6 @@
 #include "dict.c"
 #include "os.c"
 #include "threads.c"
+#include "mp-math.c"
 
 #endif /* __MINIMAL_BUILD */
