@@ -1,25 +1,49 @@
 // The author disclaims copyright to this source code.
-#include "colorforth.h"
-#include "cf-stdio.h"
 
-static char initialized = 0;
+/**********************************************************************************
+ *   HASH DEF
+ *********************************************************************************/
+#ifdef __SECTION_HASH_DEF
 
-// Expose the parser to colorForth
-// gniark gniark: parsing recursion from colorForth itself!!
-void
-parse(struct state *s)
-{
+#define OP_PARSE                     (opcode_t) 0x9555EDEF                // parse
+#define OP_CLEAR_TIB                 (opcode_t) 0xDE5DBC77                // clear-tib
+
+#endif /* __SECTION_HASH_DEF */
+
+
+/**********************************************************************************
+ *   WORD DEF
+ *********************************************************************************/
+#ifdef __SECTION_WORD_DEF
+
+define_primitive(s, ENTRY_NAME("parse"), OP_PARSE);
+define_primitive(s, ENTRY_NAME("clear-tib"), OP_CLEAR_TIB);
+
+#endif /* __SECTION_WORD_DEF */
+
+
+/**********************************************************************************
+ *   SWITCH DEF
+ *********************************************************************************/
+#ifdef __SECTION_SWITCH
+
+case OP_PARSE: {
   POP1();
   parse_colorforth(s, p1);
+  break;
 }
 
-void
-require_parser_fn(struct state *state)
-{
-  if (initialized) return;
-
-  define_primitive_extension(state, PARSE_HASH,        ENTRY_NAME("parse"), parse);
-  define_primitive_extension(state, CLEAR_TIB_HASH,    ENTRY_NAME("clear-tib"), clear_tib);
-
-  initialized = 1;
+case OP_CLEAR_TIB: {
+  clear_tib(s);
+  break;
 }
+
+#endif /* __SECTION_SWITCH */
+
+
+/**********************************************************************************
+ *   FUNCTION DEF
+ *********************************************************************************/
+#ifdef __SECTION_FUNCTION
+
+#endif /* __SECTION_FUNCTION */

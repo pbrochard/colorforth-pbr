@@ -1,39 +1,59 @@
 // The author disclaims copyright to this source code.
-#include "colorforth.h"
-#include "cf-stdio.h"
 
-static char initialized = 0;
+/**********************************************************************************
+ *   HASH DEF
+ *********************************************************************************/
+#ifdef __SECTION_HASH_DEF
 
-void
-system_fn(struct state *s)
-{
+#define OP_SYSTEM                     (opcode_t) 0x7BB8F701                // system
+#define OP_C_SUBALLOC                 (opcode_t) 0xF25B6721                // c-alloc
+#define OP_C_SUBFREE                  (opcode_t) 0x318C2312                // c-free
+
+#endif /* __SECTION_HASH_DEF */
+
+
+/**********************************************************************************
+ *   WORD DEF
+ *********************************************************************************/
+#ifdef __SECTION_WORD_DEF
+
+define_primitive(s, ENTRY_NAME("system"),  OP_SYSTEM);
+define_primitive(s, ENTRY_NAME("c-alloc"), OP_C_SUBALLOC);
+define_primitive(s, ENTRY_NAME("c-free"),  OP_C_SUBFREE);
+
+#endif /* __SECTION_WORD_DEF */
+
+
+/**********************************************************************************
+ *   SWITCH DEF
+ *********************************************************************************/
+#ifdef __SECTION_SWITCH
+
+case OP_SYSTEM: {
   POP1();
-  PUSH1(system((char*)p1));
+  PUSH1(system(CFSTRING2C(p1)));
+  break;
 }
 
-void
-c_alloc(struct state *s)
-{
+case OP_C_SUBALLOC: {
   POP1();
   const unsigned int size = (unsigned int)p1;
   PUSH1((cell)cf_calloc(s, 1, size, CALLOC_ERROR));
+  break;
 }
 
-void
-c_free(struct state *s)
-{
+case OP_C_SUBFREE: {
   POP1();
   free((char *)p1);
+  break;
 }
 
-void
-require_os_fn(struct state *state)
-{
-  if (initialized) return;
+#endif /* __SECTION_SWITCH */
 
-  define_primitive_extension(state, SYSTEM_HASH,      ENTRY_NAME("system"), system_fn);
-  define_primitive_extension(state, C_SUBALLOC_HASH,  ENTRY_NAME("c-alloc"), c_alloc);
-  define_primitive_extension(state, C_SUBFREE_HASH,   ENTRY_NAME("c-free"), c_free);
 
-  initialized = 1;
-}
+/**********************************************************************************
+ *   FUNCTION DEF
+ *********************************************************************************/
+#ifdef __SECTION_FUNCTION
+
+#endif /* __SECTION_FUNCTION */

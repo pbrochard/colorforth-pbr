@@ -1,57 +1,54 @@
-%
-:true ~c" true " ^pr ,;
-:false ~c" false " ^pr ,;
-:end ~c" end" ^pr ,;
+:true ~c" true " ^pr ;
+:false ~c" false " ^pr ;
+:end ~c" end" ^pr ;
 
-:.f ^dup . ,;
-:nl ~c"  | " ^pr ,;
+:.f ^dup . ;
+:nl ~c"  | " ^pr ;
 
-:test-if ^.f `true ,if  ^end ,;
-:test-if-not ^.f `false ,if-not ^end ,;
+:test-if ^.f 'true ^if  ^end ;
+:test-if-not ^.f 'false ^if-not ^end ;
 
-:test-if; ^.f `true ,if;  ^end ,;
-:test-if-not; ^.f `false ,if-not; ^end ,;
+:test-if; ^.f 'true ^if;  ^end ;
+:test-if-not; ^.f 'false ^if-not; ^end ;
 
-:test-if-else ^.f `true `false ,if-else  ^end ,;
+:test-if-else ^.f 'true 'false ^if-else  ^end ;
 
-~" ** Basic tests:" ~pr
-cr " if     " pr
+~s" ** Basic tests:" ~pr
+cr s" if     " pr
 0 test-if nl    1 test-if nl    10 test-if nl    -10 test-if nl
 
-" if-not   " npr
+s" if-not   " npr
 0 test-if-not nl   1 test-if-not nl   10 test-if-not nl   -10 test-if-not nl
 
-" if     " npr
+s" if     " npr
 0   test-if; nl   1 test-if; nl   10 test-if; nl   -10 test-if; nl
 
-" if-not;  " npr
+s" if-not;  " npr
 0   test-if-not; nl   1 test-if-not; nl   10 test-if-not; nl   -10 test-if-not; nl
 
-" if-else  " npr
+s" if-else  " npr
 0   test-if-else nl   1 test-if-else nl   10 test-if-else nl   -10 test-if-else nl
 
+cr cr s" ** Tail optimized explanation:"  ~prn
+s" use star version if tail call is needed." ~prn
+s" For example, this will blow the stack:" ~prn
 
-cr cr " ** Tail optimized explanation:"  ~prn
-" use star version if tail call is needed." ~prn
-" For example, this will blow the stack:" ~prn
+:go ^1 dup . 'go ^if ;
+~'go ~see
 
-:go ^1 dup . `go ,if ,;
-'go ~see
+~s" this version will not:" ~prn
+:go ^1 dup . 'go ^if* ;
+~'go ~see
 
-~" this version will not:" ~prn
-:go ^1 dup . `go ,if* ,;
-'go ~see
+cr s" ** Macro examples" prn
+:nope ~c" nope | " ^pr ;
+:A ~c" I'm A | " ^pr ;
+:B ~c" I'm B | " ^pr ;
 
+:orNope ^rot . 'nope ^if-else ;
 
-cr " ** Macro examples" prn
-:nope ~c" nope | " ^pr ,;
-:A ~c" I'm A | " ^pr ,;
-:B ~c" I'm B | " ^pr ,;
-
-:orNope ^rot . `nope ^if-else ,;
-
-:isA ^dup 2 = `A ,orNope ,;
-:isB ^dup 3 = `B ,orNope ,;
+:isA ^dup 2 = 'A ^orNope ;
+:isB ^dup 3 = 'B ^orNope ;
 
 
 ~'isA ~see   'isB ~see  cr
@@ -59,11 +56,11 @@ cr " ** Macro examples" prn
 ~1 isA 2 isA 3 isA cr
 ~1 isB 2 isB 3 isB
 
-cr cr " ** Another macro examples" prn
-:isOrNope  ^rot dup . = swap `nope ^if-else ,;
+cr cr s" ** Another macro examples" prn
+:isOrNope  ^rot dup . = swap 'nope ^if-else ;
 
-:isA `A ^2 ,isOrNope ,;
-:isB `B ^3 ,isOrNope ,;
+:isA 'A ^2 isOrNope ;
+:isB 'B ^3 isOrNope ;
 
 
 ~'isA ~see  'isB ~see  cr

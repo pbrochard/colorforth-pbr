@@ -1,5 +1,4 @@
-%
-~( Ackermann - Peter function
+( Ackermann - Peter function
 
 A m,n = | n+1                if m = 0
         | A m-1, n           if n = 0
@@ -11,44 +10,44 @@ In order to compute A 4, 1 adapt the stack sizes in conf.h to
 )
 
 
-~\ for backward recursion
-:<A> ,;
+( for backward recursion )
+:<A> ^;
 
-:A-0-n ~( m n ) ^1 + nip ,;
-:A-m-0 ~( m n ) ^drop 1 - 1 <A> ,;
+:A-0-n ( m n ) ^1 + nip ;
+:A-m-0 ( m n ) ^drop 1 - 1 <A> ;
 
-:A ~( m n - A)^
-  ^over               ~\ m n m
-  `A-0-n ,if-not;     ~\ m=0  or  m n
-  ^dup                ~\ m n n
-  `A-m-0 ,if-not;     ~\ n=0  or  m n
-  ^over               ~\ m n m
-  ^1 -                ~\ m n m-1
-  ^-rot               ~\ m-1 m n
-  ^1 -                ~\ m-1 m n-1
-  ^<A>                ~\ m-1 A(m, n-1)
+:A ( m n - A) ^
+  ^over               ( m n m )
+  'A-0-n ^if-not;     ( m=0  or  m n )
+  ^dup                ( m n n )
+  'A-m-0 ^if-not;     ( n=0  or  m n )
+  ^over               ( m n m )
+  ^1 -                ( m n m-1 )
+  ^-rot               ( m-1 m n )
+  ^1 -                ( m-1 m n-1 )
+  ^<A>                ( m-1 A(m, n-1) )
   ^A
-,;
+;
 
-~\ <A> is redefined to A to allow backward recursion
-'A '<A> ~is
+~( <A> is redefined to A to allow backward recursion )
+~`A `<A> ~is
 
 ~2 10 A .
 
 bye
 
-~( Results
-  0 4 A .   5           0.008 secs
-  2 10 A .  23          0.009 secs
-  3 1 A .   13          0.010 secs
-  3 2 A .   29          0.007 secs
-  3 3 A .   61          0.008 secs
-  3 4 A .   125         0.008 secs
-  3 8 A .   2045        0.107 secs
-  3 10 A .  8189        1.633 secs
-  3 11 A .  16381       6.388 secs
-  3 12 A .  32765      24.970 secs
+~( Results                  V1              V2
+  0 4 A .   5           0.008 secs      0.006 secs
+  2 10 A .  23          0.009 secs      0.009 secs
+  3 1 A .   13          0.010 secs      0.008 secs
+  3 2 A .   29          0.007 secs      0.008 secs
+  3 3 A .   61          0.008 secs      0.009 secs
+  3 4 A .   125         0.008 secs      0.008 secs
+  3 8 A .   2045        0.107 secs      0.073 secs
+  3 10 A .  8189        1.633 secs      1.034 secs
+  3 11 A .  16381       6.388 secs      4.079 secs
+  3 12 A .  32765      24.970 secs     16.374 secs
 
-  4 0 A .   13          0.008 secs
-  4 1 A .   65533     105.092 secs
+  4 0 A .   13          0.008 secs      0.006 secs
+  4 1 A .   65533     105.092 secs     68.062 secs
 )

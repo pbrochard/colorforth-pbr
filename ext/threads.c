@@ -1,9 +1,136 @@
 // The author disclaims copyright to this source code.
-#include "colorforth.h"
-#include "cf-stdio.h"
+
+/**********************************************************************************
+ *   HASH DEF
+ *********************************************************************************/
+#ifdef __SECTION_HASH_DEF
+
+#define OP_THREAD__RUN            (opcode_t) 0xE47BB892    // thread/run
+#define OP_THREAD__JOIN_SUBALL    (opcode_t) 0x9B920C1F    // thread/join-all
+#define OP_THREAD__JOIN           (opcode_t) 0x37303F01    // thread/join
+#define OP_THREAD__KILL           (opcode_t) 0x6B3D7E01    // thread/kill
+#define OP_THREAD__LOCK           (opcode_t) 0x91795D9A    // thread/lock
+#define OP_THREAD__UNLOCK         (opcode_t) 0xE4DECEBD    // thread/unlock
+
+
+
+#endif /* __SECTION_HASH_DEF */
+
+
+/**********************************************************************************
+ *   WORD DEF
+ *********************************************************************************/
+#ifdef __SECTION_WORD_DEF
+
+define_primitive(s, ENTRY_NAME("thread/run"),      OP_THREAD__RUN);
+define_primitive(s, ENTRY_NAME("thread/join-all"), OP_THREAD__JOIN_SUBALL);
+define_primitive(s, ENTRY_NAME("thread/join"),     OP_THREAD__JOIN);
+define_primitive(s, ENTRY_NAME("thread/kill"),     OP_THREAD__KILL);
+define_primitive(s, ENTRY_NAME("thread/lock"),     OP_THREAD__LOCK);
+define_primitive(s, ENTRY_NAME("thread/unlock"),   OP_THREAD__UNLOCK);
+
+
+#endif /* __SECTION_WORD_DEF */
+
+
+/**********************************************************************************
+ *   SWITCH DEF
+ *********************************************************************************/
+#ifdef __SECTION_SWITCH
+
+case OP_THREAD__RUN:
+{
+  POP2();
+  cell n = p1;
+  struct entry *entry = ENTRY(p2);
+
+  if (n >= MAX_THREAD) {
+    cf_printf(s, "Too many threads. At most %d allowed\n", MAX_THREAD);
+    PUSH1(-1);
+    return;
+  }
+
+  if (!initialized) {
+    for (int i = 0; i < MAX_LOCK; i++)
+    {
+      sem_init(&locks[i], 0, 1);
+    }
+    initialized = 1;
+  }
+
+  struct state *clone = clone_state(s);
+
+  thread_args[p1].clone = clone;
+  thread_args[p1].entry = entry;
+
+  pthread_create(&thread_args[p1].pthread, NULL, perform_thread, (void *) &thread_args[p1]);
+
+  PUSH1(n);
+
+  break;
+}
+
+case OP_THREAD__JOIN_SUBALL:
+{
+  for (int i = 0; i < MAX_THREAD; i++)
+  {
+    pthread_join(thread_args[i].pthread, NULL);
+  }
+  break;
+}
+
+case OP_THREAD__JOIN:
+{
+  POP1();
+
+  pthread_join(thread_args[p1].pthread, NULL);
+
+  break;
+}
+
+case OP_THREAD__KILL:
+{
+  POP1();
+
+  pthread_kill(thread_args[p1].pthread, SIGUSR1);
+  pthread_join(thread_args[p1].pthread, NULL);
+
+  pthread_kill(thread_args[p1].pthread, 0);
+  pthread_join(thread_args[p1].pthread, NULL);
+
+  free_clone_state(thread_args[p1].clone);
+
+  break;
+}
+
+case OP_THREAD__LOCK:
+{
+  POP1();
+
+  sem_wait(&locks[p1]);
+
+  break;
+}
+
+case OP_THREAD__UNLOCK:
+{
+  POP1();
+
+  sem_post(&locks[p1]);
+
+  break;
+}
+
+
+#endif /* __SECTION_SWITCH */
+
+
+/**********************************************************************************
+ *   FUNCTION DEF
+ *********************************************************************************/
+#ifdef __SECTION_FUNCTION
 
 #ifdef __THREADS
-
 
 #include <pthread.h>
 #include <semaphore.h>
@@ -39,6 +166,8 @@ clone_state(struct state *s)
 {
   struct state *clone = cf_calloc(s, 1, sizeof(*s), THREAD_CLONE_STATE_ERROR);
   clone->color = execute;
+
+  clone->base = 10;
 
   clone->dict.entries = s->dict.entries;
   clone->dict.latest = s->dict.latest;
@@ -111,99 +240,6 @@ perform_thread(void *arg)
   return NULL;
 }
 
-void
-thread_run(struct state *s)
-{
-  POP2();
-  cell n = p1;
-  struct entry *entry = (struct entry *) p2;
+#endif /* __THREADS */
 
-  if (n >= MAX_THREAD) {
-    cf_printf(s, "Too many threads. At most %d allowed\n", MAX_THREAD);
-    PUSH1(-1);
-    return;
-  }
-
-  struct state *clone = clone_state(s);
-
-  thread_args[p1].clone = clone;
-  thread_args[p1].entry = entry;
-
-  pthread_create(&thread_args[p1].pthread, NULL, perform_thread, (void *) &thread_args[p1]);
-
-  PUSH1(n);
-}
-
-void
-thread_join_all(struct state *s)
-{
-  for (int i = 0; i < MAX_THREAD; i++)
-  {
-    pthread_join(thread_args[i].pthread, NULL);
-  }
-}
-
-void
-thread_join(struct state *s)
-{
-  POP1();
-
-  pthread_join(thread_args[p1].pthread, NULL);
-}
-
-void
-thread_kill(struct state *s)
-{
-  POP1();
-
-  pthread_kill(thread_args[p1].pthread, SIGUSR1);
-  pthread_join(thread_args[p1].pthread, NULL);
-
-  pthread_kill(thread_args[p1].pthread, 0);
-  pthread_join(thread_args[p1].pthread, NULL);
-
-  free_clone_state(thread_args[p1].clone);
-}
-
-void
-thread_lock(struct state *s)
-{
-  POP1();
-
-  sem_wait(&locks[p1]);
-}
-
-void
-thread_unlock(struct state *s)
-{
-  POP1();
-
-  sem_post(&locks[p1]);
-}
-
-void
-require_threads_fn(struct state *s)
-{
-  if (initialized) return;
-
-  for (int i = 0; i < MAX_LOCK; i++)
-  {
-    sem_init(&locks[i], 0, 1);
-  }
-
-  define_primitive_extension(s, THREAD__RUN_HASH,         ENTRY_NAME("thread/run"), thread_run);
-  define_primitive_extension(s, THREAD__JOIN_SUBALL_HASH, ENTRY_NAME("thread/join-all"), thread_join_all);
-  define_primitive_extension(s, THREAD__JOIN_HASH,        ENTRY_NAME("thread/join"), thread_join);
-  define_primitive_extension(s, THREAD__KILL_HASH,        ENTRY_NAME("thread/kill"), thread_kill);
-  define_primitive_extension(s, THREAD__LOCK_HASH,        ENTRY_NAME("thread/lock"), thread_lock);
-  define_primitive_extension(s, THREAD__UNLOCK_HASH,      ENTRY_NAME("thread/unlock"), thread_unlock);
-
-  initialized = 1;
-}
-
-#else
-void
-init_threads_utils(struct state *s)
-{
-}
-#endif
+#endif /* __SECTION_FUNCTION */

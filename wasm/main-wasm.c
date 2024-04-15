@@ -5,20 +5,20 @@
 
 #include <emscripten/emscripten.h>
 
-struct state *state;
+struct state *s;
 
 EMSCRIPTEN_KEEPALIVE
 void parse_cf(int c) {
-  parse_colorforth(state, c);
+  parse_colorforth(s, c);
 }
 
 int
 main(int argc, char *argv[])
 {
-  state = colorforth_newstate();
-  parse_from_string(state, "% cr \" This is a colorForth inspired implementation\" prn\n");
-  parse_from_string(state, "\"   source code: https://github.com/pbrochard/colorforth-pbr\" prn\n");
-  parse_from_string(state, "\" Try for example: 2 2 + .\" prn\n");
-  parse_from_string(state, "cr \" Here are the defined words:\" prn\n\n");
-  parse_from_string(state, "~ echo on words\n\n");
+  s = colorforth_newstate();
+  parse_from_string(s, " ");
+// 	parse_from_string(s, "cr s\" This is a colorForth inspired implementation\" prn\n");
+// 	parse_from_string(s, "s\"   source code: https://github.com/pbrochard/colorforth-pbr\" prn\n");
+// 	parse_from_string(s, "s\" Try for example: 2 2 + .\" prn\n");
+// 	parse_from_string(s, "cr s\" Here are the defined words:\" prn\n\n");
 }

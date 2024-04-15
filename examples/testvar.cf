@@ -1,22 +1,21 @@
-%
-:v ~77 variable ,;
+:v ~77 variable ^;
 
 ~
-v ?
-100 v !
-v ?
+v h?
+100 v h!
+v h?
 
-:vars ~10 variables ,;
+:vars ~10 variables ^;
 
 ~
-10 vars !
-20 vars 1 [] !
-30 vars 2 [] !
+10 vars h!
+20 vars 1 [] h!
+30 vars 2 [] h!
 
-'vars ~dump
+cr
 
-vars ?
-vars 1 [] ?
-vars 2 [] ?
+vars h?
+vars 1 [] h?
+vars 2 [] h?
 
 bye

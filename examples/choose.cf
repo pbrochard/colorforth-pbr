@@ -1,19 +1,19 @@
-%
-:yes ~c" YES!" ^prn ,;
-:no ~c" NO!" ^prn ,;
-:done ~c" done" ^prn ,;
+:yes ~c" YES!" ^prn ;
+:no ~c" NO!" ^prn ;
+:done ~c" done" ^prn ;
 
-:test-yes ^yes ,;
-:test-no  ^no  ,;
+:test-yes ^yes ;
+:test-no  ^no  ;
 
-:choose-yes ^1 `yes `no ,if-else ^done ,;
-:choose-no  ^0 `yes `no ,if-else ^done ,;
+:choose-yes ^1 'yes 'no ^if-else ^done ;
+:choose-no  ^0 'yes 'no ^if-else ^done ;
 
+~
 'choose-yes ~see
 
 ~test-yes  test-no
 
-" -----" prn
+s" -----" prn
 
 choose-yes  choose-no
 

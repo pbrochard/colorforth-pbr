@@ -1,6 +1,8 @@
 Makefile
 colorforth
+colorforth-unsafe
 conf.h
 lib.cf
 colorforth-arduino/conf.h
 *.hex
+ext/ext.c

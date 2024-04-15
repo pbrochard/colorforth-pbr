@@ -10,122 +10,291 @@
 #include "colorforth.h"
 #include "cf-stdio.h"
 
-#ifdef __EMBED_LIB_CF
-#include <lib.cf.h>
-#endif /* __EMBED_LIB_CF */
+#ifdef __KEEP_ENTRY_NAMES
+#define ENTRY_NAME(name) (name)
+#else
+#define ENTRY_NAME(name) (NULL)
+#endif
 
-extern void load_extensions(struct state *s);
+#define __SECTION_HASH_DEF
+#include "core.c"
+#include "ext.c"
+#include "lib.c"
+#undef __SECTION_HASH_DEF
 
 #ifdef __CHECK_DICT
 extern char check_entry(struct state *s, struct entry *check_entry);
 extern void display_clash_found(struct state *s, char clash_found);
 #endif /* __CHECK_DICT */
 
-struct prefix_map prefix_map[MAX_PREFIX];
-
 #define define_register(N)                                                     \
-  case OP_##N##_STORE: { ENSURE_STACK_MIN(1, break);  N = POP(); break; }      \
-  case OP_##N##_LOAD: { ENSURE_STACK_MAX(1, break);   PUSH(N); break; }        \
-  case OP_##N##_ADD: { ENSURE_STACK_MIN(1, break);    N += POP(); break; }     \
-  case OP_##N##_INC: { N += 1; break; }                                        \
-  case OP_##N##_DEC: { N -= 1; break; }                                        \
-  case OP_##N##_R_POP: { ENSURE_R_STACK_MIN(1, break); N = R_POP(); break; }   \
-  case OP_##N##_R_PUSH: { ENSURE_R_STACK_MAX(1, break); R_PUSH(N); break; }
+  case OP_REG_##N##_STORE: { ENSURE_STACK_MIN(1);  N = POP(); break; }         \
+  case OP_REG_##N##_LOAD: { ENSURE_STACK_MAX(1);   PUSH(N); break; }    \
+  case OP_REG_##N##_ADD: { ENSURE_STACK_MIN(1);    N += POP(); break; } \
+  case OP_REG_##N##_INC: { N += 1; break; }                             \
+  case OP_REG_##N##_DEC: { N -= 1; break; }                             \
+  case OP_REG_R_TO_##N##_ : { ENSURE_R_STACK_MIN(1); N = R_POP(); break; } \
+  case OP_REG_##N##_TO_R: { ENSURE_R_STACK_MAX(1); R_PUSH(N); break; }
 
-#define define_register_primitive(N)                                    \
-  define_primitive(s, REG_##N##_LOAD_HASH,        ENTRY_NAME(#N"@"), OP_##N##_LOAD); \
-  define_primitive(s, REG_##N##_STORE_HASH,       ENTRY_NAME(#N"!"), OP_##N##_STORE); \
-  define_primitive(s, REG_##N##_ADD_STORE_HASH,   ENTRY_NAME(#N"+!"), OP_##N##_ADD); \
-  define_primitive(s, REG_##N##_ADD_ADD_HASH,     ENTRY_NAME(#N"++"), OP_##N##_INC); \
-  define_primitive(s, REG_##N##_SUB_SUB_HASH,     ENTRY_NAME(#N"--"), OP_##N##_DEC); \
-  define_primitive(s, REG_##N##_TO_R_HASH,        ENTRY_NAME(#N">R"), OP_##N##_R_PUSH); \
-  define_primitive(s, REG_R_TO_##N##_HASH,        ENTRY_NAME("R>"#N), OP_##N##_R_POP);
+#include "utils.c"
+
+#define __SECTION_FUNCTION
+#include "core.c"
+#include "ext.c"
+#include "lib.c"
+#undef __SECTION_FUNCTION
+
+// 'hashed_name' is 'hash(name)' or 0x0 if names are kept
+// 'name' must be null-terminated.
+static void
+define_primitive(struct state *s, char name[] __attribute__((unused)), hash_t hashed_name)
+{
+  cell entry_index = find_entry_by_hash(&s->dict, hashed_name);
+
+  if (entry_index != -1)
+  {
+#ifdef __KEEP_ENTRY_NAMES
+    struct entry *found_entry = ENTRY(entry_index);
+    cf_printf(s, "'%s' clash with '%s'\n", name, found_entry->name);
+#endif /* __KEEP_ENTRY_NAMES */
+
+    cf_fatal_error(s, DUPLICATE_HASH_ERROR);
+  }
+
+  s->dict.latest++;
+  struct entry *entry = ENTRY(s->dict.latest);
+
+  entry->opcode = hashed_name;
+
+  entry->mode = CORE;
+  entry->offset = s->here;
+  STORE(entry->opcode, opcode_t);
+  STORE(OP_RETURN, opcode_t);
+
+#ifdef __KEEP_ENTRY_NAMES
+  entry->name_len = strlen(NON_NULL(name));
+  entry->name = cf_calloc(s, 1, entry->name_len + 1, PRIMITIVE_ERROR);
+  memcpy(entry->name, NON_NULL(name), entry->name_len);
+#endif
+
+#ifdef __SHOW_MISSING_HASH
+#ifdef __KEEP_ENTRY_NAMES
+  char *up_name = cf_calloc(s, 1, entry->name_len + 1, PRIMITIVE_ERROR);
+  memcpy(up_name, name, entry->name_len + 1);
+
+  char *p = up_name;
+  while((*p=toupper(*p))) p++;
+
+  cf_printf(s, "%20s <-> %-20lX   hashed_name=%-20lX | %20s_HASH %20lX | %20s\n", name, entry->opcode, hashed_name, up_name, hash(name), entry->name);
+
+  free(up_name);
+#else
+  cf_printf(s, "%-20lX %lX\n", entry->opcode, hashed_name);
+#endif
+#endif
+}
+
+/**
+ *
+ * Color functions
+ *
+ **/
+static void
+define(struct state *s)
+{
+  struct dictionary * dict = &s->dict;
+  dict->latest++;
+  struct entry *entry = &dict->entries[dict->latest];
+
+  entry->opcode = hash(s->tib.buf);
+
+#ifdef __KEEP_ENTRY_NAMES
+  entry->name_len = s->tib.len;
+  entry->name = cf_calloc(s, 1, entry->name_len + 1, DEFINE_ERROR);
+  memcpy(entry->name, s->tib.buf, s->tib.len);
+
+#ifdef __LIVE_CHECK_DICT
+  // TODO
+  //if (check_entry(s, entry)) display_clash_found(s, 1);
+#endif /* __LIVE_CHECK_DICT */
+#endif
+
+  entry->offset = s->here;
+  entry->mode = CALL;
+  // printf("\ndefine: %s offset=%ld\n", entry->name, entry->offset);
+}
+
+static void
+compile_entry(struct state *s, cell entry_index)
+{
+  struct entry* entry = ENTRY(entry_index);
+  if (entry->mode == CORE) {
+    STORE(entry->opcode, opcode_t);
+  } else if (entry_index == s->dict.latest) {
+    STORE(OP_TAIL_CALL, opcode_t);
+    STORE(entry_index, cell);
+  } else {
+    STORE(OP_CALL, opcode_t);
+    STORE(entry_index, cell);
+  }
+}
+
+static void
+compile_literal(struct state *s, cell n)
+{
+  STORE(OP_NUMBER, opcode_t);
+  STORE(n, cell);
+}
+
+static void
+compile(struct state *s)
+{
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index != -1)
+  {
+    compile_entry(s, entry_index);
+  }
+  else
+  {
+    // try to interpret as an unsigned decimal number
+    cell n = 0;
+    if (tib_to_number(s, &n))
+    {
+      compile_literal(s, n);
+    }
+    else
+    {
+      unknow_word(s);
+    }
+  }
+}
 
 void
-cf_print_cell(struct state *s, cell cell)
+execute_(struct state *s, struct entry *entry)
 {
-  switch (s->base)
+  // cf_printf(s, "-> %s offset=%d\n", entry->name, entry->offset);
+  cell pc = entry->offset;
+
+  ENSURE_R_STACK_MAX(1);
+  R_PUSH(-1);
+
+#ifdef __USE_REGISTER
+  register cell A = 0;
+  register cell B = 0;
+  register cell C = 0;
+  register cell I = 0;
+  register cell J = 0;
+  register cell K = 0;
+#endif
+
+
+  // don't forget to COMPILE a return!!!!
+  while(1)
   {
-    case 16:
+    switch (HEAP(pc, opcode_t))
     {
-      cf_printf(s, "$%lX", cell);
-      break;
-    }
-    case 2:
-    {
-      cf_putchar(s, '#');
-      if (cell == 0)
+      case OP_RETURN:
       {
-        cf_printf(s, "0 ");
-      } else {
-        int i = CHAR_BIT * sizeof cell;
-        char output = 0;
-        while(i--)
-        {
-          const char n = ((cell >> i) & 1);
-          if (n) output = 1;
-          if (output) cf_putchar(s, '0' + n);
+        ENSURE_R_STACK_MIN(1);
+        cell offset = R_POP();
+        if (offset == -1) {
+          // cf_printf(s, "   %s(done) <-\n", entry->name);
+          return ;
         }
+        pc = offset;
+        continue;
       }
-      break;
+
+#define __SECTION_SWITCH
+#include "core.c"
+#include "ext.c"
+#include "lib.c"
+#undef __SECTION_SWITCH
+
+      default:
+      {
+        cf_printf(s, "??");
+      }
     }
-    default:
-    {
-      cf_printf(s, CELL_FMT, cell);
-      break;
-    }
+    pc += sizeof(opcode_t);
   }
 }
 
 void
-quit(struct state *s)
+execute(struct state *s)
 {
-  s->done = 1;
-  echo_color(s, ' ', COLOR_CLEAR);
-  cf_printf(s, "\n");
-}
-
-void
-cf_fatal_error(struct state *s, char id)
-{
-  cf_printf(s, "E%d\n", id);
-  if (s)
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index != -1)
   {
-    echo_color(s, ' ', COLOR_CLEAR);
+    execute_(s, ENTRY(entry_index));
   }
-  cf_fflush();
-  reset_terminal();
-  exit(1);
+  else
+  {
+    // try to interpret as an unsigned decimal number
+    cell n = 0;
+    if (tib_to_number(s, &n))
+    {
+      ENSURE_STACK_MAX(1);
+      PUSH(n);
+    }
+    else
+    {
+      unknow_word(s);
+      return;
+    }
+  }
 }
 
-void *
-cf_calloc(struct state *s, size_t nmemb, size_t size, unsigned char id)
+static void
+tick(struct state *s)
 {
-  void *ptr = calloc(nmemb, size);
-  if (!ptr) cf_fatal_error(s, id);
-
-  return ptr;
-}
-
-
-#define FNV_32_PRIME ((hash_t)0x01000193)
-
-hash_t
-hash(char *str)
-{
-  if (!str) return 0;
-
-  unsigned char *s = (unsigned char *)str;
-  hash_t hval = 0;
-
-  while (*s) {
-    hval ^= (hash_t)*s++;
-
-    /* multiply by the 32 bit FNV magic prime mod 2^32 */
-    hval *= FNV_32_PRIME;
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index == -1) {
+    unknow_word(s);
+    return;
   }
 
-  return hval;
+  ENSURE_STACK_MAX(1);
+  PUSH(ENTRY(entry_index)->offset);
+}
+
+static void
+compile_tick(struct state *s)
+{
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index == -1) {
+    unknow_word(s);
+    return;
+  }
+
+  STORE(OP_TICK_NUMBER, opcode_t);
+  STORE(ENTRY(entry_index)->offset, cell);
+}
+
+static void
+tick_entry(struct state *s)
+{
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index == -1) {
+    unknow_word(s);
+    return;
+  }
+
+  ENSURE_STACK_MAX(1);
+  PUSH(entry_index);
+}
+
+static void
+compile_tick_entry(struct state *s)
+{
+  cell entry_index = find_entry(s, &s->dict);
+  if (entry_index == -1) {
+    unknow_word(s);
+    return;
+  }
+
+  STORE(OP_TICK_NUMBER, opcode_t);
+  STORE(entry_index, cell);
 }
 
 void
@@ -147,923 +316,26 @@ void
 free_dictionary(struct dictionary *dict)
 {
 #ifdef __KEEP_ENTRY_NAMES
-  for (struct entry *entry = dict->latest; entry != dict->entries - 1; entry--)
+  for (int i = dict->latest; i >= 0; i--)
   {
-    if (entry->name != NULL) free(entry->name);
+    if (dict->entries[i].name != NULL) free(dict->entries[i].name);
   }
 #endif
 
   free(dict->entries);
 }
 
-static void
-dot_s(struct state *s, struct stack *stack)
-{
-  cf_printf(s, "[%d] ", stack->sp + 1);
-  for (int i = 0; i < stack->sp + 1; i++)
-  {
-    cf_print_cell(s, stack->cells[i]);
-    cf_printf(s, " ");
-  }
-  cf_printf(s, "<tos\n");
-}
-
-void
-clear_tib (struct state *s){
-  for(size_t i = 0; i < s->tib.len; i++)
-  {
-    s->tib.buf[i] = 0;
-  }
-  s->tib.len = 0;
-}
-
-#ifdef __KEEP_ENTRY_NAMES
-void
-dump_words(struct state *s, struct dictionary *dict)
-{
-  for (struct entry *entry = dict->latest; entry != dict->entries - 1; entry--)
-  {
-    if (entry->name == NULL) continue;
-
-    s->tib.len = entry->name_len;
-    memcpy(s->tib.buf, entry->name, entry->name_len);
-    s->tib.buf[s->tib.len] = '\0';
-    cf_printf(s, "%s ", s->tib.buf);
-  }
-}
-#else
-void
-dump_words(struct state *s, struct dictionary *dict __attribute__((unused)))
-{
-  cf_printf(s, "...\n");
-}
-#endif
-
-
-void
-words(struct state *s)
-{
-  dump_words(s, &s->dict);
-  cf_printf(s, "\n");
-}
-
-struct entry*
-find_entry(struct state *s, struct dictionary *dict)
-{
-  s->tib.buf[s->tib.len] = '\0';
-  const hash_t tib_hash = hash(s->tib.buf);
-
-  for (struct entry *entry = dict->latest; entry != dict->entries - 1; entry--)
-  {
-    if (entry->name_hash == tib_hash)
-    {
-      return entry;
-    }
-  }
-  return NULL;
-}
-
-struct entry*
-find_entry_by_hash(struct dictionary *dict, hash_t name_hash)
-{
-  for (struct entry *entry = dict->latest; entry != dict->entries - 1; entry--)
-  {
-    if (entry->name_hash == name_hash)
-    {
-      return entry;
-    }
-  }
-  return NULL;
-}
-
-struct entry*
-find_entry_by_code(struct dictionary *dict, struct code *code)
-{
-  for (struct entry *entry = dict->latest; entry != dict->entries - 1; entry--)
-  {
-    if (entry->code->opcode == code->opcode)
-    {
-      return entry;
-    }
-  }
-  return NULL;
-}
-
-struct entry*
-find_entry_by_fn(struct dictionary *dict, struct code *code)
-{
-  for (struct entry *entry = dict->latest; entry != dict->entries - 1; entry--)
-  {
-    if (entry->code->value == code->value)
-    {
-      return entry;
-    }
-  }
-  return NULL;
-}
-
-void
-print_tib(struct state *s)
-{
-  for(size_t i = 0; i < s->tib.len; i++)
-  {
-    cf_putchar(s, s->tib.buf[i]);
-  }
-}
-
-void
-unknow_word (struct state *s)
-{
-  print_tib(s);
-  cf_printf(s, "?\n");
-
-  if (s->str_stream || s->file_stream)
-  {
-    cf_fatal_error(s, -1);
-  }
-}
-
-// 'hashed_name' is 'hash(name)' or 0x0 if names are kept
-// 'name' must be null-terminated.
-static void
-define_primitive_generic(struct state *s, struct dictionary *dict,
-                         hash_t hashed_name, char name[] __attribute__((unused)),
-                         const enum opcode opcode, void (*fn)(struct state *s))
-{
-  if (hashed_name)
-  {
-    struct entry *found_entry = find_entry_by_hash(dict, hashed_name);
-    if (found_entry)
-    {
-#ifdef __KEEP_ENTRY_NAMES
-      cf_printf(s, "'%s' clash with '%s'\n", name, found_entry->name);
-#endif /* __KEEP_ENTRY_NAMES */
-
-      cf_fatal_error(s, DUPLICATE_HASH_ERROR);
-    }
-  }
-
-  dict->latest++;
-  struct entry *entry = dict->latest;
-
-  entry->name_hash = hashed_name;
-
-#ifdef __KEEP_ENTRY_NAMES
-  if (!entry->name_hash)
-  {
-    entry->name_hash = hash(name);
-  }
-
-  entry->name_len = strlen(NON_NULL(name));
-  entry->name = cf_calloc(s, 1, entry->name_len, PRIMITIVE_ERROR);
-  memcpy(entry->name, NON_NULL(name), entry->name_len);
-#endif
-
-#ifdef __SHOW_MISSING_HASH
-#ifdef __KEEP_ENTRY_NAMES
-  char *up_name = cf_calloc(s, 1, entry->name_len + 1, PRIMITIVE_ERROR);
-  memcpy(up_name, name, entry->name_len + 1);
-
-  char *p = up_name;
-  while((*p=toupper(*p))) p++;
-
-  cf_printf(s, "%20s <-> %-20lX   hashed_name=%-20lX | %20s_HASH %20lX\n", name, entry->name_hash, hashed_name, up_name, hash(name));
-
-  free(up_name);
-#else
-  cf_printf(s, "%-20lX %lX\n", entry->name_hash, hashed_name);
-#endif
-#endif
-
-  entry->code = s->here;
-  entry->code->opcode = opcode;
-  entry->code->value = (cell) fn;
-
-  (entry->code + 1)->opcode = OP_RETURN;
-  (entry->code + 1)->value = 0;
-
-  s->here = (struct code *)s->here + 2;
-}
-
-static void
-define_primitive(struct state *s, hash_t hashed_name, char name[], const enum opcode opcode)
-{
-  define_primitive_generic(s, &s->dict, hashed_name, name, opcode, NULL);
-}
-
-void
-define_primitive_extension(struct state *s, hash_t hashed_name, char name[], void (*fn)(struct state *s))
-{
-  define_primitive_generic(s, &s->dict, hashed_name, name, OP_FUNCTION_CALL, fn);
-}
-
-static bool
-tib_to_number(struct state *s, cell *n)
-{
-  char *endptr;
-  s->tib.buf[s->tib.len] = '\0';
-  *n = strtol(s->tib.buf, &endptr, s->base);
-  return *s->tib.buf != 0 && *endptr == 0;
-}
-
-/**
- *
- * Color functions
- *
- **/
-static void
-define_generic(struct state *s, struct dictionary *dict)
-{
-  dict->latest++;
-  struct entry *entry = dict->latest;
-
-  entry->name_hash = hash(s->tib.buf);
-
-#ifdef __KEEP_ENTRY_NAMES
-  entry->name_len = s->tib.len;
-  entry->name = cf_calloc(s, 1, entry->name_len, DEFINE_ERROR);
-  memcpy(entry->name, s->tib.buf, s->tib.len);
-
-#ifdef __LIVE_CHECK_DICT
-  if (check_entry(s, entry)) display_clash_found(s, 1);
-#endif /* __LIVE_CHECK_DICT */
-#endif
-
-  entry->code = s->here;
-}
-
-static void
-define(struct state *s)
-{
-  define_generic(s, &s->dict);
-}
-
-inline void
-compile_code(struct state *s, enum opcode opcode, cell value)
-{
-  struct code *code = (struct code *)s->here;
-  code->opcode = opcode;
-  code->value = value;
-  s->here = (struct code *)s->here + 1;
-}
-
-static void
-compile_entry(struct state *s, struct entry *entry)
-{
-  compile_code(s, entry == s->dict.latest ? OP_TAIL_CALL : OP_CALL, (cell)entry);
-}
-
-static void
-inline_entry(struct state *s, struct entry *entry)
-{
-  for (size_t i = 0, done = 0; !done; i++)
-  {
-    // inline OP_RETURN in first position
-    if (entry->code[i].opcode == OP_RETURN && i > 0)
-    {
-      break;
-    }
-    compile_code(s, entry->code[i].opcode, entry->code[i].value);
-  }
-}
-
-static void
-compile_literal(struct state *s, cell n)
-{
-  compile_code(s, OP_NUMBER, n);
-}
-
-static void
-compile(struct state *s)
-{
-  struct entry *entry = find_entry(s, &s->dict);
-  if (entry)
-  {
-    compile_entry(s, entry);
-  }
-  else
-  {
-    // try to interpret as an unsigned decimal number
-    cell n = 0;
-    if (tib_to_number(s, &n))
-    {
-      compile_literal(s, n);
-    }
-    else
-    {
-      unknow_word(s);
-    }
-  }
-}
-
-static void
-compile_inline(struct state *s)
-{
-  struct entry *entry = find_entry(s, &s->dict);
-  if (entry)
-  {
-    inline_entry(s, entry);
-  }
-  else
-  {
-    unknow_word(s);
-  }
-}
-
-void
-execute_(struct state *s, struct entry *entry)
-{
-  // cf_printf(s, "-> %s\n", entry->name);
-  struct code *pc = entry->code;
-
-  ENSURE_R_STACK_MAX(1, return);
-  R_PUSH(0);
-
-#ifdef __USE_REGISTER
-  register cell A = 0;
-  register cell B = 0;
-  register cell C = 0;
-  register cell I = 0;
-  register cell J = 0;
-#endif
-
-  // don't forget to INLINE a return!!!!
-  while(1)
-  {
-    switch (pc->opcode)
-    {
-      case OP_RETURN:
-      {
-        ENSURE_R_STACK_MIN(1, break);
-        struct code *code = (struct code *) R_POP();
-        if (code)
-        {
-          pc = code;
-        }
-        else
-        {
-          return;
-        }
-        break;
-      }
-
-      case OP_R_PUSH:
-      {
-        ENSURE_STACK_MIN(1, break); ENSURE_R_STACK_MAX(1, break);
-        const cell n = POP();
-        R_PUSH(n);
-        break;
-      }
-
-      case OP_R_POP:
-      {
-        ENSURE_R_STACK_MIN(1, break); ENSURE_STACK_MAX(1, break);
-        const cell n = R_POP();
-        PUSH(n);
-        break;
-      }
-
-      case OP_R_FETCH:
-      {
-        ENSURE_R_STACK_MIN(1, break);
-        ENSURE_STACK_MAX(1, break);
-        PUSH(R_CELLS[R_SP]);
-        break;
-      }
-
-#ifdef __USE_REGISTER
-      define_register(A);
-      define_register(B);
-      define_register(C);
-      define_register(I);
-      define_register(J);
-#endif
-
-      case OP_DUP:
-      {
-        ENSURE_STACK_MIN(1, break);
-        ENSURE_STACK_MAX(1, break);
-        PUSH(CELLS[SP - 1]);
-        break;
-      }
-
-      case OP_DROP:
-      {
-        ENSURE_STACK_MIN(1, break);
-        SP -= 1;
-        break;
-      }
-
-      case OP_SWAP:
-      {
-        ENSURE_STACK_MIN(2, break);
-        const cell n = CELLS[SP];
-        CELLS[SP] = CELLS[SP - 1];
-        CELLS[SP - 1] = n;
-        break;
-      }
-
-      case OP_OVER:
-      {
-        ENSURE_STACK_MIN(2, break);
-        ENSURE_STACK_MAX(1, break);
-        PUSH(CELLS[SP - 2]);
-        break;
-      }
-
-      case OP_ROT:
-      {
-        ENSURE_STACK_MIN(3, break);
-        const cell n = CELLS[SP - 2];
-        CELLS[SP - 2] = CELLS[SP - 1];
-        CELLS[SP - 1] = CELLS[SP];
-        CELLS[SP] = n;
-        break;
-      }
-
-      case OP_MINUS_ROT:
-      {
-        ENSURE_STACK_MIN(3, break);
-        const cell n = CELLS[SP];
-        CELLS[SP] = CELLS[SP - 1];
-        CELLS[SP - 1] = CELLS[SP - 2];
-        CELLS[SP - 2] = n;
-        break;
-      }
-
-      case OP_NIP:
-      {
-        ENSURE_STACK_MIN(2, break);
-        SP -= 1;
-        CELLS[SP] = CELLS[SP + 1];
-        break;
-      }
-
-      case OP_LOAD:
-      {
-        ENSURE_STACK_MIN(1, break);
-        CELLS[SP] = *(cell*) CELLS[SP];
-        break;
-      }
-
-      case OP_STORE:
-      {
-        ENSURE_STACK_MIN(2, break);
-        cell *ptr = (cell*) CELLS[SP];
-        *ptr = CELLS[SP - 1];
-        SP -= 2;
-        break;
-      }
-
-      case OP_CLOAD:
-      {
-        ENSURE_STACK_MIN(1, break);
-        CELLS[SP] = *(char*) CELLS[SP];
-        break;
-      }
-
-      case OP_CSTORE:
-      {
-        ENSURE_STACK_MIN(2, break);
-        char *ptr = (char*) CELLS[SP];
-        *ptr = CELLS[SP - 1];
-        SP -= 2;
-        break;
-      }
-
-      case OP_CALL:
-      {
-        ENSURE_STACK_MAX(1, break);
-        struct entry *entry_ = (struct entry*)pc->value;
-        R_PUSH((cell)pc);
-        pc = entry_->code - 1;
-        break;
-      }
-
-      case OP_TAIL_CALL:
-      {
-        struct entry *entry_ = (struct entry*)pc->value;
-        pc = entry_->code - 1;
-        break;
-      }
-
-      case OP_FUNCTION_CALL:
-      {
-        // Call extension function
-        ((void (*)(struct state *s)) pc->value)(s);
-        break;
-      }
-
-      case OP_NUMBER:
-      case OP_TICK_NUMBER:
-      {
-        ENSURE_STACK_MAX(1, break);
-        SP += 1;
-        CELLS[SP] = pc->value;
-        break;
-      }
-
-      case OP_ADD:
-      {
-        ENSURE_STACK_MIN(2, break);
-        SP -= 1;
-        CELLS[SP] = CELLS[SP] + CELLS[SP + 1];
-        break;
-      }
-
-      case OP_SUB:
-      {
-        ENSURE_STACK_MIN(2, break);
-        SP -= 1;
-        CELLS[SP] = CELLS[SP] - CELLS[SP + 1];
-        break;
-      }
-
-      case OP_MUL:
-      {
-        ENSURE_STACK_MIN(2, break);
-        SP -= 1;
-        CELLS[SP] = CELLS[SP] * CELLS[SP + 1];
-        break;
-      }
-
-      case OP_EQUAL:
-      {
-        ENSURE_STACK_MIN(2, break);
-        SP -= 1;
-        CELLS[SP] = CELLS[SP] == CELLS[SP + 1];
-        break;
-      }
-
-      case OP_LESS:
-      {
-        ENSURE_STACK_MIN(2, break);
-        SP -= 1;
-        CELLS[SP] = CELLS[SP] < CELLS[SP + 1];
-        break;
-      }
-
-      case OP_BRANCH:
-      {
-        pc = (struct code*)pc->value;
-        continue;
-      }
-
-      case OP_ZBRANCH:
-      {
-        POP1();
-        if (!p1) { pc = (struct code*)pc->value; continue; }
-        break;
-      }
-
-      case OP_NBRANCH:
-      {
-        POP1();
-        if (p1) { pc = (struct code*)pc->value; continue; }
-        break;
-      }
-
-      case OP_IF:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f) {
-          R_PUSH((cell)pc);
-          pc = entry_->code - 1;
-        }
-
-        break;
-      }
-
-      case OP_IF_EXIT:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f) {
-          R_PUSH((cell)pc);
-          pc = entry_->code - 1;
-          R_SP -= 1;
-        }
-
-        break;
-      }
-
-      case OP_IF_NOT:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f == 0) {
-          R_PUSH((cell)pc);
-          pc = entry_->code - 1;
-        }
-
-        break;
-      }
-
-      case OP_IF_NOT_EXIT:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f == 0) {
-          R_PUSH((cell)pc);
-          pc = entry_->code - 1;
-          R_SP -= 1;
-        }
-
-        break;
-      }
-
-      case OP_IF_STAR:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f) pc = entry_->code - 1;
-
-        break;
-      }
-
-      case OP_IF_STAR_EXIT:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f) {
-          pc = entry_->code - 1;
-          R_SP -= 1;
-        }
-
-        break;
-      }
-
-      case OP_IF_NOT_STAR:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f == 0) pc = entry_->code - 1;
-
-        break;
-      }
-
-      case OP_IF_NOT_STAR_EXIT:
-      {
-        ENSURE_STACK_MIN(2, break);
-        struct entry *entry_ = (struct entry*)POP();
-        const cell f = POP();
-
-        if (f == 0) {
-          pc = entry_->code - 1;
-          R_SP -= 1;
-        }
-
-        break;
-      }
-
-      case OP_IF_ELSE:
-      {
-        ENSURE_STACK_MIN(3, break);
-        struct entry *entry_false_ = (struct entry*)POP();
-        struct entry *entry_true_ = (struct entry*)POP();
-        const cell f = POP();
-
-        R_PUSH((cell)pc);
-        if (f) {
-          pc = entry_true_->code - 1;
-        }
-        else {
-          pc = entry_false_->code - 1;
-        }
-
-        break;
-      }
-
-      case OP_EMIT:
-      {
-        ENSURE_STACK_MIN(1, break);
-        cf_putchar(s, (char)CELLS[SP]);
-        SP -= 1;
-        break;
-      }
-
-      case OP_KEY:
-      {
-        ENSURE_STACK_MAX(1, break);
-        PUSH((char)cf_getchar(s));
-        break;
-      }
-
-      case OP_CELL:
-      {
-        ENSURE_STACK_MAX(1, break);
-        PUSH(sizeof(cell));
-        break;
-      }
-
-      case OP_CODE_LEN:
-      {
-        ENSURE_STACK_MAX(1, break);
-        PUSH(sizeof(struct code));
-        break;
-      }
-
-      case OP_GET_ENTRY_CODE:
-      {
-        ENSURE_STACK_MIN(1, break);
-        struct entry *entry_ = (struct entry*)POP();
-        PUSH((cell)entry_->code);
-        break;
-      }
-
-      case OP_EXECUTE:
-      {
-        ENSURE_STACK_MIN(1, break);
-        ENSURE_R_STACK_MAX(1, break);
-        struct code *code_ = (struct code*)POP();
-        R_PUSH((cell)pc);
-        pc = code_ - 1;
-        break;
-      }
-
-      // Like execute but leave xt on the stack
-      case OP_EXECUTE_STAR:
-      {
-        ENSURE_STACK_MIN(1, break);
-        ENSURE_R_STACK_MAX(1, break);
-        R_PUSH((cell)pc);
-        pc = (struct code*)CELLS[SP] - 1;
-        break;
-      }
-
-      case OP_HERE:
-      {
-        ENSURE_STACK_MAX(1, break);
-        PUSH((cell)&s->here);
-        break;
-      }
-
-      case OP_LATEST:
-      {
-        ENSURE_STACK_MAX(1, break);
-        PUSH((cell)&s->dict.latest);
-        break;
-      }
-
-      case OP_GET_CVA: // Code value address
-      {
-        ENSURE_STACK_MIN(1, break);
-        struct code *code = (struct code *) POP();
-        PUSH((cell) &code->value);
-        break;
-      }
-
-      case OP_COMPILE:
-      {
-        ENSURE_STACK_MIN(1, break);
-        struct entry *entry_ = (struct entry*)POP();
-        compile_entry(s, entry_);
-        break;
-      }
-
-      case OP_COMPILE_INLINE:
-      {
-        ENSURE_STACK_MIN(1, break);
-        struct entry *entry_ = (struct entry*)POP();
-        inline_entry(s, entry_);
-        break;
-      }
-
-      case OP_COMPILE_LITERAL:
-      {
-        ENSURE_STACK_MIN(1, break);
-        cell n = POP();
-        compile_literal(s, n);
-        break;
-      }
-
-      case OP_BYE:
-      {
-        quit(s);
-        return;
-      }
-
-      case OP_WORDS:
-      {
-        words(s);
-        break;
-      }
-
-      case OP_NOP: {
-        break;
-      }
-
-      case OP_PRINT_TOS:
-      {
-        ENSURE_STACK_MIN(1, break);
-        const cell n = POP();
-        cf_print_cell(s, n);
-        cf_printf(s, " ");
-        cf_fflush();
-        break;
-      }
-
-      case OP_DOT_S:
-      {
-        dot_s(s, s->stack);
-        break;
-      }
-
-      case OP_CLEAR:
-      {
-        SP = 0;
-        break;
-      }
-
-      default:
-      {
-        cf_printf(s, "??");
-      }
-    }
-    pc++;
-  }
-  // cf_printf(s, "   %s(done) <-\n", entry->name);
-}
-
-void
-execute(struct state *s)
-{
-  struct entry *entry = find_entry(s, &s->dict);
-  if (entry)
-  {
-    execute_(s, entry);
-  }
-  else
-  {
-    // try to interpret as an unsigned decimal number
-    cell n = 0;
-    if (tib_to_number(s, &n))
-    {
-      ENSURE_STACK_MAX(1, return);
-      PUSH(n);
-    }
-    else
-    {
-      unknow_word(s);
-    }
-  }
-}
-
-static void
-tick(struct state *s)
-{
-  struct entry *entry = find_entry(s, &s->dict);
-  if (entry)
-  {
-    ENSURE_STACK_MAX(1, return);
-    PUSH((cell)entry);
-  }
-  else
-  {
-    unknow_word(s);
-  }
-}
-
-static void
-compile_tick(struct state *s)
-{
-  struct entry *entry = find_entry(s, &s->dict);
-  if (entry)
-  {
-    compile_code(s, OP_TICK_NUMBER, (cell)entry);
-  }
-  else
-  {
-    unknow_word(s);
-  }
-}
-
 void
 parse_colorforth(struct state *s, int c)
 {
   if (s->tib.len == 0) {
-    for (int i = 0; i < MAX_PREFIX; i++)
-    {
-      if (prefix_map[i].c == c) {
-        s->color = prefix_map[i].fn;
-        echo_color(s, c, prefix_map[i].color);
-        return;
-      }
+    // Handle prefix
+    switch(c) {
+#define __SECTION_PREFIX_DEF
+#include "core.c"
+#include "ext.c"
+#include "lib.c"
+#undef __SECTION_PREFIX_DEF
     }
   }
 
@@ -1078,11 +350,7 @@ parse_colorforth(struct state *s, int c)
     {
       // Have word.
       s->color(s);
-      for(size_t i = 0; i < s->tib.len; i++)
-      {
-        s->tib.buf[i] = 0;
-      }
-      s->tib.len = 0;
+      clear_tib(s);
     }
 
     return;
@@ -1103,7 +371,6 @@ parse_colorforth(struct state *s, int c)
     }
     return;
   }
-
 
   echo_color(s, c, NULL);
   if (s->tib.len < sizeof(s->tib.buf))
@@ -1146,39 +413,6 @@ parse_from_string(struct state *s, char *str)
   parse_space(s);
 }
 
-void
-define_prefix(char c, void (*fn)(struct state *s), char * color, short reset)
-{
-  static int n_prefix = 0;
-
-  if (reset) n_prefix = 0;
-
-  if (n_prefix >= MAX_PREFIX)
-  {
-    cf_fatal_error(NULL, 7);
-  }
-
-  prefix_map[n_prefix].c = c;
-  prefix_map[n_prefix].fn = fn;
-  prefix_map[n_prefix].color = color;
-  n_prefix += 1;
-}
-
-#ifdef __EMBED_LIB_CF
-void
-parse_from_embed_lib_cf(struct state *s)
-{
-  char* str = malloc(lib_cf_len + 1);
-  if (str)
-  {
-    strncpy(str, (char *)lib_cf, lib_cf_len);
-    str[lib_cf_len] = 0;
-    parse_from_string(s, str);
-    free(str);
-  }
-}
-#endif /* __EMBED_LIB_CF */
-
 struct state*
 colorforth_newstate(void)
 {
@@ -1194,10 +428,12 @@ colorforth_newstate(void)
   init_stack(s->r_stack, R_STACK_SIZE, RSTACK_INIT_ERROR);
 
   s->dict.entries = cf_calloc(s, DICT_SIZE, sizeof(struct entry), DICT_ERROR);
-  s->dict.latest = s->dict.entries - 1;
+  s->dict.latest = -1;
 
   s->heap = cf_calloc(s, 1, HEAP_SIZE, HEAP_ERROR);
-  s->here = s->heap;
+  s->here = 0;
+  STORE(OP_NOP, opcode_t);
+  STORE(OP_RETURN, opcode_t);
 
   s->done = 0;
   s->echo_on = 0;
@@ -1205,94 +441,11 @@ colorforth_newstate(void)
   s->str_stream = NULL;
   s->file_stream = NULL;
 
-  define_prefix(':', define,         COLOR_RED,     1);
-  define_prefix('^', compile,        COLOR_GREEN,   0);
-  define_prefix('~', execute,        COLOR_YELLOW,  0);
-  define_prefix('\'', tick,          COLOR_BLUE,    0);
-  define_prefix('`', compile_tick,   COLOR_BLUE,    0);
-  define_prefix(',', compile_inline, COLOR_CYAN,    0);
-
-  define_primitive(s, NOP_HASH,               ENTRY_NAME("nop"), OP_NOP);
-  define_primitive(s, PRINT_TOS_HASH,         ENTRY_NAME("."), OP_PRINT_TOS);
-  define_primitive(s, DUP_HASH,               ENTRY_NAME("dup"), OP_DUP);
-  define_primitive(s, OVER_HASH,              ENTRY_NAME("over"), OP_OVER);
-  define_primitive(s, SWAP_HASH,              ENTRY_NAME("swap"), OP_SWAP);
-  define_primitive(s, DROP_HASH,              ENTRY_NAME("drop"), OP_DROP);
-  define_primitive(s, ROT_HASH,               ENTRY_NAME("rot"), OP_ROT);
-  define_primitive(s, MINUS_ROT_HASH,         ENTRY_NAME("-rot"), OP_MINUS_ROT);
-  define_primitive(s, NIP_HASH,               ENTRY_NAME("nip"), OP_NIP);
-  define_primitive(s, ADD_HASH,               ENTRY_NAME("+"), OP_ADD);
-  define_primitive(s, SUB_HASH,               ENTRY_NAME("-"), OP_SUB);
-  define_primitive(s, MUL_HASH,               ENTRY_NAME("*"), OP_MUL);
-  define_primitive(s, EQUAL_HASH,             ENTRY_NAME("="), OP_EQUAL);
-  define_primitive(s, LESS_HASH,              ENTRY_NAME("<"), OP_LESS);
-  define_primitive(s, BYE_HASH,               ENTRY_NAME("bye"), OP_BYE);
-  define_primitive(s, WORDS_HASH,             ENTRY_NAME("words"), OP_WORDS);
-  define_primitive(s, EMIT_HASH,              ENTRY_NAME("emit"), OP_EMIT);
-  define_primitive(s, KEY_HASH,               ENTRY_NAME("key"), OP_KEY);
-  define_primitive(s, LOAD_HASH,              ENTRY_NAME("@"), OP_LOAD);
-  define_primitive(s, STORE_HASH,             ENTRY_NAME("!"), OP_STORE);
-  define_primitive(s, CLOAD_HASH,             ENTRY_NAME("c@"), OP_CLOAD);
-  define_primitive(s, CSTORE__HASH,           ENTRY_NAME("c!"), OP_CSTORE);
-  define_primitive(s, CELL_HASH,              ENTRY_NAME("cell"), OP_CELL);
-  define_primitive(s, CODE_LEN_HASH,          ENTRY_NAME("#code"), OP_CODE_LEN);
-  define_primitive(s, HERE_HASH,              ENTRY_NAME("here"), OP_HERE);
-  define_primitive(s, LATEST_HASH,            ENTRY_NAME("latest"), OP_LATEST);
-
-  define_primitive(s, COMPILE_HASH,           ENTRY_NAME("[^]"), OP_COMPILE);
-  define_primitive(s, COMPILE_INLINE_HASH,    ENTRY_NAME("[`]"), OP_COMPILE_INLINE);
-  define_primitive(s, COMPILE_LITERAL_HASH,   ENTRY_NAME("[,]"), OP_COMPILE_LITERAL);
-  define_primitive(s, GET_ENTRY_CODE_HASH,    ENTRY_NAME("code>"), OP_GET_ENTRY_CODE);
-  define_primitive(s, EXECUTE_HASH,           ENTRY_NAME("execute"), OP_EXECUTE);
-  define_primitive(s, EXECUTE_STAR_HASH,      ENTRY_NAME("execute*"), OP_EXECUTE_STAR);
-  define_primitive(s, GET_CVA_HASH,           ENTRY_NAME("cva>"), OP_GET_CVA);
-
-  define_primitive(s, BRANCH_HASH,            ENTRY_NAME("branch"), OP_BRANCH);
-  define_primitive(s, ZBRANCH_HASH,           ENTRY_NAME("0branch"), OP_ZBRANCH);
-  define_primitive(s, NBRANCH_HASH,           ENTRY_NAME("nbranch"), OP_NBRANCH);
-
-  define_primitive(s, IF_HASH,                ENTRY_NAME("if"), OP_IF);
-  define_primitive(s, IF_EXIT_HASH,           ENTRY_NAME("if;"), OP_IF_EXIT);
-  define_primitive(s, IF_NOT_HASH,            ENTRY_NAME("if-not"), OP_IF_NOT);
-  define_primitive(s, IF_NOT_EXIT_HASH,       ENTRY_NAME("if-not;"), OP_IF_NOT_EXIT);
-
-  define_primitive(s, IF_STAR_HASH,           ENTRY_NAME("if*"), OP_IF_STAR);
-  define_primitive(s, IF_EXIT_STAR_HASH,      ENTRY_NAME("if*;"), OP_IF_STAR_EXIT);
-  define_primitive(s, IF_NOT_STAR_HASH,       ENTRY_NAME("if-not*"), OP_IF_NOT_STAR);
-  define_primitive(s, IF_NOT_EXIT_STAR_HASH,  ENTRY_NAME("if-not*;"), OP_IF_NOT_STAR_EXIT);
-
-  define_primitive(s, IF_ELSE_HASH,           ENTRY_NAME("if-else"), OP_IF_ELSE);
-
-  define_primitive(s, DOT_S_HASH,             ENTRY_NAME(".s"), OP_DOT_S);
-
-  define_primitive(s, RETURN_HASH,            ENTRY_NAME(";"), OP_RETURN);
-
-  define_primitive(s, R_PUSH_HASH,            ENTRY_NAME(">R"), OP_R_PUSH);
-  define_primitive(s, R_POP_HASH,             ENTRY_NAME("R>"), OP_R_POP);
-  define_primitive(s, R_FETCH_HASH,           ENTRY_NAME("R@"), OP_R_FETCH);
-
-  define_primitive(s, CLEAR_HASH,             ENTRY_NAME("clear"), OP_CLEAR);
-
-  init_lib(s);
-
-#ifdef __USE_REGISTER
-  // A, B, C, I and J registers are state global
-  define_register_primitive(A);
-  define_register_primitive(B);
-  define_register_primitive(C);
-  define_register_primitive(I);
-  define_register_primitive(J);
-  // I, J, K counter
-  // A, B, C, X, Y just register
-#endif
-
-#ifdef __USE_EXTENSIONS
-  load_extensions(s);
-#endif
-
-#ifdef __EMBED_LIB_CF
-  parse_from_embed_lib_cf(s);
-#endif /* __EMBED_LIB_CF */
+#define __SECTION_WORD_DEF
+#include "core.c"
+#include "ext.c"
+#include "lib.c"
+#undef __SECTION_WORD_DEF
 
   s->color = execute;
   echo_color(s, '~', COLOR_YELLOW);

@@ -1,0 +1,17 @@
+:.slength ^space slength . ;
+
+:hello ~c" Hello " ^;
+:world ~c" new world!" ^;
+
+~
+hello pr  hello .slength
+world dup npr   .slength
+
+hello npr world prn
+
+s" Another test..." nprn
+s" End!" dup prn
+
+cell - ddump
+
+bye

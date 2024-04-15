@@ -1,198 +1,160 @@
-~require-os require-dict require-io require-parser require-time require-math
-
-:\ ^key 10 = `\ ,if-not* ,;
+:\ ^key 10 = '\ ^if-not* ;
 ~\ One line comment
 
-:( ^key ~key ) [,] ^= `( ,if-not* ,;
-~( multilines comment )
-
 ~( boolean constant )
-:true   ^1 ,;
-:false  ^0 ,;
+:true   ^1 ;
+:false  ^0 ;
 
-:on  ^1 swap c! ,;
-:off ^0 swap c! ,;
+:on  ^1 swap c! ;
+:off ^0 swap c! ;
 
-:hex ^16 base c! ,;
-:dec ^10 base c! ,;
-:bin ^2 base c! ,;
-:base? ^base c@ dup dec . base c! ,;
-
-:% ^echo off ,;
-
-~( Inlined if )
-:iif ^here @ `0branch ^[`] ,;
-:niif ^here @ `nbranch ^[`] ,;
-:then ^here @ swap cva> ! ,;
-:else ^here @ `branch ^[`]  swap here @ swap cva> ! ,;
-
-~( Infinit loop )
-:begin ^here @ ,;
-:again  ^here @ `branch ^[`] cva> ! ,;
-
-~( do/?loop, for/next )
-:do ~( n -) `I>R ^[`] `I! ^[`] ^here @ ,;
-
-~( :l ^10 ~for ^I@ . ~next ,;
- -> 9 8 7 6 5 4 3 2 1 0 )
-:for ~( n - ),do `I-- ^[`] ,;
-:next `I@ ^[`] here @ `nbranch ^[`] cva> ! `R>I ^[`] ,;
-
-~( :l 10 ~do ^I@ . 13 ~?loop ,;
- -> 10 11 12 13 )
-:?loop ~( Nmax -) `I@ ^[`] `- ^[`] `I++ ^[`] here @ `nbranch ^[`] cva> ! `R>I ^[`] ,;
-
-~( :l 10 ~do ^I@ . 3 22 ~+?loop ,;
- -> 10 13 16 19 22 )
-:+?loop ~( Step Nmax) `I@ ^[`] `- ^[`] `swap ^[`] `I+! ^[`] here @ .s bye `nbranch ^[`] cva> ! `R>I ^[`] ,;
-
+:hex ^16 base c! ;
+:dec ^10 base c! ;
+:bin ^2 base c! ;
+:base? ^base c@ dup dec . base c! ;
 
 ~( helper words )
-:2dup ^over over ,;
-:2drop ^drop drop ,;
+:2dup ^over over ;
+:2drop ^drop drop ;
 
-:1+ ^1 ,+ ;
-:1- ^1 ,- ;
+:1+ ^1 ^+ ;
+:1- ^1 ^- ;
 
-:+! ^dup @ rot + swap ! ,;
-:1+! ^dup @ 1+ swap ! ,;
-:1-! ^dup @ 1- swap ! ,;
-:cell+! ^dup @ cell + swap ! ,;
+:+! ^dup h@ rot + swap h! ;
+:1+! ^dup h@ 1+ swap h! ;
+:1-! ^dup h@ 1- swap h! ;
+:cell+! ^dup h@ cell + swap h! ;
 
-:;; ,R> drop ;
-:;;; ,;; ;; ;
+:;; ^R> R> 2drop ;
 
-:cells ,cell * ;
-
-:noname> ^here @ ,;
-
-~( loop )
-:times-loop ~( xt - xt ) ,I-- execute* I@ `times-loop ,if* ,;
-:times ~( ent n - ) ,I>R I! ^code> times-loop drop ,R>I ,;
-:ctimes ~( xt n - ) ,I>R I! ^times-loop drop ,R>I ,;
-'times-loop ~entry/hide
+:cells ^cell * ;
 
 ~( rendering )
-:cr ^10 emit ,;
-:tab ^9 emit ,;
-:space ^32 emit ,;
-:spaces ^space 1- dup `spaces ,if* ^drop ,;
+:cr ^10 emit ;
+:tab ^9 emit ;
+:space ^32 emit ;
+:spaces ^space 1- dup 'spaces ^if* ^drop ;
+
+~( loop )
+:times-loop ~( xt - xt ) ^I-- call* I@ 'times-loop ^if* ;
+:times ~( xt n - ) ^I>R I! IJK>R times-loop R>KJI R>I drop ;
+~`times-loop ~entry/hide
 
 ~( dump word )
-:emit. ^ drop 46 emit ,;
-:v-emit ~( c - ) ^
-  dup  32 < `emit. ,if; ^
-  dup 128 < `emit. ,if-not; ^
-  emit ,;
+:emit. ^drop 46 emit ;
+:v-emit ~( c - )
+  ^dup  32 < 'emit. ^if;
+  ^dup 128 < 'emit. ^if-not;
+  ^emit ;
+:.c ^dup v-emit space . tab ;
+:cr? ^dup 16 mod 0 = 'cr ^if ;
 
-:dumpc ^swap dup c@ dup v-emit space . tab  1+ swap ,;
-:dumpl ^dumpc 1- dup `dumpl ,if* ^drop ,;
-:dumpb ^swap  12 dumpl  swap cr 1- dup `dumpb ,if* ,;
-:dump ~( a - ) ^10 dumpb drop ,;
-'dumpc ~entry/hide  'dumpl ~entry/hide  'dumpb ~entry/hide
+:<dump> ~( a xt -) ^>R dup 159 I@ - cr? + c@ .c  R> ;
+:dump ~( a - ) ^'<dump> ^160 times drop cr cr ;
+~`emit. ~entry/hide `v-emit ~entry/hide `.c ~entry/hide
+`cr? ~entry/hide `<dump> ~entry/hide
 
+:ddump ^dup 160 + heap-size min 160 -  &heap dump ;
 
-:alloc ~( n - a ) ^here @ swap over + here ! ,;
+( alloc )
+:noname> ^here ;
 
-:>! ^cell alloc ! ,;
-:>c! ^1 alloc ! ,;
+:alloc ( n - a ) ^here swap over + &here ! ;
 
-:data-heap-size ^50000 ,;
-~data-heap-size c-alloc :dataheap ~[,] ,;
-~cell alloc :dhere ~[,] ,;
-~dataheap dhere !
-
-:dalloc ~( n - a ) ^dhere @ swap over + dhere ! ,;
-
-~\ patch the 'bye' entry to free the heap before calling the original 'bye'
-~noname> ^dataheap c-free 'bye ~code> [,] ^execute ,;  'bye ~c>is
-
-:>d! ^cell dalloc ! ,;
-:>dc! ^1 dalloc ! ,;
-
-:? ^@ . ,;
-:variable ^cell dalloc dup [,] ! ,;
-:variables ^cells dalloc [,] ,;
-:constant ^[,] ,;
-
-:[] ,cells + ;
-
-~( create null-terminated string )
-:"marker ~0 variable ,;
-:"forget ^"marker @ dhere ! ,;
+:>! ^cell alloc h! ;
+:>c! ^1 alloc h! ;
 
 
-:"init ^dhere @  dup "marker !  cell + ,;
-:."key ^dup  echo c@ `emit `drop ,if-else ,;
-:"loop ^dup key ."key dup ~key " [,] ^= `nop ,if; ^swap c! 1 + "loop ,;
-:"done ^drop drop dhere @ - dup ^1 + dalloc swap cell - over ! ,;
-:" ^"init "loop "done ,;
-:c" ^" [,] ,;
+~( variables )
+~heap-size cell - :&dhere ~[,] ^;
+~&dhere cell - &dhere h!
+:dhere ^&dhere h@ ;
 
-~( print string )
-:."init ^dup dup @ + cell + swap cell + ,;
-:."loop ^over over = `nop ,if; ^dup c@ emit 1 + ."loop ,;
-:pr
-:." ^."init ."loop 2drop ,;
-:prn ^pr cr ,;
-:npr ^cr pr ,;
-:nprn ^cr pr cr ,;
+:dalloc (n - a) ^dhere swap - dup &dhere h! ;
 
-:droom
-   ~c" Data: " ^pr dhere @  dataheap - dup . ~c" / " ^pr data-heap-size .
-   100 * data-heap-size / . ~c" %" ^prn ,;
-:dmarker ^dhere @  [,] ,;
-:dforget ^dhere ! ,;
+:constant ^[,] ;
+:variable ^cell dalloc dup [,] h! ;
 
-~( system )
-:cmd ^cell + system ,;
+:variables ^cells dalloc [,] ;
+:[] ^cells + ;
 
-~( marker/forget )
-:marker ^latest @   here @ 6 cells +   [,] [,] ,;
-:forget ^latest !   here ! ,;
-
-~( files )
-:aload ~( filename - buf ) ^
-   dup file-size cell + c-alloc
-   dup rot load ,;
+:? ^@ . ;
+:h? ^h@ . ;
 
 ~( mem move )
-:-cmove-done?; ^1- dup `nop ,if; ^2drop drop ,;; ,;
-:cmove-advance ^ 1+ ,;
+:cmove-heap-to-addr (src dst n) ^>R >R &heap R> &heap R> ;
+
+:cmove-advance ^ 1+ ;
+
 :cmove-loop ^
-   ,>R  ^swap dup c@ ,>R ^cmove-advance
-   swap dup ,R> ^swap c! cmove-advance
-   ,R> ^-cmove-done?; cmove-loop
-,;
-:cmove ~( src dst n - ) ^
+   >R   swap dup c@  >R  cmove-advance
+   swap dup R>   swap c! cmove-advance
+   R> 1- dup 'cmove-loop ^if* 2drop drop
+;
+
+:hcmove ( hsrc hdst n) ^cmove-heap-to-addr
+:cmove ( src dst n - ) ^
    `1+ `cmove-advance ^is
-   cmove-loop ,;
+   cmove-loop ;
 
-:cmove> ~( src dst n - ) ^
-  1- ,>R R@ ^+ swap ,R@ ^+ swap ,R> ^1+
+:hcmove> ( hsrc hdst n) ^cmove-heap-to-addr
+:cmove> ( src dst n - ) ^
+  1-  >R  R@  +  swap  R@  +  swap  R>  1+
   `1- `cmove-advance ^is
-  cmove-loop ,;
+  cmove-loop ;
 
-~( math )
-:sign/0 ^drop 0 ,;   :sign/1 ^1 ,;   :sign/-1 ^-1 ,;
-:sign ^dup `sign/0 ,if-not; ^0 < `sign/-1 `sign/1 ,if-else ,;
-'sign/0 ~entry/hide 'sign/1 ~entry/hide 'sign/-1 ~entry/hide
+~( Zero terminated + counted strings )
+:"done ^drop
+   ^0 1 dalloc hc! (store 0)
+   ^swap - dup dup >R (compute length)
+   ^dalloc
+   ^R> cell dalloc h! (store length)
+   ^dup >R swap hcmove R> ;
+
+:."key ^dup  echo c@ 'emit 'drop ^if-else ;
+
+:s" ^here dup dup
+:"loop ^key ."key dup ~key " [,] ^= '"done ^if; over hc! 1+ "loop ;
+
+:c" ^s" [,] ;
+
+:slength ^cell - h@ ;
+
+:pr (s - ) ^dup hc@ dup 0 = '2drop ^if; emit 1+ pr ;
+:prn ^pr cr ;
+:npr ^cr pr ;
+:nprn ^cr pr cr ;
 
 
-~( eval )
-:ptr ~0 variable ,;
-:count ~0 variable ,;
-:loop ^ptr @ c@ parse  ptr 1+!  count 1-!  count @ `loop ,if* ,;
-:eval ~( string - ) ^clear-tib  dup cell + ptr !  @ count !  loop  32 parse ,;
-'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
+( math )
+:sign/0 ^drop 0 ;   :sign/1 ^1 ;   :sign/-1 ^-1 ;
+:sign ^dup 'sign/0 ^if-not; ^0 < 'sign/-1 'sign/1 ^if-else ;
+~`sign/0 ~entry/hide `sign/1 ~entry/hide `sign/-1 ~entry/hide
 
-~( time )
-:time/start ^utime [,] ,;
-:time/end ^utime swap - 1000 / . ~c" ms elapsed" ^prn ,;
 
-~( hash )
-:hash" ^" hash ,;
-:.hash" ^base c@  hash" hex cr . cr base c! ,;
+( time )
+:time/start ^utime [,] ;
+:time/end ^utime swap - 1000 / . ~c" ms elapsed" ^prn ;
 
-~( include and require )
-:include" ^" included ,;
+( hash )
+:hash" ^s" hash ;
+:.hash" ^base c@  hash" hex cr . cr base c! ;
+
+
+( eval )
+:ptr ~0 variable ^;
+:count ~0 variable ^;
+:loop ^ptr h@ hc@ parse  ptr 1+!  count 1-!  count h@ 'loop ^if* ;
+:eval ( string - ) ^clear-tib  dup ptr h!  .s slength .s  count h!  loop  32 parse ;
+~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
+
+( files )
+:aload ( filename - buf ) ^
+   dup file-size c-alloc
+   dup rot load ;
+
+:c-pr (s - ) ^dup c@ dup 0 = '2drop ^if; emit 1+ c-pr ;
+
+:str2buf (s - ptr len) ^dup &heap swap slength ;
+
+~

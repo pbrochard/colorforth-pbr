@@ -1,12 +1,11 @@
-%
-\ A joke to reinvent the world
+~\ A joke to reinvent the world
 0
 
-" 2 + 2 = " pr   2 2 + . cr
+s" 2 + 2 = " pr   2 2 + . cr
 
-:two ^2 ,;
-:2 ^dup two = `two ,if-not; ^3 ,;
+:two ^2 ;
+:2 ^dup two = 'two ^if-not; 3 ;
 ~
-" 2 + 2 = " pr  2 2 + .
+s" 2 + 2 = " pr  2 2 + . cr
 
 bye

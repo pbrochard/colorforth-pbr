@@ -2,6 +2,11 @@
 #ifndef __CONF_H
 #define __CONF_H
 
+#include <sys/time.h>
+#include <unistd.h>
+#include <time.h>
+
+
 typedef long cell;
 #define CELL_FMT "%ld"
 
@@ -19,8 +24,6 @@ typedef long cell;
 // Enable hashed names: reduce memory size but break words/see/disasemble
 #define __KEEP_ENTRY_NAMES
 
-#include "hash_def.h"
-
 #ifndef __MINIMAL_BUILD
 
 // Enable register variable
@@ -36,9 +39,6 @@ typedef long cell;
 // Enable colors in the terminal
 #define __ECHO_COLOR
 
-// Embed lib.cf
-#define __EMBED_LIB_CF
-
 // Use extensions
 #define __USE_EXTENSIONS
 
@@ -52,7 +52,7 @@ typedef long cell;
 typedef double number_t;
 
 // MP_MATH
-#define __MP_MATH
+// #define __MP_MATH
 
 #define MPSTACK_SIZE 30
 
@@ -74,14 +74,13 @@ typedef double number_t;
 #define R_STACK_SIZE 30
 
 #define DICT_SIZE 10000
-#define INLINED_DICT_SIZE 1000
 
 #define HEAP_SIZE 40960
 
 #define TIB_SIZE 32
 
 // Number of bits in a char
-#define CHAR_BIT 8
+#define CF_CHAR_BIT 8
 
 struct state;
 

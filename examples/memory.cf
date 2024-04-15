@@ -1,0 +1,11 @@
+:buf ~100 c-alloc [,] ^;
+
+~buf .
+
+55 buf !  111 buf 10 + !
+buf @ .
+buf 10 + @ .
+
+buf c-free
+
+bye

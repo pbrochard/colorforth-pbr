@@ -50,10 +50,10 @@
      ("%[^:~%^('`|,]+" . (0 'colorForth-mode-execute-face t))
      ("[`'][^:~%^('`|,]+" . (0 'colorForth-mode-tick-face t))
      (",[^:~%^('`|,]+" . (0 'colorForth-mode-inline-face t))
-     ("~( [^)]+" . (0 'colorForth-mode-comment-face t))
+     ("([^)]+)" . (0 'colorForth-mode-comment-face t))
      ("~\\\\ [^\n]+" . (0 'colorForth-mode-comment-face t))
      ("|[^:~%^('`|,]+" . (0 'colorForth-mode-inlined-face t))
-     ("~c?\".*\" " . (0 'colorForth-mode-string-face t))))
+     ("[sc]\"[^\"]+\" " . (0 'colorForth-mode-string-face t))))
 
 (define-derived-mode colorForth-mode text-mode "colorForth"
   "major mode for editing colorForth language code."
