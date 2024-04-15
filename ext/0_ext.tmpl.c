@@ -11,5 +11,6 @@
 #include "time.c"
 #include "dict.c"
 #include "os.c"
+#include "threads.c"
 
 #endif /* __MINIMAL_BUILD */

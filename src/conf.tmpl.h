@@ -52,7 +52,7 @@ typedef long cell;
 typedef double number_t;
 
 // MP_MATH
-#define __MP_MATH
+// #define __MP_MATH
 
 #define MPSTACK_SIZE 30
 
