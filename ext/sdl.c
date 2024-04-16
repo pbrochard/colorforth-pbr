@@ -1,38 +1,83 @@
 // The author disclaims copyright to this source code.
-#include "colorforth.h"
-#include "cf-stdio.h"
 
 #ifdef __SDL
 
-#include <unistd.h>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+/**********************************************************************************
+ *   HASH DEF
+ *********************************************************************************/
+#ifdef __SECTION_HASH_DEF
+
+#define OP_SDL_INIT                (opcode_t) 0x92FE07C0           // sdl/init
+#define OP_SDL_CLOSE               (opcode_t) 0xFAD1E96            // sdl/close
+#define OP_SDL_DELAY               (opcode_t) 0xD811784D           // sdl/delay
+#define OP_SDL_SHOW_CURSOR         (opcode_t) 0x6BD0F784           // sdl/show-cursor
+#define OP_SDL_HIDE_CURSOR         (opcode_t) 0xB3052F5F           // sdl/hide-cursor
+#define OP_SDL_POLL_EVENT          (opcode_t) 0x42D5F536           // sdl/poll-event
+#define OP_SDL_PRESENT             (opcode_t) 0x1B628525           // sdl/present
+#define OP_SDL_KEY_PRESS           (opcode_t) 0x4224F69A           // sdl/key?
+#define OP_SDL_MOUSE_BUTTON        (opcode_t) 0x6755EA17           // sdl/button?
+#define OP_SDL_GET_MOUSE_X         (opcode_t) 0x9E5030C4           // sdl/mouse-x@
+#define OP_SDL_GET_MOUSE_Y         (opcode_t) 0xC452AB2D           // sdl/mouse-y@
+#define OP_SDL_BACKGROUND          (opcode_t) 0x4A51D2AA           // sdl/background
+
+#define OP_SDL_LOAD_IMAGE          (opcode_t) 0xA30EA3E2           // sdl/load-image
+#define OP_SDL_PUT_IMAGE           (opcode_t) 0x3DFA782B           // sdl/put-image
+
+#define OP_SDL_OPEN_FONT           (opcode_t) 0x9D24F958           // sdl/open-font
+#define OP_SDL_PUT_TEXT            (opcode_t) 0x25B908D5           // sdl/put-text
+#define OP_SDL_GET_TEXT_SIZE       (opcode_t) 0x3B567CA7           // sdl/text-size@
+
+#define OP_SDL_PLAY_SOUND          (opcode_t) 0x8EFAE1EA           // sdl/play-sound
+#define OP_SDL_HALT_SOUND          (opcode_t) 0xB451120F           // sdl/halt-sound
+#define OP_SDL_VOLUME              (opcode_t) 0xCCB3E567           // sdl/volume!
+#define OP_SDL_LOAD_SOUND          (opcode_t) 0x3F337FC            // sdl/load-sound
+
+#define OP_SDL_GET_TICKS           (opcode_t) 0xA0C11FC            // sdl/ticks@
+
+#endif /* __SECTION_HASH_DEF */
 
 
-static char initialized = 0;
+/**********************************************************************************
+ *   WORD DEF
+ *********************************************************************************/
+#ifdef __SECTION_WORD_DEF
+
+define_primitive(s, ENTRY_NAME("sdl/init"), OP_SDL_INIT);
+define_primitive(s, ENTRY_NAME("sdl/close"), OP_SDL_CLOSE);
+define_primitive(s, ENTRY_NAME("sdl/delay"), OP_SDL_DELAY);
+define_primitive(s, ENTRY_NAME("sdl/show-cursor"), OP_SDL_SHOW_CURSOR);
+define_primitive(s, ENTRY_NAME("sdl/hide-cursor"), OP_SDL_HIDE_CURSOR);
+define_primitive(s, ENTRY_NAME("sdl/poll-event"), OP_SDL_POLL_EVENT);
+define_primitive(s, ENTRY_NAME("sdl/present"), OP_SDL_PRESENT);
+define_primitive(s, ENTRY_NAME("sdl/key?"), OP_SDL_KEY_PRESS);
+define_primitive(s, ENTRY_NAME("sdl/button?"), OP_SDL_MOUSE_BUTTON);
+define_primitive(s, ENTRY_NAME("sdl/mouse-x@"), OP_SDL_GET_MOUSE_X);
+define_primitive(s, ENTRY_NAME("sdl/mouse-y@"), OP_SDL_GET_MOUSE_Y);
+define_primitive(s, ENTRY_NAME("sdl/background"), OP_SDL_BACKGROUND);
+
+define_primitive(s, ENTRY_NAME("sdl/load-image"), OP_SDL_LOAD_IMAGE);
+define_primitive(s, ENTRY_NAME("sdl/put-image"), OP_SDL_PUT_IMAGE);
+
+define_primitive(s, ENTRY_NAME("sdl/open-font"), OP_SDL_OPEN_FONT);
+define_primitive(s, ENTRY_NAME("sdl/put-text"), OP_SDL_PUT_TEXT);
+define_primitive(s, ENTRY_NAME("sdl/text-size@"), OP_SDL_GET_TEXT_SIZE);
+
+define_primitive(s, ENTRY_NAME("sdl/play-sound"), OP_SDL_PLAY_SOUND);
+define_primitive(s, ENTRY_NAME("sdl/halt-sound"), OP_SDL_HALT_SOUND);
+define_primitive(s, ENTRY_NAME("sdl/volume!"), OP_SDL_VOLUME);
+define_primitive(s, ENTRY_NAME("sdl/load-sound"), OP_SDL_LOAD_SOUND);
+
+define_primitive(s, ENTRY_NAME("sdl/ticks@"), OP_SDL_GET_TICKS);
+
+#endif /* __SECTION_WORD_DEF */
 
 
-///* Please, edit this for your project */
-#define MAX_KEY 300
+/**********************************************************************************
+ *   SWITCH DEF
+ *********************************************************************************/
+#ifdef __SECTION_SWITCH
 
-int sdl_mouse_x = 0;
-int sdl_mouse_y = 0;
-
-int tab_mouse_button[3];
-int tab_keys[MAX_KEY];
-
-SDL_Window * main_screen;
-SDL_Renderer *main_renderer;
-TTF_Font * font = NULL;
-
-
-// /*===========================================================
-//  *   Open and close functions
-//  ============================================================*/
-void
-sdl_init(struct state *s) {
+case OP_SDL_INIT: {
   POP3();
   int width = p3;
   int height = p2;
@@ -110,9 +155,11 @@ sdl_init(struct state *s) {
   for (i = 0; i < 3; i++) {
     tab_mouse_button[i] = 0;
   }
+
+  break;
 }
 
-void sdl_close (struct state *s) {
+case OP_SDL_CLOSE: {
   SDL_DestroyRenderer(main_renderer);
   SDL_DestroyWindow(main_screen);
 
@@ -125,20 +172,265 @@ void sdl_close (struct state *s) {
 
   IMG_Quit();
   SDL_Quit();
+
+  break;
 }
 
-void sdl_delay (struct state *s) {
+case OP_SDL_DELAY: {
   POP1();
   SDL_Delay(p1);
+
+  break;
 }
 
-void sdl_show_cursor (struct state *s) {
+case OP_SDL_SHOW_CURSOR: {
   SDL_ShowCursor (SDL_ENABLE);
+  break;
 }
 
-void sdl_hide_cursor (struct state *s) {
+case OP_SDL_HIDE_CURSOR: {
   SDL_ShowCursor (SDL_DISABLE);
+  break;
 }
+
+case OP_SDL_POLL_EVENT: {
+  SDL_Event event;
+
+  while(SDL_PollEvent(&event)) {
+    analyze_event(&event);
+  }
+
+  SDL_GetMouseState (&sdl_mouse_x, &sdl_mouse_y);
+
+  break;
+}
+
+case OP_SDL_PRESENT: {
+  SDL_RenderPresent(main_renderer);
+  break;
+}
+
+
+case OP_SDL_KEY_PRESS: {
+  POP1();
+  PUSH1(tab_keys[p1]);
+  break;
+}
+
+case OP_SDL_MOUSE_BUTTON: {
+  POP1();
+  PUSH1(tab_mouse_button[p1 - 1]);
+  break;
+}
+
+case OP_SDL_GET_MOUSE_X: {
+  PUSH1(sdl_mouse_x);
+  break;
+}
+
+case OP_SDL_GET_MOUSE_Y: {
+  PUSH1(sdl_mouse_y);
+  break;
+}
+
+case OP_SDL_BACKGROUND: {
+  POP3();
+  SDL_SetRenderDrawColor(main_renderer, (int)p3, (int)p2, (int)p1, 255);
+  SDL_RenderClear(main_renderer);
+  break;
+}
+
+// /*===========================================================
+//  *   Image functions
+//  ============================================================*/
+case OP_SDL_LOAD_IMAGE: {
+  POP1();
+  char * filename = CFSTRING2C(p1);
+  SDL_Surface * surf = NULL;
+
+  printf ("In C - Opening: %s\n", filename);
+
+  surf = IMG_Load (filename);
+  if (surf == NULL) {
+    fprintf(stderr, "Can't load image %s - %s\n", filename, SDL_GetError());
+    PUSH1(-1);
+    return;
+  }
+
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(main_renderer, surf);
+  SDL_FreeSurface(surf);
+
+  if (texture == NULL) {
+    fprintf(stderr, "Can't load image %s - %s\n", filename, SDL_GetError());
+    PUSH1(-1);
+    return;
+  }
+
+  PUSH1((cell) texture);
+  break;
+}
+
+case OP_SDL_PUT_IMAGE: {
+  POP3();
+  int x = p2, y = p1;
+  SDL_Texture * texture = (SDL_Texture *) p3;
+  SDL_Rect dstrect;
+  int w, h;
+
+  SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+  dstrect.x = x; dstrect.y = y;
+  dstrect.w = w; dstrect.h = h;
+  SDL_RenderCopy(main_renderer, texture, NULL, &dstrect);
+  break;
+}
+
+
+// /*===========================================================
+//  *   Text functions
+//  ============================================================*/
+case OP_SDL_OPEN_FONT: {
+  POP2();
+  char * filename = CFSTRING2C(p2);
+  int ptsize = p1;
+
+  if ( !(font == NULL)) {
+    TTF_CloseFont(font);
+  }
+
+  font = TTF_OpenFont(filename, ptsize);
+  if ( font == NULL ) {
+    fprintf(stderr, "Couldn't load %d pt font from %s: %s\n",
+        ptsize, filename, SDL_GetError());
+    PUSH1(-1);
+    return;
+  }
+  TTF_SetFontStyle(font, TTF_STYLE_NORMAL);
+
+  PUSH1(0);
+  break;
+}
+
+case OP_SDL_PUT_TEXT: {
+  POP4();
+  char * string = CFSTRING2C(p4);
+  int x = p3, y = p2;
+  int forecol = p1;
+
+  SDL_Color fg;
+  /* SDL_Color bg; */
+  SDL_Surface *text;
+  SDL_Rect dstrect;
+  SDL_Texture *texture;
+
+  fg.r = (forecol >> 16) & 0xff;
+  fg.g = (forecol >> 8) & 0xff;
+  fg.b = forecol & 0xff;
+
+  text = TTF_RenderUTF8_Solid(font, string, fg);
+
+  if ( text != NULL ) {
+    dstrect.x = x;
+    dstrect.y = y;
+    dstrect.w = text->w;
+    dstrect.h = text->h;
+    texture = SDL_CreateTextureFromSurface(main_renderer, text);
+    SDL_RenderCopy(main_renderer, texture, NULL, &dstrect);
+    SDL_FreeSurface(text);
+  }
+
+  break;
+}
+
+case OP_SDL_GET_TEXT_SIZE: {
+  POP1();
+  char * string = CFSTRING2C(p1);
+
+  SDL_Surface *text;
+  SDL_Color fg;
+
+  text = TTF_RenderUTF8_Solid(font, string, fg);
+
+  if ( text != NULL ) {
+    PUSH2(text->w, text->h);
+    SDL_FreeSurface(text);
+  } else {
+    PUSH2(-1, -1);
+  }
+  break;
+}
+
+//,-----
+//| Sound part
+//`-----
+case OP_SDL_PLAY_SOUND: {
+  POP1();
+  Mix_PlayChannel(-1, (Mix_Chunk *) p1, 0);
+  break;
+}
+
+case OP_SDL_HALT_SOUND: {
+  Mix_HaltChannel(-1);
+  break;
+ }
+
+case OP_SDL_VOLUME: {
+  POP1();
+  Mix_Volume(-1, p1 * MIX_MAX_VOLUME / 100);
+  break;
+}
+
+case OP_SDL_LOAD_SOUND: {
+  POP1();
+  char * filename = CFSTRING2C(p1);
+
+  const Mix_Chunk * snd = Mix_LoadWAV(filename);
+  if (snd == NULL) {
+    fprintf(stderr,
+        "\nError: I could not load the sound file:\n"
+        "%s\n"
+        "The Simple DirectMedia error that occured was:\n"
+            "%s\n\n", filename, SDL_GetError());
+    PUSH1(-1);
+    return;
+  }
+
+  PUSH1((cell) snd);
+  break;
+}
+
+case OP_SDL_GET_TICKS: {
+  PUSH1(SDL_GetTicks ());
+  break;
+}
+
+
+#endif /* __SECTION_SWITCH */
+
+
+/**********************************************************************************
+ *   FUNCTION DEF
+ *********************************************************************************/
+#ifdef __SECTION_FUNCTION
+
+#include <unistd.h>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
+
+///* Please, edit this for your project */
+#define MAX_KEY 300
+
+int sdl_mouse_x = 0;
+int sdl_mouse_y = 0;
+
+int tab_mouse_button[3];
+int tab_keys[MAX_KEY];
+
+SDL_Window * main_screen;
+SDL_Renderer *main_renderer;
+TTF_Font * font = NULL;
+
 
 // /*===========================================================
 //  *   Input functions
@@ -213,240 +505,6 @@ void analyze_event (SDL_Event * event) {
   }
 }
 
-void sdl_poll_event (struct state *s) {
-  SDL_Event event;
-
-  while(SDL_PollEvent(&event)) {
-    analyze_event(&event);
-  }
-
-  SDL_GetMouseState (&sdl_mouse_x, &sdl_mouse_y);
-}
-
-void sdl_present (struct state *s) {
-  SDL_RenderPresent(main_renderer);
-}
-
-
-void sdl_key_press (struct state *s) {
-  POP1();
-  PUSH1(tab_keys[p1]);
-}
-
-void sdl_mouse_button (struct state *s) {
-  POP1();
-  PUSH1(tab_mouse_button[p1 - 1]);
-}
-
-void sdl_get_mouse_x (struct state *s) {
-  PUSH1(sdl_mouse_x);
-}
-
-void sdl_get_mouse_y (struct state *s) {
-  PUSH1(sdl_mouse_y);
-}
-
-void sdl_background (struct state *s) {
-  POP3();
-  SDL_SetRenderDrawColor(main_renderer, (int)p3, (int)p2, (int)p1, 255);
-  SDL_RenderClear(main_renderer);
-}
-
-// /*===========================================================
-//  *   Image functions
-//  ============================================================*/
-void
-sdl_load_image (struct state *s) {
-  POP1();
-  char * filename = CFSTRING2C(p1);
-  SDL_Surface * surf = NULL;
-
-  printf ("In C - Opening: %s\n", filename);
-
-  surf = IMG_Load (filename);
-  if (surf == NULL) {
-    fprintf(stderr, "Can't load image %s - %s\n", filename, SDL_GetError());
-    PUSH1(-1);
-    return;
-  }
-
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(main_renderer, surf);
-  SDL_FreeSurface(surf);
-
-  if (texture == NULL) {
-    fprintf(stderr, "Can't load image %s - %s\n", filename, SDL_GetError());
-    PUSH1(-1);
-    return;
-  }
-
-  PUSH1((cell) texture);
-}
-
-void
-sdl_put_image (struct state *s) {
-  POP3();
-  int x = p2, y = p1;
-  SDL_Texture * texture = (SDL_Texture *) p3;
-  SDL_Rect dstrect;
-  int w, h;
-
-  SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-  dstrect.x = x; dstrect.y = y;
-  dstrect.w = w; dstrect.h = h;
-  SDL_RenderCopy(main_renderer, texture, NULL, &dstrect);
-}
-
-
-// /*===========================================================
-//  *   Text functions
-//  ============================================================*/
-void
-sdl_open_font (struct state *s) {
-  POP2();
-  char * filename = CFSTRING2C(p2);
-  int ptsize = p1;
-
-  if ( !(font == NULL)) {
-    TTF_CloseFont(font);
-  }
-
-  font = TTF_OpenFont(filename, ptsize);
-  if ( font == NULL ) {
-    fprintf(stderr, "Couldn't load %d pt font from %s: %s\n",
-        ptsize, filename, SDL_GetError());
-    PUSH1(-1);
-    return;
-  }
-  TTF_SetFontStyle(font, TTF_STYLE_NORMAL);
-
-  PUSH1(0);
-}
-
-void
-sdl_put_text (struct state *s) {
-  POP4();
-  char * string = CFSTRING2C(p4);
-  int x = p3, y = p2;
-  int forecol = p1;
-
-  SDL_Color fg;
-  /* SDL_Color bg; */
-  SDL_Surface *text;
-  SDL_Rect dstrect;
-  SDL_Texture *texture;
-
-  fg.r = (forecol >> 16) & 0xff;
-  fg.g = (forecol >> 8) & 0xff;
-  fg.b = forecol & 0xff;
-
-  text = TTF_RenderUTF8_Solid(font, string, fg);
-
-  if ( text != NULL ) {
-    dstrect.x = x;
-    dstrect.y = y;
-    dstrect.w = text->w;
-    dstrect.h = text->h;
-    texture = SDL_CreateTextureFromSurface(main_renderer, text);
-    SDL_RenderCopy(main_renderer, texture, NULL, &dstrect);
-    SDL_FreeSurface(text);
-  }
-}
-
-void
-sdl_text_size (struct state *s) {
-  POP1();
-  char * string = CFSTRING2C(p1);
-
-  SDL_Surface *text;
-  SDL_Color fg;
-
-  text = TTF_RenderUTF8_Solid(font, string, fg);
-
-  if ( text != NULL ) {
-    PUSH2(text->w, text->h);
-    SDL_FreeSurface(text);
-  } else {
-    PUSH2(-1, -1);
-  }
-}
-
-//,-----
-//| Sound part
-//`-----
-void
-sdl_play_sound(struct state *s) {
-  POP1();
-  Mix_PlayChannel(-1, (Mix_Chunk *) p1, 0);
-}
-
-void
-sdl_halt_sound(struct state *s) {
-   Mix_HaltChannel(-1);
- }
-
-void
-sdl_set_sound_volume(struct state *s) {
-  POP1();
-  Mix_Volume(-1, p1 * MIX_MAX_VOLUME / 100);
-}
-
-void
-sdl_load_sound (struct state *s) {
-  POP1();
-  char * filename = CFSTRING2C(p1);
-
-  const Mix_Chunk * snd = Mix_LoadWAV(filename);
-  if (snd == NULL) {
-    fprintf(stderr,
-        "\nError: I could not load the sound file:\n"
-        "%s\n"
-        "The Simple DirectMedia error that occured was:\n"
-            "%s\n\n", filename, SDL_GetError());
-    PUSH1(-1);
-    return;
-  }
-
-  PUSH1((cell) snd);
-}
-
-void
-sdl_get_ticks (struct state *s) {
-  PUSH1(SDL_GetTicks ());
-}
-
-void
-require_sdl_fn(struct state *state)
-{
-  if (initialized) return;
-
-  define_primitive_extension(state, SDL_INIT_HASH,              ENTRY_NAME("sdl/init"), sdl_init);
-  define_primitive_extension(state, SDL_CLOSE_HASH,             ENTRY_NAME("sdl/close"), sdl_close);
-  define_primitive_extension(state, SDL_DELAY_HASH,             ENTRY_NAME("sdl/delay"), sdl_delay);
-  define_primitive_extension(state, SDL_SHOW_CURSOR_HASH,       ENTRY_NAME("sdl/show-cursor"), sdl_show_cursor);
-  define_primitive_extension(state, SDL_HIDE_CURSOR_HASH,       ENTRY_NAME("sdl/hide-cursor"), sdl_hide_cursor);
-  define_primitive_extension(state, SDL_POLL_EVENT_HASH,        ENTRY_NAME("sdl/poll-event"), sdl_poll_event);
-  define_primitive_extension(state, SDL_PRESENT_HASH,           ENTRY_NAME("sdl/present"), sdl_present);
-  define_primitive_extension(state, SDL_KEY_PRESS_HASH,         ENTRY_NAME("sdl/key?"), sdl_key_press);
-  define_primitive_extension(state, SDL_MOUSE_BUTTON_HASH,      ENTRY_NAME("sdl/button?"), sdl_mouse_button);
-  define_primitive_extension(state, SDL_GET_MOUSE_X_HASH,       ENTRY_NAME("sdl/mouse-x@"), sdl_get_mouse_x);
-  define_primitive_extension(state, SDL_GET_MOUSE_Y_HASH,       ENTRY_NAME("sdl/mouse-y@"), sdl_get_mouse_y);
-  define_primitive_extension(state, SDL_BACKGROUND_HASH,        ENTRY_NAME("sdl/background"), sdl_background);
-
-  define_primitive_extension(state, SDL_OPEN_FONT_HASH,         ENTRY_NAME("sdl/open-font"), sdl_open_font);
-  define_primitive_extension(state, SDL_PUT_TEXT_HASH,          ENTRY_NAME("sdl/put-text"), sdl_put_text);
-  define_primitive_extension(state, SDL_GET_TEXT_SIZE_HASH,     ENTRY_NAME("sdl/text-size@"), sdl_text_size);
-
-  define_primitive_extension(state, SDL_LOAD_IMAGE_HASH,        ENTRY_NAME("sdl/load-image"), sdl_load_image);
-  define_primitive_extension(state, SDL_PUT_IMAGE_HASH,         ENTRY_NAME("sdl/put-image"), sdl_put_image);
-
-  define_primitive_extension(state, SDL_PLAY_SOUND_HASH,        ENTRY_NAME("sdl/play-sound"), sdl_play_sound);
-  define_primitive_extension(state, SDL_HALT_SOUND_HASH,        ENTRY_NAME("sdl/halt-sound"), sdl_halt_sound);
-  define_primitive_extension(state, SDL_VOLUME_HASH,            ENTRY_NAME("sdl/volume!"), sdl_set_sound_volume);
-  define_primitive_extension(state, SDL_LOAD_SOUND_HASH,        ENTRY_NAME("sdl/load-sound"), sdl_load_sound);
-
-  define_primitive_extension(state, SDL_GET_TICKS_HASH,         ENTRY_NAME("sdl/ticks@"), sdl_get_ticks);
-
-  initialized = 1;
-}
+#endif /* __SECTION_FUNCTION */
 
 #endif /* __SDL */

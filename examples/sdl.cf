@@ -1,53 +1,63 @@
-% require-sdl
+( Usage: colorforth src/lib.tmpl.cf examples/sdl.cf )
 
 ~1024 768 0 sdl/init
 1 sdl/volume!
 
-:done ~0 variable ,;
+:done ~0 variable ^;
 
-~" sdl/font/Vera.ttf" 18 sdl/open-font .
+~s" examples/sdl/font/Vera.ttf" 18 sdl/open-font .
 
-:ball ~" sdl/images/ball.png" sdl/load-image constant ,;
-:ball-x ~100 variable ,;
-:ball-y ~50 variable ,;
+:ball ~s" examples/sdl/images/ball.png" sdl/load-image constant ^;
 
-:snd/hk ~" sdl/sounds/hk.mp3" sdl/load-sound constant ,;
-:snd/synth ~" sdl/sounds/synth.mp3" sdl/load-sound constant ,;
+:ball-x ~100 variable ^;
+:ball-y ~50 variable ^;
 
+:snd/hk ~s" examples/sdl/sounds/hk.mp3" sdl/load-sound constant ^;
+:snd/synth ~s" examples/sdl/sounds/synth.mp3" sdl/load-sound constant ^;
 
-:R ~255 255 * [,] ^* ,;
-:G ^255 * ,;
-:B ^ + + ,;
+:R ~255 255 * [,] ^* ;
+:G ^255 * ;
+:B ^ + + ;
 
 :button-pressed
    ^snd/synth sdl/play-sound
-   ~c" Button " ^pr . ~c" pressed: " ^pr sdl/mouse-x@ . sdl/mouse-y@ . cr ,;
+   ~c" Button " ^pr . ~c" pressed: " ^pr sdl/mouse-x@ . sdl/mouse-y@ . cr ;
+
+:button-2-pressed ^2 button-pressed ;
+:button-3-pressed ^3 button-pressed ;
 
 :draw ^
    10 10 100 sdl/background
-
-   ~" This is a test" dup sdl/text-size@ .s . . cr [,]
+   ~s" This is a test" dup sdl/text-size@ .s . . cr [,]
    ^100 200  10 R 255 G 10 B  sdl/put-text
 
-   ball ball-x @ ball-y @ sdl/put-image
+   ball ball-x h@ ball-y h@ sdl/put-image
 
-   sdl/present ,;
+   sdl/present ;
 
 :move-ball-to ^
    snd/hk sdl/play-sound
-   sdl/mouse-x@ 25 - ball-x ! sdl/mouse-y@ 25 - ball-y !  draw ,;
+   sdl/mouse-x@ 25 - ball-x h! sdl/mouse-y@ 25 - ball-y h!  draw ;
+
+:done! ^1 done h! ^
+
+:check-buttons ^
+   1 sdl/button? 'move-ball-to ^if;
+   2 sdl/button? 'button-2-pressed ^if;
+   3 sdl/button? 'button-3-pressed ^if;
+;
+
 
 :sdl-loop ^
    sdl/poll-event
 
-   27 sdl/key? ~iif ^1 done ! ~then ^
-   100 sdl/key? ~iif ^1 done ! ~then ^
-   1 sdl/button? `move-ball-to ,if ^
-   2 sdl/button? ~iif ^2 button-pressed ~ then ^
-   3 sdl/button? ~iif ^3 button-pressed ~ then ^
+   27 sdl/key? 'done! ^if;
+   100 sdl/key? 'done! ^if;
 
-   ^done @ `sdl-loop ,if-not*
-,;
+   check-buttons
+
+   ^done h@ 'sdl-loop ^if-not*
+;
 
 
 ~draw sdl-loop

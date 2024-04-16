@@ -14,5 +14,6 @@
 #include "threads.c"
 #include "mp-math.c"
 #include "network.c"
+#include "sdl.c"
 
 #endif /* __MINIMAL_BUILD */
