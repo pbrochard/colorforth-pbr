@@ -125,6 +125,8 @@
 :npr ^cr pr ;
 :nprn ^cr pr cr ;
 
+:bpr (a - ) ^dup c@ dup 0 = '2drop ^if; emit 1+ bpr ;
+
 
 ( math )
 :sign/0 ^drop 0 ;   :sign/1 ^1 ;   :sign/-1 ^-1 ;

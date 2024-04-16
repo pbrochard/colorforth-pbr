@@ -1,27 +1,28 @@
-%
-require-network
+:sock ~0 variable ^;
 
-:sock ~0 variable ,;
+:buffer ~1024 c-alloc [,] ^;
 
-:buffer ~1024 dalloc [,] ,;
-
-:send ^sock @ socket-send drop ,;
-:send-nl ^10 sock @ socket-send-char drop ,;
-:recv ~( buffer -) ^1024 sock @ socket-recv drop ,;
+:send ^sock h@ socket-send drop ;
+:send-nl ^10 sock h@ socket-send-char drop ;
+:recv ~( buffer -) ^1024 sock h@ socket-recv drop ;
 
 :main ^
-   ~c" 127.0.0.1" ^8000 client-start .s sock !
+   ~c" 127.0.0.1" ^8000 client-start .s sock h!
 
-   buffer recv buffer prn
-   buffer recv buffer prn
+   buffer recv buffer dump
+   buffer bpr cr
+   2 sleep
+   buffer recv buffer bpr cr
+   2 sleep
 
    ~c" Hello from client!" ^send send-nl
 
    ^1 sleep
 
-   sock @ server-stop drop
+   sock h@ server-stop drop
+   buffer c-free
    .s
-,;
+;
 
 ~main
 bye

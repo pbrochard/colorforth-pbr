@@ -13,5 +13,6 @@
 #include "os.c"
 #include "threads.c"
 #include "mp-math.c"
+#include "network.c"
 
 #endif /* __MINIMAL_BUILD */

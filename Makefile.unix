@@ -29,7 +29,8 @@ INCLUDED_SRC=src/utils.c \
 	ext/dict.c \
 	ext/os.c \
 	ext/threads.c \
-	ext/mp-math.c
+	ext/mp-math.c \
+	ext/network.c
 
 
 SRC_H=src/colorforth.h \

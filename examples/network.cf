@@ -1,30 +1,34 @@
-%
-require-network
+:server ~0 variable ^;
+:sock ~0 variable ^;
 
-:server ~0 variable ,;
-:sock ~0 variable ,;
+:buffer ~1024 c-alloc [,] ^;
 
-:buffer ~1024 dalloc [,] ,;
-
-:send ^sock @ socket-send drop ,;
-:send-nl ^10 sock @ socket-send-char drop ,;
-:recv ~( buffer -) ^1024 sock @ socket-recv drop ,;
+:send ^sock h@ socket-send drop ;
+:send-nl ^10 sock h@ socket-send-char drop ;
+:recv ~( buffer -) ^1024 sock h@ socket-recv drop ;
 
 :main ^
-   8000 server-start .s server !
-   server @ server-accept .s sock !
+   8000 server-start .s server h!
 
+   ~c" Waiting for client connection" ^prn
+   server h@ server-accept .s sock h!
+
+   ~c" Sending lines to client" ^prn
    ~c" test on one line" ^send
+   2 sleep
    ~c" test on a second line" ^send
+   1 sleep
 
+   ~c" Waiting from client" ^prn
    buffer recv
-   cr buffer dump cr buffer prn cr
+   cr buffer dump cr buffer bpr cr
 
-   ^1 sleep
+   1 sleep
 
-   server @ server-stop drop
+   server h@ server-stop drop
+   buffer c-free
    .s
-,;
+;
 
 ~main
 bye
