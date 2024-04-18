@@ -57,6 +57,12 @@ conf.h: src/conf.tmpl.h
 ext/ext.c: ext/0_ext.tmpl.c
 	cp ext/0_ext.tmpl.c ext/ext.c
 
+lib.cf: src/lib.tmpl.cf
+	@[ -f ~/.config/colorforth.bak.cf ] && echo "Backup file '~/.config/colorforth.bak.cf' exists. Exiting" && exit 1 || true
+	mkdir -p ~/.config
+	cp  ~/.config/colorforth.cf ~/.config/colorforth.bak.cf
+	cp src/lib.tmpl.cf ~/.config/colorforth.cf
+
 colorforth: Makefile $(SRC) $(INCLUDED_SRC) $(EXT_SRC) $(SRC_H)
 	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth $(SRC) $(EXT_SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
@@ -88,6 +94,8 @@ dumpelf: colorforth
 
 cleanelf: colorforth
 	termux-elf-cleaner colorforth
+
+install: lib.cf
 
 clean:
 	rm -f colorforth colorforth-unsafe

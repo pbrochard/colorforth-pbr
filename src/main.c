@@ -6,6 +6,25 @@
 extern void parse_from_file(struct state *s, char *filename);
 
 void
+parse_home_lib(struct state *s, int argc, char *argv[]) {
+#ifdef config_file
+  char *filename = calloc(1024, sizeof(char));
+
+  s->echo_on = 0;
+
+  strcat(filename, getenv("HOME"));
+  strcat(filename, "/");
+  strcat(filename, config_file);
+
+  parse_from_file(s, filename);
+
+  free(filename);
+
+  s->echo_on = 1;
+#endif
+}
+
+void
 parse_command_line(struct state *s, int argc, char *argv[])
 {
   s->echo_on = 0;
@@ -48,6 +67,7 @@ main_main(int argc, char *argv[])
 
   struct state *s = colorforth_newstate();
 
+  parse_home_lib(s, argc, argv);
   parse_command_line(s, argc, argv);
 
   while (!s->done)

@@ -10,6 +10,8 @@
 typedef long cell;
 #define CELL_FMT "%ld"
 
+#define config_file ".config/colorforth.cf"
+
 // Uncomment for a minimal build with only mandatory extensions
 // Build with:
 //   make EXTRA_CFLAGS=-D__MINIMAL_BUILD EXT_SRC=
