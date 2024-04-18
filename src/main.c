@@ -8,6 +8,11 @@ extern void parse_from_file(struct state *s, char *filename);
 void
 parse_home_lib(struct state *s, int argc, char *argv[]) {
 #ifdef config_file
+  for (int i = 1; i < argc; i++)
+  {
+    if (memcmp(argv[i], "-n", 2) == 0) return;
+  }
+
   char *filename = calloc(1024, sizeof(char));
 
   s->echo_on = 0;
@@ -58,7 +63,7 @@ parse_command_line(struct state *s, int argc, char *argv[])
 int
 main_main(int argc, char *argv[])
 {
-  if (argc ==3 && memcmp(argv[1], "--hash", 2) == 0) {
+  if (argc ==3 && memcmp(argv[1], "--hash", 6) == 0) {
     printf("0x%X", hash(argv[2]));
     return 0;
   }
