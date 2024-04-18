@@ -147,7 +147,7 @@
 :ptr ~0 variable ^;
 :count ~0 variable ^;
 :loop ^ptr h@ hc@ parse  ptr 1+!  count 1-!  count h@ 'loop ^if* ;
-:eval ( string - ) ^clear-tib  dup ptr h!  .s slength .s  count h!  loop  32 parse ;
+:eval ( string - ) ^clear-tib  dup ptr h!  slength  count h!  loop  32 parse ;
 ~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
 
 ( files )
