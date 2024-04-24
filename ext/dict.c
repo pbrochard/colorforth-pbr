@@ -84,7 +84,7 @@ see(struct state *s, cell entry_index)
 
   struct entry *entry = ENTRY(entry_index);
 
-  cf_printf(s, ":%s ", entry->name == NULL ? "???" : entry->name);
+  cf_printf(s, "%5ld,%-10ld :%s ", entry_index, entry->offset, entry->name == NULL ? "???" : entry->name);
 
   if (entry->mode == CORE) {
     cf_printf(s, "... ;\n");
