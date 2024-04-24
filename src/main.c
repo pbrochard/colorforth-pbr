@@ -45,7 +45,9 @@ parse_command_line(struct state *s, int argc, char *argv[])
 
     if (nextIsEval)
     {
+      parse_colorforth(s, '~');
       parse_from_string(s, argv[i]);
+      cf_printf(s, "\n");
       nextIsEval = 0;
       continue;
     }
@@ -53,9 +55,8 @@ parse_command_line(struct state *s, int argc, char *argv[])
     parse_from_file(s, argv[i]);
   }
 
-  s->echo_on = 1;
-
   parse_colorforth(s, '~');
+  s->echo_on = 1;
 }
 
 
