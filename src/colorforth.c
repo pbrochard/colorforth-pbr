@@ -27,15 +27,6 @@ extern char check_entry(struct state *s, struct entry *check_entry);
 extern void display_clash_found(struct state *s, char clash_found);
 #endif /* __CHECK_DICT */
 
-#define define_register(N)                                                     \
-  case OP_REG_##N##_STORE: { ENSURE_STACK_MIN(1);  N = POP(); break; }         \
-  case OP_REG_##N##_LOAD: { ENSURE_STACK_MAX(1);   PUSH(N); break; }    \
-  case OP_REG_##N##_ADD: { ENSURE_STACK_MIN(1);    N += POP(); break; } \
-  case OP_REG_##N##_INC: { N += 1; break; }                             \
-  case OP_REG_##N##_DEC: { N -= 1; break; }                             \
-  case OP_REG_R_TO_##N##_ : { ENSURE_R_STACK_MIN(1); N = R_POP(); break; } \
-  case OP_REG_##N##_TO_R: { ENSURE_R_STACK_MAX(1); R_PUSH(N); break; }
-
 #include "utils.c"
 
 #define __SECTION_FUNCTION
@@ -43,6 +34,7 @@ extern void display_clash_found(struct state *s, char clash_found);
 #include "ext.c"
 #include "lib.c"
 #undef __SECTION_FUNCTION
+
 
 // 'hashed_name' is 'hash(name)' or 0x0 if names are kept
 // 'name' must be null-terminated.
@@ -173,7 +165,7 @@ void
 execute_(struct state *s, struct entry *entry)
 {
   // cf_printf(s, "-> %s offset=%d\n", entry->name, entry->offset);
-  cell pc = entry->offset;
+  PC = entry->offset;
 
   ENSURE_R_STACK_MAX(1);
   R_PUSH(-1);
@@ -191,7 +183,7 @@ execute_(struct state *s, struct entry *entry)
   // don't forget to COMPILE a return!!!!
   while(1)
   {
-    switch (HEAP(pc, opcode_t))
+    switch (HEAP(PC, opcode_t))
     {
       case OP_RETURN:
       {
@@ -201,7 +193,7 @@ execute_(struct state *s, struct entry *entry)
           // cf_printf(s, "   %s(done) <-\n", entry->name);
           return ;
         }
-        pc = offset;
+        PC = offset;
         continue;
       }
 
@@ -216,7 +208,7 @@ execute_(struct state *s, struct entry *entry)
         cf_printf(s, "??");
       }
     }
-    pc += sizeof(opcode_t);
+    PC += sizeof(opcode_t);
   }
 }
 

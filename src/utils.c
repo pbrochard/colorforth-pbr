@@ -36,6 +36,83 @@ cf_print_cell(struct state *s, cell cell)
   }
 }
 
+cell
+find_entry(struct state *s, struct dictionary *dict)
+{
+  s->tib.buf[s->tib.len] = '\0';
+  const hash_t tib_opcode = hash(s->tib.buf);
+
+  for (int i = dict->latest; i >= 0; i--)
+  {
+    if (dict->entries[i].opcode == tib_opcode)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+cell
+find_entry_by_hash(struct dictionary *dict, hash_t opcode)
+{
+  for (int i = dict->latest; i >= 0; i--)
+  {
+    if (dict->entries[i].opcode == opcode)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+cell
+find_entry_by_offset(struct dictionary *dict, cell offset)
+{
+  for (int i = dict->latest; i >= 0; i--)
+  {
+    if (dict->entries[i].offset <= offset)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+void
+print_entry (struct state *s, cell entry_index) {
+  if (entry_index == -1) {
+    unknow_word(s);
+    return;
+  }
+
+  struct entry *entry = ENTRY(entry_index);
+
+  cf_printf(s, "%s[%ld,%ld]",  entry->name == NULL ? "???" : entry->name, entry_index, entry->offset);
+}
+
+void
+get_stacktrace (struct state *s) {
+  PUSH(-1);
+  PUSH(find_entry_by_offset(&s->dict, PC));
+
+  for (int i = s->r_stack->sp; i > 0; i--) {
+    PUSH(find_entry_by_offset(&s->dict, R_CELLS[i]));
+  }
+}
+
+void
+show_stacktrace (struct state *s) {
+  cf_printf(s, "  ");
+  print_entry(s, find_entry_by_offset(&s->dict, PC));
+
+  for (int i = s->r_stack->sp; i > 0; i--) {
+    cf_printf(s, " <- ");
+    print_entry(s, find_entry_by_offset(&s->dict, R_CELLS[i]));
+  }
+
+  cf_printf(s, "\n");
+}
+
 void
 quit(struct state *s)
 {
@@ -47,7 +124,9 @@ quit(struct state *s)
 void
 cf_fatal_error(struct state *s, char id)
 {
-  cf_printf(s, "E%d\n", id);
+  cf_printf(s, "E%d", id);
+  show_stacktrace(s);
+
   if (s)
   {
     echo_color(s, ' ', COLOR_CLEAR);
@@ -138,48 +217,6 @@ words(struct state *s)
 {
   dump_words(s, &s->dict);
   cf_printf(s, "\n");
-}
-
-cell
-find_entry(struct state *s, struct dictionary *dict)
-{
-  s->tib.buf[s->tib.len] = '\0';
-  const hash_t tib_opcode = hash(s->tib.buf);
-
-  for (int i = dict->latest; i >= 0; i--)
-  {
-    if (dict->entries[i].opcode == tib_opcode)
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-
-cell
-find_entry_by_hash(struct dictionary *dict, hash_t opcode)
-{
-  for (int i = dict->latest; i >= 0; i--)
-  {
-    if (dict->entries[i].opcode == opcode)
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-
-cell
-find_entry_by_offset(struct dictionary *dict, cell offset)
-{
-  for (int i = dict->latest; i >= 0; i--)
-  {
-    if (dict->entries[i].offset == offset)
-    {
-      return i;
-    }
-  }
-  return -1;
 }
 
 // struct entry*

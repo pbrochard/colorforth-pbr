@@ -94,6 +94,8 @@ struct state
   uint8_t *heap;
   cell here;
 
+  cell pc;
+
   char base;
 
   char done;
@@ -189,6 +191,8 @@ extern void *cf_calloc(struct state *state, size_t nmemb, size_t size, unsigned 
 #define R_SP s->r_stack->sp
 #define R_LIM s->r_stack->lim
 
+#define PC s->pc
+
 #define HEAP(offset, type) *((type *) (s->heap + (offset)))
 #define PUT(value, type) { HEAP(s->here, type) = (type) (value); }
 #define STORE(value, type) { PUT(value, type); s->here += sizeof(type); }
@@ -196,14 +200,14 @@ extern void *cf_calloc(struct state *state, size_t nmemb, size_t size, unsigned 
 #define ENTRY(index) (&s->dict.entries[(index)])
 
 #ifndef UNSAFE_MODE
-#define ENSURE_STACK_MIN_GEN(x, sp, msg) if (sp < x - 1) { cf_printf(NULL, msg); return; }
-#define ENSURE_STACK_MAX_GEN(x, sp, lim, msg) if (sp > lim - x) { cf_printf(NULL, msg);  return; }
+#define ENSURE_STACK_MIN_GEN(x, sp, msg) if (sp < x - 1) { cf_printf(NULL, msg); show_stacktrace(s); return; }
+#define ENSURE_STACK_MAX_GEN(x, sp, lim, msg) if (sp > lim - x) { cf_printf(NULL, msg);  show_stacktrace(s);  return; }
 
-#define ENSURE_STACK_MIN(x) ENSURE_STACK_MIN_GEN(x, SP, "ES<!\n")
-#define ENSURE_STACK_MAX(x) ENSURE_STACK_MAX_GEN(x, SP, LIM, "ES>!\n")
+#define ENSURE_STACK_MIN(x) ENSURE_STACK_MIN_GEN(x, SP, "\nES<!")
+#define ENSURE_STACK_MAX(x) ENSURE_STACK_MAX_GEN(x, SP, LIM, "\nES>!")
 
-#define ENSURE_R_STACK_MIN(x) ENSURE_STACK_MIN_GEN(x, R_SP, "ERS<!\n")
-#define ENSURE_R_STACK_MAX(x) ENSURE_STACK_MAX_GEN(x, R_SP, R_LIM, "ERS>!\n")
+#define ENSURE_R_STACK_MIN(x) ENSURE_STACK_MIN_GEN(x, R_SP, "\nERS<!")
+#define ENSURE_R_STACK_MAX(x) ENSURE_STACK_MAX_GEN(x, R_SP, R_LIM, "\nERS>!")
 #else
 #define ENSURE_STACK_MIN(x)
 #define ENSURE_STACK_MAX(x)
@@ -232,6 +236,15 @@ extern void *cf_calloc(struct state *state, size_t nmemb, size_t size, unsigned 
 
 #define define_register_OP(N) OP_##N##_LOAD, OP_##N##_STORE, OP_##N##_ADD, \
     OP_##N##_INC, OP_##N##_DEC, OP_##N##_R_PUSH, OP_##N##_R_POP
+
+#define define_register(N)                                                     \
+  case OP_REG_##N##_STORE: { ENSURE_STACK_MIN(1);  N = POP(); break; }         \
+  case OP_REG_##N##_LOAD: { ENSURE_STACK_MAX(1);   PUSH(N); break; }    \
+  case OP_REG_##N##_ADD: { ENSURE_STACK_MIN(1);    N += POP(); break; } \
+  case OP_REG_##N##_INC: { N += 1; break; }                             \
+  case OP_REG_##N##_DEC: { N -= 1; break; }                             \
+  case OP_REG_R_TO_##N##_ : { ENSURE_R_STACK_MIN(1); N = R_POP(); break; } \
+  case OP_REG_##N##_TO_R: { ENSURE_R_STACK_MAX(1); R_PUSH(N); break; }
 
 #define NON_NULL(x) ((x) ? (x) : "")
 

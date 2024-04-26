@@ -414,17 +414,17 @@ case OP_HEAP_CSTORE:
 
 case OP_CALL:
 {
-  pc += sizeof(opcode_t);
+  PC += sizeof(opcode_t);
   ENSURE_STACK_MAX(1);
-  R_PUSH(pc + sizeof(cell));
-  pc = ENTRY(HEAP(pc, cell))->offset;
+  R_PUSH(PC + sizeof(cell));
+  PC = ENTRY(HEAP(PC, cell))->offset;
   continue;
 }
 
 case OP_TAIL_CALL:
 {
-  pc += sizeof(opcode_t);
-  pc = ENTRY(HEAP(pc, cell))->offset;
+  PC += sizeof(opcode_t);
+  PC = ENTRY(HEAP(PC, cell))->offset;
   continue;
 }
 
@@ -433,9 +433,9 @@ case OP_TICK_NUMBER:
 {
   ENSURE_STACK_MAX(1);
   SP += 1;
-  pc += sizeof(opcode_t);
-  CELLS[SP] = HEAP(pc, cell);
-  pc += sizeof(cell);
+  PC += sizeof(opcode_t);
+  CELLS[SP] = HEAP(PC, cell);
+  PC += sizeof(cell);
   continue;
 }
 
@@ -485,11 +485,11 @@ case OP_IF:
   ENSURE_STACK_MIN(2);
   POP2();
 
-  pc += sizeof(opcode_t);
+  PC += sizeof(opcode_t);
 
   if (p2) {
-    R_PUSH(pc);
-    pc = p1;
+    R_PUSH(PC);
+    PC = p1;
   }
   continue;
 }
@@ -500,9 +500,9 @@ case OP_IF_TAIL_CALL:
   ENSURE_STACK_MIN(2);
   POP2();
 
-  pc += sizeof(opcode_t);
+  PC += sizeof(opcode_t);
 
-  if (p2) pc = p1;
+  if (p2) PC = p1;
   continue;
 }
 
@@ -511,11 +511,11 @@ case OP_IF_EXIT:
   ENSURE_STACK_MIN(2);
   POP2();
 
-  pc += sizeof(opcode_t);
+  PC += sizeof(opcode_t);
 
   if (p2) {
-    R_PUSH(pc);
-    pc = p1;
+    R_PUSH(PC);
+    PC = p1;
     R_SP -= 1;
   }
   continue;
@@ -526,11 +526,11 @@ case OP_IF_NOT:
   ENSURE_STACK_MIN(2);
   POP2();
 
-  pc += sizeof(opcode_t);
+  PC += sizeof(opcode_t);
 
   if (p2 == 0) {
-    R_PUSH(pc);
-    pc = p1;
+    R_PUSH(PC);
+    PC = p1;
   }
   continue;
 }
@@ -541,9 +541,9 @@ case OP_IF_NOT_TAIL_CALL:
   ENSURE_STACK_MIN(2);
   POP2();
 
-  pc += sizeof(opcode_t);
+  PC += sizeof(opcode_t);
 
-  if (p2 == 0) pc = p1;
+  if (p2 == 0) PC = p1;
   continue;
 }
 
@@ -552,11 +552,11 @@ case OP_IF_NOT_EXIT:
   ENSURE_STACK_MIN(2);
   POP2();
 
-  pc += sizeof(opcode_t);
+  PC += sizeof(opcode_t);
 
   if (p2 == 0) {
-    R_PUSH(pc);
-    pc = p1;
+    R_PUSH(PC);
+    PC = p1;
     R_SP -= 1;
   }
   continue;
@@ -568,9 +568,9 @@ case OP_IF_ELSE:
   ENSURE_STACK_MIN(3);
   POP3();
 
-  pc += sizeof(opcode_t);
-  R_PUSH(pc);
-  pc = p3 ? p2 : p1;
+  PC += sizeof(opcode_t);
+  R_PUSH(PC);
+  PC = p3 ? p2 : p1;
   continue;
 }
 
@@ -608,8 +608,8 @@ case OP_EXECUTE:
   ENSURE_STACK_MIN(1);
   ENSURE_R_STACK_MAX(1);
   const cell offset = POP();
-  R_PUSH(pc + sizeof(opcode_t));
-  pc = offset;
+  R_PUSH(PC + sizeof(opcode_t));
+  PC = offset;
   continue;
 }
 
@@ -618,8 +618,8 @@ case OP_EXECUTE_STAR:
   ENSURE_STACK_MIN(1);
   ENSURE_R_STACK_MAX(1);
   const cell offset = CELLS[SP];
-  R_PUSH(pc + sizeof(opcode_t));
-  pc = offset;
+  R_PUSH(PC + sizeof(opcode_t));
+  PC = offset;
   continue;
 }
 
