@@ -1,9 +1,17 @@
 // The author disclaims copyright to this source code.
 #include <string.h>
+#include <signal.h>
+#include <setjmp.h>
 #include "colorforth.h"
 #include "cf-stdio.h"
 
 extern void parse_from_file(struct state *s, char *filename);
+extern void reset_state(struct state *s);
+extern void show_full_stacktrace(struct state *s);
+
+
+struct state *s;
+
 
 void
 parse_home_lib(struct state *s, int argc, char *argv[]) {
@@ -59,7 +67,42 @@ parse_command_line(struct state *s, int argc, char *argv[])
   s->echo_on = 1;
 }
 
+sigjmp_buf mark;
 
+
+void
+print_exception(char *msg, siginfo_t *info) {
+  printf("%s", COLOR_RED);
+  printf("\n%s (%d)%s\n", strsignal(info->si_signo), info->si_signo, msg);
+  printf("Stacktrace:");
+  show_full_stacktrace(s);
+}
+
+void
+handler0(int signo, siginfo_t *info, void *context)
+{
+  print_exception("\nFailed to parse command line arguments", info);
+  reset_terminal();
+  exit(1);
+}
+
+void
+handler(int signo, siginfo_t *info, void *context)
+{
+  print_exception("", info);
+  siglongjmp(mark, -1);
+}
+
+void
+install_sigaction (void (*sigact)(int, siginfo_t *, void *)) {
+  struct sigaction act = { 0 };
+  act.sa_sigaction = sigact;
+  act.sa_flags = SA_SIGINFO;
+  sigemptyset(&(act.sa_mask));
+  sigaddset(&(act.sa_mask), SIGSEGV);
+  sigaction(SIGSEGV, &act, NULL);
+  sigaction(SIGFPE, &act, NULL);
+}
 
 int
 main(int argc, char *argv[])
@@ -71,10 +114,16 @@ main(int argc, char *argv[])
 
   init_terminal();
 
-  struct state *s = colorforth_newstate();
+  s = colorforth_newstate();
+
+  install_sigaction(&handler0);
 
   parse_home_lib(s, argc, argv);
   parse_command_line(s, argc, argv);
+
+  install_sigaction(&handler);
+
+  if (sigsetjmp(mark, 1) == -1) reset_state(s);
 
   while (!s->done)
   {
