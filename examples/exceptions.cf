@@ -1,0 +1,14 @@
+~
+:z
+:DIV_ZERO ^1 0 / ;
+
+:s
+:SEGFAULT ^0 0 ! ;
+
+:level4 ^4 . DIV_ZERO ;
+:level3 ^3 . level4 ;
+:level2 ^2 . ( SEGFAULT ) ^level3 ;
+:level1 ^1 . level2 ;
+:main ^0 . level1 ;
+
+~
