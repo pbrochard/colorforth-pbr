@@ -1,0 +1,25 @@
+~
+:level4 ^4 . .stacktrace ;
+:level3 ^3 . level4 ;
+:level2 ^2 . level3 .full-stacktrace ;
+:level1 ^1 . level2 ;
+:main ^0 .   level1 ;
+
+~
+'level4 ~see 'level3 ~see 'level2 ~see 'level1 ~see
+'main ~see
+cr
+
+~main .s
+
+:error ^drop ;
+:l4 ^error ;
+:l3 ^l4 ;
+:l2 ^l3 ;
+:l1 ^l2 ;
+
+~l1
+
+.s
+
+~bye

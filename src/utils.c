@@ -79,15 +79,14 @@ find_entry_by_offset(struct dictionary *dict, cell offset)
 }
 
 void
-print_entry (struct state *s, cell entry_index) {
+print_entry (struct state *s, char *format, cell entry_index) {
   if (entry_index == -1) {
-    unknow_word(s);
     return;
   }
 
   struct entry *entry = ENTRY(entry_index);
 
-  cf_printf(s, "%s[%ld,%ld]",  entry->name == NULL ? "???" : entry->name, entry_index, entry->offset);
+  cf_printf(s, format,  entry->name == NULL ? "???" : entry->name, entry_index, entry->offset);
 }
 
 void
@@ -102,15 +101,43 @@ get_stacktrace (struct state *s) {
 
 void
 show_stacktrace (struct state *s) {
-  cf_printf(s, "  ");
-  print_entry(s, find_entry_by_offset(&s->dict, PC));
+  char * format = "%s:%ld:%ld";
+
+  cf_printf(s, "  %s", COLOR_RED);
+  print_entry(s, format, find_entry_by_offset(&s->dict, PC));
 
   for (int i = s->r_stack->sp; i > 0; i--) {
     cf_printf(s, " <- ");
-    print_entry(s, find_entry_by_offset(&s->dict, R_CELLS[i]));
+    print_entry(s, format, find_entry_by_offset(&s->dict, R_CELLS[i]));
   }
 
+  cf_printf(s, "%s\n", COLOR_YELLOW);
+}
+
+void
+show_full_stacktrace (struct state *s) {
+  char *format = "%-15s | %ld | %ld";
+  cell current_index = find_entry_by_offset(&s->dict, PC);
+
+  cf_printf(s, "%s", COLOR_RED);
+  for (cell i = 0; i < R_LIM && R_CELLS[i]; i++) {
+    cell index = find_entry_by_offset(&s->dict, R_CELLS[i]);
+
+    cf_printf(s, "%s", index == current_index ? "---> " : "     ");
+
+    print_entry(s, format, index);
+    cf_printf(s, "\n");
+  }
+
+  cf_printf(s, "%s", COLOR_YELLOW);
   cf_printf(s, "\n");
+}
+
+void
+clear_r_stack (struct state *s) {
+  for (cell i = 0; i < R_LIM && R_CELLS[i]; i++) {
+    R_CELLS[i] = 0;
+  }
 }
 
 void

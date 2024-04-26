@@ -12,6 +12,8 @@
 #define OP_ENTRY_HIDE                (opcode_t) 0x7C95E439                // entry/hide
 #define OP_ROOM                      (opcode_t) 0xE48409A3                // room
 #define OP_DROP_ROOM                 (opcode_t) 0xC57E1E23                // drop-room
+#define OP_DOT_STACKTRACE            (opcode_t) 0xC6A520A7                // .stacktrace
+#define OP_DOT_FULL_STACKTRACE       (opcode_t) 0x306C1267                // .full-stacktrace
 
 #endif /* __SECTION_HASH_DEF */
 
@@ -26,6 +28,8 @@ define_primitive(s, ENTRY_NAME("base"), OP_BASE);
 define_primitive(s, ENTRY_NAME("is"), OP_ENTRY_IS);
 define_primitive(s, ENTRY_NAME("c>is"), OP_ENTRY_C_IS);
 define_primitive(s, ENTRY_NAME("entry/hide"), OP_ENTRY_HIDE);
+define_primitive(s, ENTRY_NAME(".stacktrace"), OP_DOT_STACKTRACE);
+define_primitive(s, ENTRY_NAME(".full-stacktrace"), OP_DOT_FULL_STACKTRACE);
 
 #endif /* __SECTION_WORD_DEF */
 
@@ -69,6 +73,17 @@ case OP_ENTRY_HIDE: {
   entry->name_len = 0;
 #endif
 
+  break;
+}
+
+case OP_DOT_STACKTRACE: {
+  cf_printf(s, "\n");
+  show_stacktrace(s);
+  break;
+}
+
+case OP_DOT_FULL_STACKTRACE: {
+  show_full_stacktrace(s);
   break;
 }
 

@@ -191,6 +191,7 @@ execute_(struct state *s, struct entry *entry)
         cell offset = R_POP();
         if (offset == -1) {
           // cf_printf(s, "   %s(done) <-\n", entry->name);
+          clear_r_stack(s);
           return ;
         }
         PC = offset;
