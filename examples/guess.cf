@@ -1,0 +1,60 @@
+( guess a number )
+(
+   Your guess? 35 ?
+   Too low
+   98 ?
+   Too high
+   50 ?
+   Too low
+   68 ?
+   Too low
+   70 ?
+   Too low
+   80 ?
+   Too low
+   90 ?
+   Too high
+   86 ?
+   Too high
+   84 ?
+   Too low
+   85 ?
+   YOU WIN!!
+)
+
+~time srand
+:guess ^100 random 1+ ~c" Your guess? " ^pr ;
+
+:too-high ~c" Too high" ^prn drop ;
+:too-low ~c" Too low" ^prn ;
+:win ~c" YOU WIN!!" ^prn cr guess ;
+
+( rebind ? to check the number )
+:? (n --) ^over
+   over < 'too-high ^if;
+   over < 'too-low  ^if;
+   win
+;
+
+( A simple helper to ease calculating the dichotomy )
+
+:h? ( min max ) ^+ 2 / dup . ? ;
+
+(
+   Your guess? 50 ?
+   Too low
+   50 100 h?
+   75 Too high
+   50 75 h?
+   62 Too low
+   62 75 h?
+   68 Too high
+   68 62 h?
+   65 Too high
+   65 62 h?
+   63 Too low
+   63 65 h?
+   64 YOU WIN!!
+)
+
+~guess
