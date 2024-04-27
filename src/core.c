@@ -25,10 +25,13 @@ case '`': {
 
 case '(': {
   char count = 0;
+  echo_color(s, c, COLOR_WHITE);
   while ((c = cf_getchar(s)) != ')' || count > 0) {
+    echo_color(s, c, COLOR_WHITE);
     if (c == '(') count += 1;
     else if (c == ')') count -= 1;
   }
+  echo_color(s, c, COLOR_WHITE);
   return;
 }
 
