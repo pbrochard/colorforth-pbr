@@ -1,32 +1,22 @@
 ( guess a number )
 (
-   Your guess? 35 ?
-   Too low
-   98 ?
-   Too high
-   50 ?
-   Too low
-   68 ?
-   Too low
-   70 ?
-   Too low
-   80 ?
-   Too low
-   90 ?
-   Too high
-   86 ?
-   Too high
-   84 ?
-   Too low
-   85 ?
+   Your guess?
+   35 ?
+   Too low! Your guess?
+   88 ?
+   Too high! Your guess?
+   52 ?
+   Too low! Your guess?
+   61 ?
    YOU WIN!!
 )
 
 ~time srand
-:guess ^100 random 1+ ~c" Your guess? " ^pr ;
+:.guess  ~c" Your guess? " ^prn ;
+:guess ^100 random 1+ .guess ;
 
-:too-high ~c" Too high" ^prn drop ;
-:too-low ~c" Too low" ^prn ;
+:too-high ~c" Too high! " ^pr drop .guess ;
+:too-low ~c" Too low! " ^pr .guess ;
 :win ~c" YOU WIN!!" ^prn cr guess ;
 
 ( rebind ? to check the number )
@@ -41,18 +31,19 @@
 :h? ( min max ) ^+ 2 / dup . ? ;
 
 (
-   Your guess? 50 ?
-   Too low
+   Your guess?
+   50 ?
+   Too low! Your guess?
    50 100 h?
-   75 Too high
+   75 Too high! Your guess?
    50 75 h?
-   62 Too low
+   62 Too low! Your guess?
    62 75 h?
-   68 Too high
+   68 Too high! Your guess?
    68 62 h?
-   65 Too high
+   65 Too high! Your guess?
    65 62 h?
-   63 Too low
+   63 Too low! Your guess?
    63 65 h?
    64 YOU WIN!!
 )
