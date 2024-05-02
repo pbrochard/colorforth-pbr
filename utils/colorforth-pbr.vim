@@ -12,16 +12,16 @@ if exists("b:current_syntax")
 endif
 
 
-function ColorForthSyntax()
-  syn match colorForthComment "\~\\.*$"
-  syn region colorForthBlockComment   start="(" end=")" fold contains=colorForthBlockComment
+syn match prefix "[:^~'`]" conceal
 
-  syn region colorForthDefine start=":" end=" " contains=ALL
-  syn region colorForthString start=/[cs]"/ end=/"/
-  syn region colorForthTick start="['`]" end="[:~('`^]" contains=ALL
-  syn region colorForthCompile start="\^" end="[:~('`\\]" contains=ALL
-  syn region colorForthExecute start="\~" end="[:^('`\\]" contains=ALL
-endfunction
+syn match colorForthComment "\~\\.*$"
+syn region colorForthBlockComment   start="(" end=")" fold contains=colorForthBlockComment
+
+syn region colorForthDefine start=":" end=" " contains=ALL
+syn region colorForthString start=/[cs]"/ end=/"/
+syn region colorForthTick start="['`]" end="[:~('`^]" contains=ALL
+syn region colorForthCompile start="\^" end="[:~('`\\]" contains=ALL
+syn region colorForthExecute start="\~" end="[:^('`\\]" contains=ALL
 
 
 let b:current_syntax = "colorforth-pbr"
@@ -34,6 +34,8 @@ hi def link colorForthExecute Execute
 hi def link colorForthTick Tick
 hi def link colorForthString String
 
+hi def link prefix prefix
+
 hi colorForthComment ctermfg=White
 hi colorForthBlockComment ctermfg=White
 hi colorForthDefine ctermfg=Red
@@ -42,21 +44,4 @@ hi colorForthExecute ctermfg=Yellow
 hi colorForthTick ctermfg=Cyan
 hi colorForthString ctermfg=Magenta
 
-
-function HidePrefixFn()
-  syn match prefix "[:^~'`]" conceal
-  call ColorForthSyntax()
-  set conceallevel=3
-endfunction
-
-
-function ShowPrefixFn()
-  syn clear prefix
-  call ColorForthSyntax()
-  set conceallevel=0
-endfunction
-
-command HidePrefix call HidePrefixFn()
-command ShowPrefix call ShowPrefixFn()
-
-call ColorForthSyntax()
+hi prefix ctermfg=Blue
