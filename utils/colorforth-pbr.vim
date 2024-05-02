@@ -11,10 +11,12 @@ if exists("b:current_syntax")
   finish
 endif
 
+syn match prefixDefine ":" conceal
+syn match prefixCompile "\^" conceal
+syn match prefixExecute "\~" conceal
+syn match prefixTick "['`]" conceal
 
-syn match prefix "[:^~'`]" conceal
-
-syn match colorForthComment "\~\\.*$"
+syn match colorForthComment "\\.*$"
 syn region colorForthBlockComment   start="(" end=")" fold contains=colorForthBlockComment
 
 syn region colorForthDefine start=":" end=" " contains=ALL
@@ -26,22 +28,19 @@ syn region colorForthExecute start="\~" end="[:^('`\\]" contains=ALL
 
 let b:current_syntax = "colorforth-pbr"
 
-hi def link colorForthComment Comment
-hi def link colorForthBlockComment Comment
-hi def link colorForthDefine Define
-hi def link colorForthCompile Compile
-hi def link colorForthExecute Execute
-hi def link colorForthTick Tick
-hi def link colorForthString String
-
-hi def link prefix prefix
+hi prefixDefine ctermfg=Red
+hi prefixCompile ctermfg=Green
+hi prefixExecute ctermfg=Yellow
+hi prefixTick ctermfg=Cyan
 
 hi colorForthComment ctermfg=White
 hi colorForthBlockComment ctermfg=White
+
 hi colorForthDefine ctermfg=Red
 hi colorForthCompile ctermfg=Green
 hi colorForthExecute ctermfg=Yellow
 hi colorForthTick ctermfg=Cyan
 hi colorForthString ctermfg=Magenta
 
-hi prefix ctermfg=Blue
+command HidePrefix set conceallevel=3
+command ShowPrefix set conceallevel=0
