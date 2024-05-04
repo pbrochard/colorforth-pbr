@@ -1,6 +1,6 @@
 ~\ Inspired by https://susam.in/maze/may-the-forth-be-with-you.html
 
-:star ~key # [,] ^emit ;
+:star ~key # , ^emit ;
 
 :stars  ^star  1- dup 'stars ^if* ^drop ;
 :lines  ^cr    1- dup 'lines ^if* ^drop ;

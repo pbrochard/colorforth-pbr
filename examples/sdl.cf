@@ -15,7 +15,7 @@
 :snd/hk ~s" examples/sdl/sounds/hk.mp3" sdl/load-sound constant ^;
 :snd/synth ~s" examples/sdl/sounds/synth.mp3" sdl/load-sound constant ^;
 
-:R ~255 255 * [,] ^* ;
+:R ~255 255 * , ^* ;
 :G ^255 * ;
 :B ^ + + ;
 
@@ -28,7 +28,7 @@
 
 :draw ^
    10 10 100 sdl/background
-   ~s" This is a test" dup sdl/text-size@ .s . . cr [,]
+   ~s" This is a test" dup sdl/text-size@ .s . . cr ,
    ^100 200  10 R 255 G 10 B  sdl/put-text
 
    ball ball-x h@ ball-y h@ sdl/put-image

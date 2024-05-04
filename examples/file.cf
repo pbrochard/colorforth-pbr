@@ -13,7 +13,7 @@ c-free
 ~\ Save and reload example
 s" This is a test" str2buf  s" test.txt" save drop
 
-:buf ~s" test.txt" aload drop [,] ^;
+:buf ~s" test.txt" aload drop , ^;
 ~
 buf c-pr cr
 

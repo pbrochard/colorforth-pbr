@@ -9,8 +9,8 @@
 :row ^width h@ * ;
 
 ~width h@ height h@ * dup
-:world ~dalloc [,] ^;
-:static-world ~dalloc [,] ^;
+:world ~dalloc , ^;
+:static-world ~dalloc , ^;
 
 :world# ~( x y - ) ^height h@ mod row  swap width h@ mod + ;
 :world! ~( n x y - ) ^world# world + hc! ;
@@ -33,17 +33,17 @@
 :wall-color ^esc ~c" [38;5;254m" ^pr ;
 :player-color ^esc ~c" [38;5;226m" ^pr ;
 
-:.. ^blank-color ~key . [,] ^emit ;
-:.# ^wall-color ~key # [,] ^emit ;
-:.* ^star-color ~key * [,] ^emit ;
-:.@ ^player-color ~key @ [,] ^emit ;
-:.- ^player-color ~key - [,] ^emit ;
-:.| ^player-color ~key | [,] ^emit ;
-:./ ^player-color ~key / [,] ^emit ;
-:.\ ^player-color ~key \ [,] ^emit ;
+:.. ^blank-color ~key . , ^emit ;
+:.# ^wall-color ~key # , ^emit ;
+:.* ^star-color ~key * , ^emit ;
+:.@ ^player-color ~key @ , ^emit ;
+:.- ^player-color ~key - , ^emit ;
+:.| ^player-color ~key | , ^emit ;
+:./ ^player-color ~key / , ^emit ;
+:.\ ^player-color ~key \ , ^emit ;
 
 ~here '.. ~c>! '.# ~c>!  '.* ~c>!  '.@ ~c>! '.- ~c>!  '.| ~c>!  './ ~c>!  '.\ ~c>!
-:.cell ^world@ cells ~[,] ^+ h@ call ;
+:.cell ^world@ cells ~, ^+ h@ call ;
 
 :.world ^at-00
   `.cell `<world-h> ^is   `cr `<world-v> ^is
@@ -64,7 +64,7 @@
 ~here 'dir-nw ~c>!  'dir-n ~c>!  'dir-ne ~c>!  'dir-e  ~c>!
       'dir-se  ~c>! 'dir-s ~c>!  'dir-sw ~c>!  'dir-w ~c>!
 
-:dir@ ^cells ~[,] ^+ h@ call ;
+:dir@ ^cells ~, ^+ h@ call ;
 
 :sword@ ^player dir h@ dir@   player y h@ + height h@ mod swap   player x h@ + width h@ mod swap ;
 
@@ -100,18 +100,18 @@
 :move-down-right ^ 1 move-x   1 move-y ;
 
 :move ^
-   dup ~key s [,] ^= 'turn-left ^if;
-   dup ~key * [,] ^= 'turn-left ^if;
-   dup ~key d [,] ^= 'turn-right ^if;
-   dup ~key / [,] ^= 'turn-right ^if;
-   dup ~key 4 [,] ^= 'move-left ^if;
-   dup ~key 6 [,] ^= 'move-right ^if;
-   dup ~key 2 [,] ^= 'move-down ^if;
-   dup ~key 8 [,] ^= 'move-up ^if;
-   dup ~key 7 [,] ^= 'move-up-left ^if;
-   dup ~key 9 [,] ^= 'move-up-right ^if;
-   dup ~key 1 [,] ^= 'move-down-left ^if;
-   dup ~key 3 [,] ^= 'move-down-right ^if;
+   dup ~key s , ^= 'turn-left ^if;
+   dup ~key * , ^= 'turn-left ^if;
+   dup ~key d , ^= 'turn-right ^if;
+   dup ~key / , ^= 'turn-right ^if;
+   dup ~key 4 , ^= 'move-left ^if;
+   dup ~key 6 , ^= 'move-right ^if;
+   dup ~key 2 , ^= 'move-down ^if;
+   dup ~key 8 , ^= 'move-up ^if;
+   dup ~key 7 , ^= 'move-up-left ^if;
+   dup ~key 9 , ^= 'move-up-right ^if;
+   dup ~key 1 , ^= 'move-down-left ^if;
+   dup ~key 3 , ^= 'move-down-right ^if;
    dup 27 = 'bye ^if
 ;
 

@@ -1,7 +1,7 @@
 ( Usage: colorforth small.cf life.cf gliders.cf )
 
-:h ~ [,] ^ ;
-:w ~ [,] ^ ;
+:h ~ , ^ ;
+:w ~ , ^ ;
 
 :help
    ~c" g               One generation
@@ -12,7 +12,7 @@ fast            fast speed
 (ms) delay h!   set speed
 cls             clear and redraw board" ^prn cr ;
 
-:size ~w h * [,] ^;
+:size ~w h * , ^;
 
 :n-gen ~0 variable ^;
 :delay ~100 variable ^;
@@ -26,7 +26,7 @@ cls             clear and redraw board" ^prn cr ;
 :n-world ~0 variable ^;
 :flip ^1 n-world h@ - n-world h! ;
 
-:world ~w h * 2 * dalloc [,] ^;
+:world ~w h * 2 * dalloc , ^;
 :world# ^h mod row  swap w mod + world + ;
 :world! ~( n x y - ) ^world# n-world h@ size * + hc! ;
 :world@ ~( x y ) ^world# 1 n-world h@ - size * + hc@ ;
@@ -42,8 +42,8 @@ cls             clear and redraw board" ^prn cr ;
 :star-color ^esc ~c" [38;5;154m" ^pr ;
 :blank-color ^esc ~c" [38;5;53m" ^pr ;
 
-:.star  ^star-color ~key * [,] ^emit ;
-:.blank ^blank-color ~key . [,] ^emit ;
+:.star  ^star-color ~key * , ^emit ;
+:.blank ^blank-color ~key . , ^emit ;
 :.cell ~( x y - ) ^world@ '.star .blank ^if-else ;
 
 :.world ^at-00

@@ -66,16 +66,16 @@
 
 
 ~( variables )
-~heap-size cell - :&dhere ~[,] ^;
+~heap-size cell - :&dhere ~, ^;
 ~&dhere cell - &dhere h!
 :dhere ^&dhere h@ ;
 
 :dalloc (n - a) ^dhere swap - dup &dhere h! ;
 
-:constant ^[,] ;
-:variable ^cell dalloc dup [,] h! ;
+:constant ^, ;
+:variable ^cell dalloc dup , h! ;
 
-:variables ^cells dalloc [,] ;
+:variables ^cells dalloc , ;
 :[] ^cells + ;
 
 :? ^@ . ;
@@ -114,9 +114,9 @@
 :."key ^dup  echo c@ 'emit 'drop ^if-else ;
 
 :s" ^here dup dup
-:"loop ^key ."key dup ~key " [,] ^= '"done ^if; over hc! 1+ "loop ;
+:"loop ^key ."key dup ~key " , ^= '"done ^if; over hc! 1+ "loop ;
 
-:c" ^s" [,] ;
+:c" ^s" , ;
 
 :slength ^cell - h@ ;
 
@@ -135,7 +135,7 @@
 
 
 ( time )
-:time/start ^utime [,] ;
+:time/start ^utime , ;
 :time/end ^utime swap - 1000 / . ~c" ms elapsed" ^prn ;
 
 ( hash )
