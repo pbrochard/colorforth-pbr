@@ -1,0 +1,30 @@
+:add2 ~2 , '+ ~,c ^;
+~
+'add2 ~see
+10 add2 . cr
+
+:def-adder (n - ) ^, '+ ^,c ;
+:add10 ~10 def-adder ^;
+~
+'add10 ~see
+10 add10 . cr
+
+:def-op (op n - ) ^, ,c ;
+:mul20 ~'* ~20 def-op ^;
+~
+'mul20 ~see
+10 mul20 . cr
+
+( macro with redefinition )
+:op ^2 . cr ;
+:custom ^10 . cr ;
+
+:builder ^'op ^,c ^;
+~
+:test ~builder ^;
+~
+'test ~see test
+`custom `op ~is
+'test ~see test
+
+~bye
