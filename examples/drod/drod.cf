@@ -46,7 +46,7 @@
 :.cell ^world@ cells ~, ^+ h@ call ;
 
 :.world ^at-00
-  `.cell `<world-h> ^is   `cr `<world-v> ^is
+  `.cell `<world-h> ^is!   `cr `<world-v> ^is!
   world-loop  star-color  cr .s ;
 
 :player ~3 variables ^;
@@ -73,7 +73,7 @@
 :render-player ^3 player x h@ player y h@ world! ;
 :render-sword ^sword@ world! ;
 
-:render-world `render-cell `<world-h> ^is `nop `<world-v> ^is
+:render-world `render-cell `<world-h> ^is! `nop `<world-v> ^is!
    world-loop render-player  render-sword ;
 
 

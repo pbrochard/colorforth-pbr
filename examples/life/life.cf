@@ -47,7 +47,7 @@ cls             clear and redraw board" ^prn cr ;
 :.cell ~( x y - ) ^world@ '.star .blank ^if-else ;
 
 :.world ^at-00
-  `.cell `<world-h> ^is   `cr `<world-v> ^is
+  `.cell `<world-h> ^is!   `cr `<world-v> ^is!
   world-loop
   star-color
   ~c" Generation: " ^pr n-gen h? cr cr help ;
@@ -70,7 +70,7 @@ cls             clear and redraw board" ^prn cr ;
    -rot world! ;
 
 :gen ^
-   `apply `<world-h> ^is   `nop `<world-v> ^is
+   `apply `<world-h> ^is!   `nop `<world-v> ^is!
    world-loop   n-gen 1+! ;
 
 :g ^gen flip .world delay h@  mssleep ;

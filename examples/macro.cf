@@ -24,7 +24,7 @@
 :test ~builder ^;
 ~
 'test ~see test
-`custom `op ~is
+`custom `op ~is!
 'test ~see test
 
 ~bye

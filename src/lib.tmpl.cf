@@ -94,13 +94,13 @@
 
 :hcmove ( hsrc hdst n) ^cmove-heap-to-addr
 :cmove ( src dst n - ) ^
-   `1+ `cmove-advance ^is
+   `1+ `cmove-advance ^is!
    cmove-loop ;
 
 :hcmove> ( hsrc hdst n) ^cmove-heap-to-addr
 :cmove> ( src dst n - ) ^
   1-  >R  R@  +  swap  R@  +  swap  R>  1+
-  `1- `cmove-advance ^is
+  `1- `cmove-advance ^is!
   cmove-loop ;
 
 ~( Zero terminated + counted strings )

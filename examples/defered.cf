@@ -2,14 +2,14 @@
 :second-word ~c" I am the SECOND word" ^prn ;
 :wd
 ~
-`first-word `wd ~is
+`first-word `wd ~is!
 wd
 
 
-`second-word `wd ~is
+`second-word `wd ~is!
 wd
 
-`first-word `wd ~is
+`first-word `wd ~is!
 wd
 
 cr
@@ -17,7 +17,7 @@ cr
 :pong   ~c" pong" ^prn 1- dup 'ping ^if ;
 :<ping> ~c" ping" ^prn 1- dup 'pong ^if ;
 ~
-`<ping> `ping ~is
+`<ping> `ping ~is!
 
 10 ping
 
@@ -25,8 +25,8 @@ cr
 :<doc-on>  ^prn ;; ;
 :<doc-off> ^drop ;
 :doc
-:doc-on!  `<doc-on> `doc ^is ;
-:doc-off! `<doc-off> `doc ^is ;
+:doc-on!  `<doc-on> `doc ^is! ;
+:doc-off! `<doc-off> `doc ^is! ;
 
 :documentation ~( xt- ) ^doc-on! call doc-off! ;
 

@@ -23,8 +23,8 @@
 :<stop>
 :stop ^drop ;;; ,;
 
-:without-prefix `stop `<stop> ^is ,;
-:with-prefix `nop `<stop> ^is ,;
+:without-prefix `stop `<stop> ^is! ,;
+:with-prefix `nop `<stop> ^is! ,;
 
 :<getchar> ^getchar ,;
 
