@@ -97,6 +97,10 @@ cleanelf: colorforth
 
 install: colorforth lib.cf
 
+uninstall:
+	rm -f ~/.config/colorforth.cf ~/.config/colorforth.bak.cf
+
+
 clean:
 	rm -f colorforth colorforth-unsafe
 
