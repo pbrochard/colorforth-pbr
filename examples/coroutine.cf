@@ -1,0 +1,66 @@
+( Usage: colorforth src/coroutine.cf examples/coroutine.cf )
+:v1 ~0 variable ^;
+:v2 ~0 variable ^;
+:max1 ~10 variable ^;
+:max2 ~10 variable ^;
+
+:job#1 ^0 , ;
+:job#2 ^1 , ;
+
+:.job
+:.job1 (v n - ) ^1+ dup spaces ~c" job" ^pr . h@ . cr ;
+:.job2 (v n - ) ~key A , ^+ emit  h@ . space ;
+
+
+:job1 ^
+   v1 h@ max1 h@ >= 'nop ^if;
+   v1 ~job#1 ^.job v1 1+!
+   ~job#1 ^yield
+   job1
+;
+
+:job2 ^
+   v2 ~job#2 ^.job v2 1+!
+   ~job#2 ^yield
+   v2 h@ max2 h@ < 'job2 ^if*
+;
+
+:scheduled
+   ~job#1 ^resume ~job#2 ^resume
+   ~job#1 ^running? ~job#2 ^running? or 'scheduled ^if* ;
+
+:main ^
+   0 v1 h!  0 v2 h!
+   job1 job2 scheduled cr .s ;
+
+~main
+
+~`.job2 `.job ~is!
+
+5 max2 h! main
+
+5 max1 h!  10 max2 h! main
+
+
+( Adding another job into the mix)
+:v3 ~0 variable ^;
+:max3 ~15 variable ^;
+:job#3 ^2 , ;
+
+:job3 ^
+   v3 ~job#3 ^.job v3 1+!
+   ~job#3 ^yield
+   v3 h@ max3 h@ < 'job3 ^if*
+;
+
+:scheduled
+   ~job#1 ^resume ~job#2 ^resume ~job#3 ^resume
+   ~job#1 ^running? ~job#2 ^running? or ~job#3 ^running? or 'scheduled ^if* ;
+
+:main ^
+   0 v1 h!  0 v2 h!
+   job1 job2 job3 scheduled cr .s ;
+
+~main
+
+bye
