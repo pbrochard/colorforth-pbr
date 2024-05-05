@@ -1,0 +1,17 @@
+#! /bin/sh
+
+if [ -z "$2" ]; then
+  FILENAME="$1"
+else
+  EXTRAARGS="$1"
+  FILENAME="$2"
+  EXTRAPOSTARGS="$3"
+fi
+
+while true; do
+    vi "$FILENAME"
+    clear
+    colorforth $EXTRAARGS "$FILENAME" $EXTRAPOSTARGS
+    echo "--terminated--"
+    read pause
+done
