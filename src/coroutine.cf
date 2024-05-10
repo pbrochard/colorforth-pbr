@@ -11,3 +11,11 @@
 :resume (n -) ^
    dup running? 'drop ^if-not;
    tasks dup  h@  >R 0 swap h! ;
+
+:await ^0 0
+:loop (f n - )
+   ^dup running?  rot or swap
+   dup resume 1+
+   dup max-tasks < 'loop ^if*
+   drop 'await ^if
+;
