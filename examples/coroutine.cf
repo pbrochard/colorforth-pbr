@@ -53,13 +53,9 @@
    v3 h@ max3 h@ < 'job3 ^if*
 ;
 
-:scheduled
-   ~job#1 ^resume ~job#2 ^resume ~job#3 ^resume
-   ~job#1 ^running? ~job#2 ^running? or ~job#3 ^running? or 'scheduled ^if* ;
-
 :main ^
    0 v1 h!  0 v2 h!
-   job1 job2 job3 scheduled cr .s ;
+   job1 job2 job3 await cr .s ;
 
 ~main
 
