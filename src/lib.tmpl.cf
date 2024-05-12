@@ -150,7 +150,7 @@
 
 ( files )
 :aload ( filename - buf ) ^
-   dup file-size c-alloc
+   dup file-size 1024 max 2 *  c-alloc
    dup rot load ;
 
 :c-pr (s - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ c-pr ;
