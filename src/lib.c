@@ -144,12 +144,12 @@ parse_from_file(struct state *s, char *filename)
   }
 
   int c;
-  while((c = cf_getchar(s)) != CF_EOF && !s->done)
+  while((c = cf_getchar(s)) != CF_EOF && !s->done && s->file_stream)
   {
     parse_colorforth(s, c);
   }
 
-  fclose(s->file_stream);
+  if (s->file_stream) fclose(s->file_stream);
   s->file_stream = old_stream;
 
   parse_space(s);
