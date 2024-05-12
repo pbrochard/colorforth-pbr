@@ -392,7 +392,7 @@ parse_from_string(struct state *s, char *str)
 
   s->str_stream = str;
   int c;
-  while((c = (char) cf_getchar(s)) != 0 && !s->done)
+  while((c = (char) cf_getchar(s)) != 0 && !s->done && s->str_stream)
   {
     parse_colorforth(s, c);
   }
@@ -473,7 +473,10 @@ reset_state(struct state *s) {
   s->r_stack->sp = -1;
   s->color = execute;
   s->str_stream = NULL;
-  s->file_stream = NULL;
+  if (s->file_stream) {
+    fclose(s->file_stream);
+    s->file_stream = NULL;
+  }
   clear_tib(s);
   s->echo_on = 0;
   parse_from_string(s, " ~");

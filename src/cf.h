@@ -170,6 +170,7 @@ extern void compile_code(struct state *s, cell opcode, cell value);
 extern void quit(struct state *state);
 extern struct state* colorforth_newstate(void);
 extern void free_state(struct state* state);
+extern void reset_state(struct state *s);
 
 extern void parse_colorforth(struct state *state, int c);
 extern void parse_from_string(struct state *s, char *str);
