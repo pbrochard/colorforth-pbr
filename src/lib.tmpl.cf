@@ -148,6 +148,10 @@
 :eval ( string - ) ^clear-tib  dup ptr !  slength  count !  loop  32 parse ;
 ~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
 
+( exceptions )
+:catched ~c" !!Error catched!!" ^prn reset-state ;
+:catch ( f - ) 'catched ^if ;
+
 ( files )
 :aload ( filename - buf ) ^
    dup file-size 1024 max 2 *  c-alloc

@@ -50,9 +50,14 @@ case OP_FILE_SUBSIZE: {
 
   int size = file_size(filename);
 
-  if (size == -1) cf_printf(s, "Unable to read '%s'\n", filename);
+  if (size == -1) {
+    cf_printf(s, "Unable to read '%s'\n", filename);
+    PUSH1(-1);
+    break;
+  }
 
   PUSH1((cell)size);
+  PUSH1(0);
   break;
 }
 
