@@ -1,0 +1,4 @@
+~s" examples/examples.cfk" ~file-size catch
+.s .
+
+bye
