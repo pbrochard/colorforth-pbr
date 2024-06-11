@@ -5,13 +5,14 @@
 #include "colorforth.h"
 #include "cf-stdio.h"
 
-extern void parse_from_file(struct state *s, char *filename);
-extern void reset_state(struct state *s);
-extern void show_full_stacktrace(struct state *s);
-
 
 struct state *s;
 
+#ifndef __MINIMAL_BUILD
+
+extern void parse_from_file(struct state *s, char *filename);
+extern void reset_state(struct state *s);
+extern void show_full_stacktrace(struct state *s);
 
 void
 parse_home_lib(struct state *s, int argc, char *argv[]) {
@@ -104,6 +105,8 @@ install_sigaction (void (*sigact)(int, siginfo_t *, void *)) {
   sigaction(SIGFPE, &act, NULL);
 }
 
+#endif /* __MINIMAL_BUILD */
+
 int
 main(int argc, char *argv[])
 {
@@ -116,6 +119,7 @@ main(int argc, char *argv[])
 
   s = colorforth_newstate();
 
+#ifndef __MINIMAL_BUILD
   install_sigaction(&handler0);
 
   parse_home_lib(s, argc, argv);
@@ -124,6 +128,7 @@ main(int argc, char *argv[])
   install_sigaction(&handler);
 
   if (sigsetjmp(mark, 1) == -1) reset_state(s);
+#endif /* __MINIMAL_BUILD */
 
   while (!s->done)
   {
