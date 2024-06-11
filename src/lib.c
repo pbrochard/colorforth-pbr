@@ -5,6 +5,8 @@
  *********************************************************************************/
 #ifdef __SECTION_HASH_DEF
 
+#ifndef __MINIMAL_BUILD
+
 #define OP_HASH                      (opcode_t) 0x3475B2F0                // hash
 #define OP_BASE                      (opcode_t) 0x7D3CE245                // base
 #define OP_ENTRY_IS                  (opcode_t) 0xDB70432B                // is!
@@ -15,6 +17,8 @@
 #define OP_DOT_STACKTRACE            (opcode_t) 0xC6A520A7                // .stacktrace
 #define OP_DOT_FULL_STACKTRACE       (opcode_t) 0x306C1267                // .full-stacktrace
 
+#endif /* __MINIMAL_BUILD */
+
 #endif /* __SECTION_HASH_DEF */
 
 
@@ -22,6 +26,8 @@
  *   WORD DEF
  *********************************************************************************/
 #ifdef __SECTION_WORD_DEF
+
+#ifndef __MINIMAL_BUILD
 
 define_primitive(s, ENTRY_NAME("hash"), OP_HASH);
 define_primitive(s, ENTRY_NAME("base"), OP_BASE);
@@ -31,6 +37,8 @@ define_primitive(s, ENTRY_NAME("entry/hide"), OP_ENTRY_HIDE);
 define_primitive(s, ENTRY_NAME(".stacktrace"), OP_DOT_STACKTRACE);
 define_primitive(s, ENTRY_NAME(".full-stacktrace"), OP_DOT_FULL_STACKTRACE);
 
+#endif /* __MINIMAL_BUILD */
+
 #endif /* __SECTION_WORD_DEF */
 
 
@@ -38,6 +46,8 @@ define_primitive(s, ENTRY_NAME(".full-stacktrace"), OP_DOT_FULL_STACKTRACE);
  *   SWITCH DEF
  *********************************************************************************/
 #ifdef __SECTION_SWITCH
+
+#ifndef __MINIMAL_BUILD
 
 case OP_HASH: {
   POP1();
@@ -87,6 +97,8 @@ case OP_DOT_FULL_STACKTRACE: {
   break;
 }
 
+#endif /* __MINIMAL_BUILD */
+
 #endif /* __SECTION_SWITCH */
 
 
@@ -94,6 +106,8 @@ case OP_DOT_FULL_STACKTRACE: {
  *   FUNCTION DEF
  *********************************************************************************/
 #ifdef __SECTION_FUNCTION
+
+#ifndef __MINIMAL_BUILD
 
 extern hash_t hash(char *str);
 
@@ -154,5 +168,7 @@ parse_from_file(struct state *s, char *filename)
 
   parse_space(s);
 }
+
+#endif /* __MINIMAL_BUILD */
 
 #endif /* __SECTION_FUNCTION */

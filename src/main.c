@@ -9,13 +9,14 @@
 #include <setjmp.h>
 #endif /* __EXCEPTION */
 
-extern void parse_from_file(struct state *s, char *filename);
-extern void reset_state(struct state *s);
-extern void show_full_stacktrace(struct state *s);
-
 
 struct state *s;
 
+#ifndef __MINIMAL_BUILD
+
+extern void parse_from_file(struct state *s, char *filename);
+extern void reset_state(struct state *s);
+extern void show_full_stacktrace(struct state *s);
 
 void
 parse_home_lib(struct state *s, int argc, char *argv[]) {
@@ -111,6 +112,8 @@ install_sigaction (void (*sigact)(int, siginfo_t *, void *)) {
 #endif /* __EXCEPTION */
 
 
+#endif /* __MINIMAL_BUILD */
+
 int
 main(int argc, char *argv[])
 {
@@ -122,6 +125,8 @@ main(int argc, char *argv[])
   init_terminal();
 
   s = colorforth_newstate();
+
+#ifndef __MINIMAL_BUILD
 
 #ifdef __EXCEPTION
   install_sigaction(&handler0);
@@ -135,6 +140,8 @@ main(int argc, char *argv[])
 
   if (sigsetjmp(mark, 1) == -1) reset_state(s);
 #endif /* __EXCEPTION */
+
+#endif /* __MINIMAL_BUILD */
 
   while (!s->done)
   {
