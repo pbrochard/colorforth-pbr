@@ -17,7 +17,7 @@ syn match prefixExecute "\~" conceal
 syn match prefixTick "'" conceal
 syn match prefixTickEntry "`" conceal
 
-syn match colorForthComment "\\.*$"
+syn match colorForthComment "\~\\.*$"
 syn region colorForthBlockComment   start="(" end=")" fold contains=colorForthBlockComment
 
 syn region colorForthDefine start=":" end=" " contains=ALL
