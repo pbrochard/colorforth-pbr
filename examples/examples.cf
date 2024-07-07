@@ -10,7 +10,7 @@
 
 :square ^dup * ;
 ~\ calculated at compile time
-:25square ~5 5 * square , ^;
+:25square ~5 5 * square ,l ^;
 ~25square . cr
 
 '\ ~see

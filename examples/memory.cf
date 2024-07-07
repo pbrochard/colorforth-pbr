@@ -1,4 +1,4 @@
-:buf ~100 c-alloc , ^;
+:buf ~100 c-alloc ,l ^;
 
 ~buf .
 

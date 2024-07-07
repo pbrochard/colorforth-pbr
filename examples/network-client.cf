@@ -1,6 +1,6 @@
 :sock ~0 variable ^;
 
-:buffer ~1024 c-alloc , ^;
+:buffer ~1024 c-alloc ,l ^;
 
 :send ^sock h@ socket-send drop ;
 :send-nl ^10 sock h@ socket-send-char drop ;

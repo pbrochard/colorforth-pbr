@@ -1,15 +1,15 @@
-:add2 ~2 , '+ ~,c ^;
+:add2 ~2 ,l '+ ~,c ^;
 ~
 'add2 ~see
 10 add2 . cr
 
-:def-adder (n - ) ^, '+ ^,c ;
+:def-adder (n - ) ^,l '+ ^,c ;
 :add10 ~10 def-adder ^;
 ~
 'add10 ~see
 10 add10 . cr
 
-:def-op (op n - ) ^, ,c ;
+:def-op (op n - ) ^,l ,c ;
 :mul20 ~'* ~20 def-op ^;
 ~
 'mul20 ~see

@@ -15,7 +15,7 @@
 :snd/hk ~s" examples/sdl/sounds/hk.mp3" sdl/load-sound constant ^;
 :snd/synth ~s" examples/sdl/sounds/synth.mp3" sdl/load-sound constant ^;
 
-:R ~255 255 * , ^* ;
+:R ~255 255 * ,l ^* ;
 :G ^255 * ;
 :B ^ + + ;
 
