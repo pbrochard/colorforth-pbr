@@ -3,7 +3,7 @@
     [[ c" 1 bottle" ^pr ~]] ,
     [[ ^dup . ~c" bottles" ^pr ~]] ,
 
-:.bottles ^dup 2 min cells 'sentences ^+ h@ call ;
+:.bottles ^dup 2 min cells 'sentences ^+ h@ execute ;
 
 :.beer ^.bottles ~c"  of beer " ^pr ;
 :.wall ^.beer ~c" on the wall " ^prn ;
@@ -13,4 +13,5 @@
 :.verses ^cr .verse dup '.verses ^if* ;
 ~
 99 .verses
+
 bye

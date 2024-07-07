@@ -30,7 +30,7 @@ s" if-else  " npr
 0   test-if-else nl   1 test-if-else nl   10 test-if-else nl   -10 test-if-else nl
 
 cr cr s" ** Tail optimized explanation:"  ~prn
-s" use star version if tail call is needed." ~prn
+s" use star version if tail execute is needed." ~prn
 s" For example, this will blow the stack:" ~prn
 
 :go ^1 dup . 'go ^if ;

@@ -89,8 +89,8 @@ case '(': {
 #define OP_COMPILE                   (opcode_t) 0x6B6CDC65                // ,c
 #define OP_COMPILE_LITERAL           (opcode_t) 0x6C6CDDF8                // ,l
 #define OP_GET_ENTRY_CODE            (opcode_t) 0xC0F56CA5                // c>
-#define OP_EXECUTE                   (opcode_t) 0x61A52EA0                // call
-#define OP_EXECUTE_STAR              (opcode_t) 0x4108433E                // call*
+#define OP_EXECUTE                   (opcode_t) 0x54DA4CCF                // execute
+#define OP_EXECUTE_STAR              (opcode_t) 0x78A70C7F                // execute*
 #define OP_IF                        (opcode_t) 0x790405D7                // if
 #define OP_IF_TAIL_CALL              (opcode_t) 0x7E556D47                // if*
 #define OP_IF_EXIT                   (opcode_t) 0x6D555284                // if;

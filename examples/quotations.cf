@@ -6,13 +6,13 @@
 
 ~[[ ^2 3 + .  ~]]
 ~[[ ^12 . ~]]
-swap call call cr
+swap execute execute cr
 
 ~here . cr
 
 :data ~[[ ^1 + . ~]] ,  [[ ^ 2 + . ~]] ,  [[ ^ 3 + . ~]] ,
 
-~10 'data ~0 cells + h@ call
+~10 'data ~0 cells + h@ execute
 cr .s
 
 1 [[ ^2 2 + . ~]] [[ ^3 . ~]] if-else
@@ -23,9 +23,9 @@ cr .s
 ~0 test
 
 ( nested quotations )
-[[ ^1 ~[ ^ 2 + ~] ^call  . ~]] call cr
+[[ ^1 ~[ ^ 2 + ~] ^execute  . ~]] execute cr
 
-:nested ~[ ^1 ~[ ^ 2 + ~] ^call  . ~] ^call ;
+:nested ~[ ^1 ~[ ^ 2 + ~] ^execute  . ~] ^execute ;
 
 ~nested cr
 

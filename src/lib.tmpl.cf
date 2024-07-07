@@ -36,7 +36,7 @@
 :spaces ^space 1- dup 'spaces ^if* ^drop ;
 
 ~( loop )
-:times-loop ~( xt - xt ) ^I-- call* I@ 'times-loop ^if* ;
+:times-loop ~( xt - xt ) ^I-- execute* I@ 'times-loop ^if* ;
 :times ~( xt n - ) ^I>R I! IJK>R times-loop R>KJI R>I drop ;
 ~`times-loop ~entry/hide
 

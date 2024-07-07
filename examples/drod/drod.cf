@@ -41,7 +41,7 @@
 :.\ ^player-color ~key \ ,l ^emit ;
 
 ~here '.. ~, '.# ~,  '.* ~,  '.@ ~, '.- ~,  '.| ~,  './ ~,  '.\ ~,
-:.cell ^world@ cells ~,l ^+ h@ call ;
+:.cell ^world@ cells ~,l ^+ h@ execute ;
 
 :.world ^at-00
   `.cell `<world-h> ^is!   `cr `<world-v> ^is!
@@ -62,7 +62,7 @@
 ~here 'dir-nw ~,  'dir-n ~,  'dir-ne ~,  'dir-e  ~,
       'dir-se  ~, 'dir-s ~,  'dir-sw ~,  'dir-w ~,
 
-:dir@ ^cells ~,l ^+ h@ call ;
+:dir@ ^cells ~,l ^+ h@ execute ;
 
 :sword@ ^player dir h@ dir@   player y h@ + height h@ mod swap   player x h@ + width h@ mod swap ;
 

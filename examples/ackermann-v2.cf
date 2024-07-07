@@ -11,7 +11,7 @@ In order to compute A 4, 1 adapt the stack sizes in conf.h to
 )
 
 
-~\ for backward recursion - avoid tail call
+~\ for backward recursion - avoid tail execute:
 :<A> ,;
 
 :A ~( m n - A)^
