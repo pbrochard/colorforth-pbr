@@ -2,7 +2,7 @@
 ~noname> ~c" 1 bottle" ^pr ;
 ~noname> ~c" no more bottles" ^pr ;
 
-~>! >! >!  here 3 cells -
+~, , ,  here 3 cells -
 
 :.bottles ^dup 2 min cells ~,l ^+ h@ call ;
 

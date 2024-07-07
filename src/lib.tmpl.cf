@@ -61,8 +61,8 @@
 
 :alloc ( n - a ) ^here swap over + &here ! ;
 
-:>! ^cell alloc h! ;
-:>c! ^1 alloc h! ;
+:, ^cell alloc h! ;
+:c, ^1 alloc h! ;
 
 
 ~( variables )

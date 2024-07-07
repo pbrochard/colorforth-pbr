@@ -1,8 +1,6 @@
 ~
 ( Usage: colorforth drod.cf levels/level-1.cf )
 
-:c>! ^>! ;
-
 :height ~64 variable ^ ;
 :width ~128 variable ^ ;
 
@@ -42,7 +40,7 @@
 :./ ^player-color ~key / ,l ^emit ;
 :.\ ^player-color ~key \ ,l ^emit ;
 
-~here '.. ~c>! '.# ~c>!  '.* ~c>!  '.@ ~c>! '.- ~c>!  '.| ~c>!  './ ~c>!  '.\ ~c>!
+~here '.. ~, '.# ~,  '.* ~,  '.@ ~, '.- ~,  '.| ~,  './ ~,  '.\ ~,
 :.cell ^world@ cells ~,l ^+ h@ call ;
 
 :.world ^at-00
@@ -61,8 +59,8 @@
 :dir-w  ^4 -1  0 ;                     :dir-e  ^4 1  0 ;
 :dir-sw ^6 -1  1 ;   :dir-s ^5 0  1 ;  :dir-se ^7 1  1 ;
 
-~here 'dir-nw ~c>!  'dir-n ~c>!  'dir-ne ~c>!  'dir-e  ~c>!
-      'dir-se  ~c>! 'dir-s ~c>!  'dir-sw ~c>!  'dir-w ~c>!
+~here 'dir-nw ~,  'dir-n ~,  'dir-ne ~,  'dir-e  ~,
+      'dir-se  ~, 'dir-s ~,  'dir-sw ~,  'dir-w ~,
 
 :dir@ ^cells ~,l ^+ h@ call ;
 
