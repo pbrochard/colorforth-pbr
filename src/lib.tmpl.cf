@@ -159,4 +159,24 @@
 
 :str2buf (s - ptr len) ^dup &heap swap slength ;
 
+(
+  quotations
+
+  syntax:
+    ~[[ ^code ~]]   leave q on the stack
+    ~[ ^code ~]     used in compile mode to compile a quotation
+)
+:[
+:[[ ^here ;
+
+:]] ( - q ) ^dup         (save here for restoration)
+   '; ^,c                (compile a return)
+   here over -           (compute code lenght)
+   dup dalloc            (allocate code on data heap)
+   dup >R                (save dhere for word return)
+   swap hcmove           (move code to data heap)
+   &here !               (restore here)
+   R> ;                  (leave dhere)
+
+:] ( - ) ^]] ,l ;
 ~

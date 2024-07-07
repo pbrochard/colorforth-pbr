@@ -1,0 +1,33 @@
+( quotations example
+    use [[ ... ]] in interpret mode
+         [ ... ]  in compile mode
+)
+~here . cr
+
+~[[ ^2 3 + .  ~]]
+~[[ ^12 . ~]]
+swap call call cr
+
+~here . cr
+
+:data ~[[ ^1 + . ~]] ,  [[ ^ 2 + . ~]] ,  [[ ^ 3 + . ~]] ,
+
+~10 'data ~0 cells + h@ call
+cr .s
+
+1 [[ ^2 2 + . ~]] [[ ^3 . ~]] if-else
+
+:test ^2 . ~[ ^3 . ~] ^if 5 . cr ;
+
+~1 test
+~0 test
+
+( nested quotations )
+[[ ^1 ~[ ^ 2 + ~] ^call  . ~]] call cr
+
+:nested ~[ ^1 ~[ ^ 2 + ~] ^call  . ~] ^call ;
+
+~nested cr
+
+
+bye
