@@ -4,12 +4,12 @@
 :max1 ~10 variable ^;
 :max2 ~10 variable ^;
 
-:job#1 ^0 , ;
-:job#2 ^1 , ;
+:job#1 ^0 ,l ;
+:job#2 ^1 ,l ;
 
 :.job
 :.job1 (v n - ) ^1+ dup spaces ~c" job" ^pr . h@ . cr ;
-:.job2 (v n - ) ~key A , ^+ emit  h@ . space ;
+:.job2 (v n - ) ~key A ,l ^+ emit  h@ . space ;
 
 
 :job1 ^
@@ -45,7 +45,7 @@
 ( Adding another job into the mix)
 :v3 ~0 variable ^;
 :max3 ~15 variable ^;
-:job#3 ^2 , ;
+:job#3 ^2 ,l ;
 
 :job3 ^
    v3 ~job#3 ^.job v3 1+!

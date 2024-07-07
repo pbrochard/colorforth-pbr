@@ -87,7 +87,7 @@ case '(': {
 #define OP_HEAP_SIZE                 (opcode_t) 0xC2A05C60                // heap-size
 #define OP_LATEST                    (opcode_t) 0xA307AFAB                // latest
 #define OP_COMPILE                   (opcode_t) 0x6B6CDC65                // ,c
-#define OP_COMPILE_LITERAL           (opcode_t) 0x2C004544                // ,
+#define OP_COMPILE_LITERAL           (opcode_t) 0x6C6CDDF8                // ,l
 #define OP_GET_ENTRY_CODE            (opcode_t) 0xC0F56CA5                // c>
 #define OP_EXECUTE                   (opcode_t) 0x61A52EA0                // call
 #define OP_EXECUTE_STAR              (opcode_t) 0x4108433E                // call*
@@ -204,7 +204,7 @@ define_primitive(s, ENTRY_NAME("heap-size"), OP_HEAP_SIZE);
 define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
 
 define_primitive(s, ENTRY_NAME(",c"), OP_COMPILE);
-define_primitive(s, ENTRY_NAME(","), OP_COMPILE_LITERAL);
+define_primitive(s, ENTRY_NAME(",l"), OP_COMPILE_LITERAL);
 
 define_primitive(s, ENTRY_NAME("c>"), OP_GET_ENTRY_CODE);
 define_primitive(s, ENTRY_NAME("call"), OP_EXECUTE);

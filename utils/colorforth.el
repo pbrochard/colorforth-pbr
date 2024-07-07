@@ -28,10 +28,10 @@
   "Face for colorForth mode."
   :group 'colorForth-mode-lock-faces)
 
-(defface colorForth-mode-inline-face
-  '((t (:foreground "cyan4" :extend t)))
-  "Face for colorForth mode."
-  :group 'colorForth-mode-lock-faces)
+;;(defface colorForth-mode-inline-face
+;;  '((t (:foreground "cyan4" :extend t)))
+;;  "Face for colorForth mode."
+;;  :group 'colorForth-mode-lock-faces)
 
 (defface colorForth-mode-inlined-face
   '((t (:foreground "dark violet" :extend t)))
@@ -44,15 +44,15 @@
   :group 'colorForth-mode-lock-faces)
 
 (setq colorForth-highlights
-  '((":[^:~%^('`|,]+" . (0 'colorForth-mode-define-face t))
-     ("\\^[^:~%^('`|,]+" . (0 'colorForth-mode-compile-face t))
-     ("~[^:~%^('`|,]+" . (0 'colorForth-mode-execute-face t))
-     ("%[^:~%^('`|,]+" . (0 'colorForth-mode-execute-face t))
-     ("[`'][^:~%^('`|,]+" . (0 'colorForth-mode-tick-face t))
-     (",[^:~%^('`|,]+" . (0 'colorForth-mode-inline-face t))
+  '((":[^:~%^('`|]+" . (0 'colorForth-mode-define-face t))
+     ("\\^[^:~%^('`|]+" . (0 'colorForth-mode-compile-face t))
+     ("~[^:~%^('`|]+" . (0 'colorForth-mode-execute-face t))
+     ("%[^:~%^('`|]+" . (0 'colorForth-mode-execute-face t))
+     ("[`'][^:~%^('`|]+" . (0 'colorForth-mode-tick-face t))
+     ;;("[^:~%^('`|]+" . (0 'colorForth-mode-inline-face t))
      ("([^)]+)" . (0 'colorForth-mode-comment-face t))
      ("~\\\\ [^\n]+" . (0 'colorForth-mode-comment-face t))
-     ("|[^:~%^('`|,]+" . (0 'colorForth-mode-inlined-face t))
+     ("|[^:~%^('`|]+" . (0 'colorForth-mode-inlined-face t))
      ("[sc]\"[^\"]+\" " . (0 'colorForth-mode-string-face t))))
 
 (define-derived-mode colorForth-mode text-mode "colorForth"
