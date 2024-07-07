@@ -1,10 +1,9 @@
-~noname> ^dup . ~c" bottles" ^pr ;
-~noname> ~c" 1 bottle" ^pr ;
-~noname> ~c" no more bottles" ^pr ;
+:sentences
+   ~[[ c" no more bottles" ^pr ~]] ,
+    [[ c" 1 bottle" ^pr ~]] ,
+    [[ ^dup . ~c" bottles" ^pr ~]] ,
 
-~, , ,  here 3 cells -
-
-:.bottles ^dup 2 min cells ~,l ^+ h@ call ;
+:.bottles ^dup 2 min cells 'sentences ^+ h@ call ;
 
 :.beer ^.bottles ~c"  of beer " ^pr ;
 :.wall ^.beer ~c" on the wall " ^prn ;
