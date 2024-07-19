@@ -712,7 +712,7 @@ case OP_DOT_S:
 
 case OP_CLEAR:
 {
-  SP = 0;
+  SP = -1;
   break;
 }
 
