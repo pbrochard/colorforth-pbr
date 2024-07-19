@@ -8,15 +8,6 @@ SRC=src/main.c src/colorforth.c \
 	src/cf-stdio.c \
 	src/color.c
 
-#EXT_SRC=ext/os.c \
-#	ext/dict.c \
-#	ext/time.c \
-#	ext/math.c \
-#	ext/ext-math.c \
-#	ext/mp-math.c \
-#	ext/network.c \
-#	ext/sdl.c
-
 INCLUDED_SRC=src/utils.c \
 	src/core.c \
 	src/lib.c \
