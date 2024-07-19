@@ -9,7 +9,7 @@
 ~'main ~see
 main cr
 
-~noname> ^before 2 2 + . cr ~'main ~,l ^execute after 3 3 + . cr ;     ~`main ~c>is!
+~[[ ^before 2 2 + . cr ~'main ~,l ^execute after 3 3 + . cr ~]] `main ~c>is!
 
 ~
 'main ~see
@@ -17,5 +17,5 @@ main cr
 
 words
 
-s" The 'main' entry code has been redefined. There is only one 'main' entry in the dictionary" nprn
+~s" The 'main' entry code has been redefined. There is only one 'main' entry in the dictionary" nprn
 bye

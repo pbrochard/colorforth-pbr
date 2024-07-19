@@ -57,8 +57,6 @@
 :ddump ^dup 160 + heap-size min 160 -  &heap dump ;
 
 ( alloc )
-:noname> ^here ;
-
 :alloc ( n - a ) ^here swap over + &here ! ;
 
 :, ^cell alloc h! ;
