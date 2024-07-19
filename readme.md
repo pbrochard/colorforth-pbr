@@ -1,5 +1,7 @@
 [Example](https://pbrochard.github.io/colorforth-pbr/wasm/colorforth.html)
 
+![](doc/99-bottles-color.png?raw=true) ![](doc/99-bottles-prefix-color.png?raw=true) ![](doc/99-bottles-nocolor.png?raw=true)
+
 ![](doc/screenshot.png?raw=true)
 ![](doc/screenshot-colorize.png?raw=true)
 
