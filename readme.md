@@ -2,8 +2,7 @@
 
 ![](doc/99-bottles-color.png?raw=true) ![](doc/99-bottles-prefix-color.png?raw=true) ![](doc/99-bottles-nocolor.png?raw=true)
 
-![](doc/screenshot.png?raw=true)
-![](doc/screenshot-colorize.png?raw=true)
+![](doc/lib.png?raw=true)
 
 ### Minimal version
 ![](doc/screenshot-minimal.png?raw=true)
