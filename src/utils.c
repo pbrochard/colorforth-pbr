@@ -70,7 +70,7 @@ find_entry_by_offset(struct dictionary *dict, cell offset)
 {
   for (int i = dict->latest; i >= 0; i--)
   {
-    if (dict->entries[i].offset <= offset)
+    if (dict->entries[i].offset == offset)
     {
       return i;
     }
