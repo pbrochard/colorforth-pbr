@@ -1,5 +1,7 @@
 // The author disclaims copyright to this source code.
 
+#ifdef __THREADS
+
 /**********************************************************************************
  *   HASH DEF
  *********************************************************************************/
@@ -129,8 +131,6 @@ case OP_THREAD__UNLOCK:
  *   FUNCTION DEF
  *********************************************************************************/
 #ifdef __SECTION_FUNCTION
-
-#ifdef __THREADS
 
 #include <pthread.h>
 #include <semaphore.h>
