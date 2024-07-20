@@ -1,4 +1,5 @@
 #-*- makefile -*-
+# For DOSBOS you may need CWSDPMI.EXE found in fdos/bin from freeDos
 
 default: cf.exe
 
