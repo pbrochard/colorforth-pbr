@@ -32,10 +32,6 @@ wasm/conf.h: src/conf.tmpl.h
 	sed -i 's%\(#.*THREADS\)%// \1%' wasm/conf.h
 	sed -i 's%\(#.*NETWORK\)%// \1%' wasm/conf.h
 
-src/lib.cf.h: src/lib.tmpl.cf
-	cp src/lib.tmpl.cf lib.cf
-	xxd -i lib.cf src/lib.cf.h
-
 ext/ext.c: ext/0_ext.tmpl.c
 	cp ext/0_ext.tmpl.c ext/ext.c
 	sed -i 's%\(#include "threads.c"\)%// \1%' ext/ext.c
@@ -47,4 +43,4 @@ clean:
 	rm -f wasm/colorforth.html wasm/colorforth.wasm
 
 mrproper: clean
-	rm -f conf.h src/lib.cf src/lib.cf.h
+	rm -f conf.h src/lib.cf
