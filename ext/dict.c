@@ -70,7 +70,7 @@ case OP_FULLROOM: {
 #ifdef __SECTION_FUNCTION
 
 #include <string.h>
-#include "colorforth.h"
+#include "cf.h"
 #include "cf-stdio.h"
 
 void

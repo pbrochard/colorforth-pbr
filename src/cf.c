@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "colorforth.h"
+#include "cf.h"
 #include "cf-stdio.h"
 
 #ifdef __KEEP_ENTRY_NAMES

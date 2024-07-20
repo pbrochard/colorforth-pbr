@@ -3,11 +3,11 @@
 default: cf.exe
 
 
-SRC=src\main.c src\colorf~1.c \
+SRC=src\main.c src\cf.c \
 	src\cf-stdio.c \
 	src\color.c
 
-SRC_H=src/colorforth.h \
+SRC_H=src/cf.h \
 	conf.h \
 	src/cf-stdio.h \
 	src/color.h
@@ -33,8 +33,6 @@ conf.h: src\conftm~1.h
 	copy src\conftm~1.h conf.h
 
 patch4dos: conf.h
-	sed -i 's/include "colorforth.h"/include "colorf~1.h"/g' src/*
-	sed -i 's/include "colorforth.h"/include "colorf~1.h"/g' ext/*
 	sed -i "s%#define __ECHO_COLOR%//#define __ECHO_COLOR%g" conf.h
 	sed -i "s%#define __EXCEPTION%//#define ___EXCEPTION%g" conf.h
 	sed -i "s%#define __EXTENDED_MATH%//#define __EXTENDED_MATH%g" conf.h

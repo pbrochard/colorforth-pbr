@@ -53,7 +53,7 @@ case '(': {
 #define OP_NUMBER                    (opcode_t) 0xA2AB56D7                // __OP_NUMBER
 #define OP_TICK_NUMBER               (opcode_t) 0x544A7A21                // __OP_TICK_NUMBER
 
-// src/colorforth.c
+// src/cf.c
 #define OP_NOP                       (opcode_t) 0x5964713D                // nop
 #define OP_PRINT_TOS                 (opcode_t) 0x2E00486A                // .
 #define OP_DUP                       (opcode_t) 0xF500DB1                 // dup

@@ -8,7 +8,7 @@ extern "C" {
 
 #include <stdio.h>
 #include "conf.h"
-#include "colorforth.h"
+#include "cf.h"
 
 #define CF_EOF EOF
 

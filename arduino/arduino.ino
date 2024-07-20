@@ -1,4 +1,4 @@
-#include "colorforth.h"
+#include "cf.h"
 #include "cf-stdio.h"
 
 String readString;
