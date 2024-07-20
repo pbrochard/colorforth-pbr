@@ -45,8 +45,8 @@ optim_cpl:
 conf.h: src/conf.tmpl.h
 	cp src/conf.tmpl.h conf.h
 
-ext/ext.c: ext/0_ext.tmpl.c
-	cp ext/0_ext.tmpl.c ext/ext.c
+ext/ext.c: ext/0_tmpl.c
+	cp ext/0_tmpl.c ext/ext.c
 
 lib.cf: src/lib.tmpl.cf
 	[ -f ~/.config/colorforth.bak.cf ] && echo "Backup file '~/.config/colorforth.bak.cf' exists. Exiting" && exit 1 || true

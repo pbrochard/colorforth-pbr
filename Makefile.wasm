@@ -33,8 +33,8 @@ wasm/conf.h: src/conf.tmpl.h
 	sed -i 's%\(#.*THREADS\)%// \1%' wasm/conf.h
 	sed -i 's%\(#.*NETWORK\)%// \1%' wasm/conf.h
 
-ext/ext.c: ext/0_ext.tmpl.c
-	cp ext/0_ext.tmpl.c ext/ext.c
+ext/ext.c: ext/0_tmpl.c
+	cp ext/0_tmpl.c ext/ext.c
 	sed -i 's%\(#include "threads.c"\)%// \1%' ext/ext.c
 
 wasm/colorforth.html: Makefile.wasm $(SRC) $(SRC_H) $(SRC_WASM)
