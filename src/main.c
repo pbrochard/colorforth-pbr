@@ -1,9 +1,13 @@
 // The author disclaims copyright to this source code.
 #include <string.h>
-#include <signal.h>
-#include <setjmp.h>
+
 #include "colorforth.h"
 #include "cf-stdio.h"
+
+#ifdef __EXCEPTION
+#include <signal.h>
+#include <setjmp.h>
+#endif /* __EXCEPTION */
 
 extern void parse_from_file(struct state *s, char *filename);
 extern void reset_state(struct state *s);
@@ -67,6 +71,7 @@ parse_command_line(struct state *s, int argc, char *argv[])
   s->echo_on = 1;
 }
 
+#ifdef __EXCEPTION
 sigjmp_buf mark;
 
 
@@ -103,6 +108,8 @@ install_sigaction (void (*sigact)(int, siginfo_t *, void *)) {
   sigaction(SIGSEGV, &act, NULL);
   sigaction(SIGFPE, &act, NULL);
 }
+#endif /* __EXCEPTION */
+
 
 int
 main(int argc, char *argv[])
@@ -116,14 +123,18 @@ main(int argc, char *argv[])
 
   s = colorforth_newstate();
 
+#ifdef __EXCEPTION
   install_sigaction(&handler0);
+#endif /* __EXCEPTION */
 
   parse_home_lib(s, argc, argv);
   parse_command_line(s, argc, argv);
 
+#ifdef __EXCEPTION
   install_sigaction(&handler);
 
   if (sigsetjmp(mark, 1) == -1) reset_state(s);
+#endif /* __EXCEPTION */
 
   while (!s->done)
   {

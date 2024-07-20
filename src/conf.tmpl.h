@@ -41,6 +41,9 @@ typedef long cell;
 // Enable colors in the terminal
 #define __ECHO_COLOR
 
+// Enable exception
+#define __EXCEPTION
+
 // Use extensions
 #define __USE_EXTENSIONS
 
