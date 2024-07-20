@@ -1,9 +1,9 @@
 :sentences
-   ~[[ c" no more bottles" ^pr ~]] ,
-    [[ c" 1 bottle" ^pr ~]] ,
-    [[ ^dup . ~c" bottles" ^pr ~]] ,
+   ~[[ c" no more bottles" ]] ,
+    [[ c" 1 bottle" ]] ,
+    [[ ^dup . ~c" bottles" ]] ,
 
-:.bottles ^dup 2 min cells 'sentences ^+ h@ execute ;
+:.bottles ^dup 2 min cells 'sentences ^+ h@ execute pr ;
 
 :.beer ^.bottles ~c"  of beer " ^pr ;
 :.wall ^.beer ~c" on the wall " ^prn ;
