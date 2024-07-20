@@ -54,11 +54,11 @@ lib.cf: src/lib.tmpl.cf
 	[ -f ~/.config/colorforth.cf ] && cp ~/.config/colorforth.cf ~/.config/colorforth.bak.cf || true
 	cp src/lib.tmpl.cf ~/.config/colorforth.cf
 
-colorforth: Makefile conf.h $(SRC) $(INCLUDED_SRC) $(EXT_SRC) $(SRC_H)
-	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth $(SRC) $(EXT_SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
+colorforth: Makefile conf.h $(SRC) $(INCLUDED_SRC) $(SRC_H)
+	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
 colorforth-unsafe: Makefile $(SRC) $(SRC_H)
-	gcc -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe $(SRC) $(EXT_SRC) $(EXTRA_CLIBS)
+	gcc -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe $(SRC) $(EXTRA_CLIBS)
 
 optimize: colorforth
 	@#readelf -l colorforth

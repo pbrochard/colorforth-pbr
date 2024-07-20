@@ -7,12 +7,27 @@ SRC=src\main.c src\colorf~1.c \
 	src\cf-stdio.c \
 	src\color.c
 
-#SRC_H=src\colorf~1.h \
-#	src\cf-stdio.h \
-#	conf.h \
-#	src\hash_def.h \
-#	src\libcf~1.h \
-#	src\color.h
+SRC_H=src/colorforth.h \
+	conf.h \
+	src/cf-stdio.h \
+	src/color.h
+
+INCLUDED_SRC=src/utils.c \
+	src/core.c \
+	src/lib.c \
+	ext/ext.c \
+	ext/parser.c \
+	ext/io.c \
+	ext/time.c \
+	ext/math.c \
+	ext/math-float.c \
+	ext/dict.c \
+	ext/os.c \
+	ext/threads.c \
+	ext/mp-math.c \
+	ext/network.c \
+	ext/sdl.c
+
 
 conf.h: src\conftm~1.h
 	copy src\conftm~1.h conf.h
@@ -25,7 +40,10 @@ patch4dos: conf.h
 	sed -i "s%#define __EXTENDED_MATH%//#define __EXTENDED_MATH%g" conf.h
 	sed -i "s%#define __MP_MATH%//#define __MP_MATH%g" conf.h
 
-cf.exe: $(SRC) $(SRC_H)
+ext/ext.c: ext/0_ext.tmpl.c
+	cp ext/0_ext.tmpl.c ext/ext.c
+
+cf.exe: $(SRC) $(SRC_H) $(INCLUDED_SRC)
 	gcc -std=c99 -Os -Wall -Werror -Wextra -pedantic \
 	-s -Wno-missing-braces -Wno-missing-field-initializers -Wno-unused-parameter \
 	-I. -Isrc -Iext  \
