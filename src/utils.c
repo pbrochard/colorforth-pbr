@@ -80,6 +80,7 @@ find_entry_by_offset(struct dictionary *dict, cell offset)
 
 void
 print_entry (struct state *s, char *format, cell entry_index) {
+#ifdef __KEEP_ENTRY_NAMES
   if (entry_index == -1) {
     return;
   }
@@ -87,6 +88,7 @@ print_entry (struct state *s, char *format, cell entry_index) {
   struct entry *entry = ENTRY(entry_index);
 
   cf_printf(s, format,  entry->name == NULL ? "???" : entry->name, entry_index, entry->offset);
+#endif /* __KEEP_ENTRY_NAMES */
 }
 
 void

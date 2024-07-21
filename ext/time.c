@@ -70,4 +70,8 @@ case OP_MSSLEEP: {
  *********************************************************************************/
 #ifdef __SECTION_FUNCTION
 
+#include <sys/time.h>
+#include <unistd.h>
+#include <time.h>
+
 #endif /* __SECTION_FUNCTION */

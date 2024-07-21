@@ -27,7 +27,7 @@ extern char check_entry(struct state *s, struct entry *check_entry);
 extern void display_clash_found(struct state *s, char clash_found);
 #endif /* __CHECK_DICT */
 
-#include "utils.c"
+#include "utils.c.h"
 
 #define __SECTION_FUNCTION
 #include "core.c"

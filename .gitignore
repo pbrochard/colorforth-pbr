@@ -1,8 +1,12 @@
 Makefile
 colorforth
 colorforth-unsafe
+cf
+cf-unsafe
 conf.h
 lib.cf
 colorforth-arduino/conf.h
 *.hex
 ext/ext.c
+arduino/build/
+arduino/sketch.yaml
