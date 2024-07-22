@@ -357,9 +357,9 @@ parse_colorforth(struct state *s, int c)
 
   if (c == '\b' || c == 127)
   {
-    cf_printf(s, "\b \b");
     if (s->tib.len > 0)
     {
+      cf_printf(s, "\b \b");
       s->tib.len -= 1;
     }
     return;
