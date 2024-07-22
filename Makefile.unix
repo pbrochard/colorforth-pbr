@@ -6,10 +6,10 @@ default: colorforth
 
 SRC=src/main.c src/cf.c \
 	src/cf-stdio.c \
-	src/color.c
+	src/color.c \
+	src/utils.c
 
-INCLUDED_SRC=src/utils.c \
-	src/core.c \
+INCLUDED_SRC=src/core.c \
 	src/lib.c \
 	ext/ext.c \
 	ext/parser.c \
@@ -28,7 +28,8 @@ INCLUDED_SRC=src/utils.c \
 SRC_H=src/cf.h \
 	conf.h \
 	src/cf-stdio.h \
-	src/color.h
+	src/color.h \
+	src/utils.h
 
 FLAGS=-fPIE -std=gnu99 -O3 -Wall -Werror -Wextra -pedantic \
 	-s -Wno-missing-braces -Wno-missing-field-initializers -Wno-unused-parameter \

@@ -9,6 +9,7 @@
 
 #include "cf.h"
 #include "cf-stdio.h"
+#include "utils.h"
 
 #ifdef __KEEP_ENTRY_NAMES
 #define ENTRY_NAME(name) (name)
@@ -26,8 +27,6 @@
 extern char check_entry(struct state *s, struct entry *check_entry);
 extern void display_clash_found(struct state *s, char clash_found);
 #endif /* __CHECK_DICT */
-
-#include "utils.c.h"
 
 #define __SECTION_FUNCTION
 #include "core.c"

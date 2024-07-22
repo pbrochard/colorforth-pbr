@@ -1,4 +1,9 @@
 // The author disclaims copyright to this source code.
+#include <stdbool.h>
+#include <string.h>
+
+#include "cf.h"
+#include "cf-stdio.h"
 
 void
 cf_print_cell(struct state *s, cell cell)
@@ -195,7 +200,7 @@ hash(char *str)
   return hval;
 }
 
-static void
+void
 dot_s(struct state *s, struct stack *stack)
 {
   cf_printf(s, "[%d] ", stack->sp + 1);
@@ -295,7 +300,7 @@ unknow_word (struct state *s)
   }
 }
 
-static bool
+bool
 tib_to_number(struct state *s, cell *n)
 {
   char *endptr;
