@@ -28,7 +28,8 @@ mega: src/conf.tmpl.h
 	sed -i 's%\(.*DICT_SIZE\).*%\1 80%' arduino/conf.h
 	sed -i 's%\(.*HEAP_SIZE\).*%\1 3000%' arduino/conf.h
 	sed -i 's%\(TIB_SIZE.*\)%\1\n#define BUF_SIZE 128%' arduino/conf.h
-	arduino-cli board attach -b arduino:avr:mega arduino.ino
+	cd arduino && \
+    arduino-cli board attach -b arduino:avr:mega arduino.ino && \
 	arduino-cli compile -e arduino.ino
 #	simulide
 
