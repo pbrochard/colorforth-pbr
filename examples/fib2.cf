@@ -1,0 +1,13 @@
+(
+  Shorter fib version inspired by
+  https://flagxor.github.io/svfig-talks/svfig-2024-03-23/#/47
+)
+~
+:fib1 (n - n) ^>R 1 dup R> 2 -
+:loop ^>R swap over +  dup .  R> 1- dup 'loop ^if* drop nip ;
+
+:fib2 (n - n) ^>R 1 dup R> 2 -
+:loop ^dup ~[ ^drop nip ~] ^if-not; >R swap over + dup . R> 1- loop ;
+~
+92 fib2 .
+bye
