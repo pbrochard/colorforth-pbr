@@ -11,11 +11,11 @@
 :static-world ~dalloc ,l ^;
 
 :world# ~( x y - ) ^height @ mod row  swap width @ mod + ;
-:world! ~( n x y - ) ^world# world + hc! ;
-:world@ ~( x y ) ^world# world + hc@ ;
+:world! ~( n x y - ) ^world# world + c! ;
+:world@ ~( x y ) ^world# world + c@ ;
 
-:static-world! ~( n x y - ) ^world# static-world + hc! ;
-:static-world@ ~( x y ) ^world# static-world + hc@ ;
+:static-world! ~( n x y - ) ^world# static-world + c! ;
+:static-world@ ~( x y ) ^world# static-world + c@ ;
 
 :<world-h> ^; :<world-v> ^;
 

@@ -78,8 +78,8 @@ case '(': {
 #define OP_CSTORE                    (opcode_t) 0x55A6C3B8                // pc!
 #define OP_HEAP_LOAD                 (opcode_t) 0x400064C0                // @
 #define OP_HEAP_STORE                (opcode_t) 0x210033F3                // !
-#define OP_HEAP_CLOAD                (opcode_t) 0x800F2E13                // hc@
-#define OP_HEAP_CSTORE               (opcode_t) 0xDF0FC3A0                // hc!
+#define OP_HEAP_CLOAD                (opcode_t) 0x72F4F1DB                // c@
+#define OP_HEAP_CSTORE               (opcode_t) 0xD1F58768                // c!
 #define OP_CELL                      (opcode_t) 0x1415DDAC                // cell
 #define OP_HERE                      (opcode_t) 0xD786E25E                // here
 #define OP_HERE_ADDR                 (opcode_t) 0xAE504314                // &here
@@ -122,15 +122,6 @@ case '(': {
 #define OP_REG_B_DEC                 (opcode_t) 0x603793F4                // B--
 #define OP_REG_B_TO_R                (opcode_t) 0x755808AE                // B>R
 #define OP_REG_R_TO_B_               (opcode_t) 0x9411A7CE                // R>B
-
-// Register C
-#define OP_REG_C_LOAD                (opcode_t) 0xB2A5A4BB                // C@
-#define OP_REG_C_STORE               (opcode_t) 0xD1A5D588                // C!
-#define OP_REG_C_ADD                 (opcode_t) 0xCD007A95                // C+!
-#define OP_REG_C_INC                 (opcode_t) 0xD3008407                // C++
-#define OP_REG_C_DEC                 (opcode_t) 0xCD04F7C3                // C--
-#define OP_REG_C_TO_R                (opcode_t) 0xDBE4BBB5                // C>R
-#define OP_REG_R_TO_C_               (opcode_t) 0x9511A961                // R>C
 
 // Register I
 #define OP_REG_I_LOAD                (opcode_t) 0x96B48331                // I@
@@ -194,8 +185,8 @@ define_primitive(s, ENTRY_NAME("pc@"), OP_CLOAD);
 define_primitive(s, ENTRY_NAME("pc!"), OP_CSTORE);
 define_primitive(s, ENTRY_NAME("h@"), OP_HEAP_LOAD);
 define_primitive(s, ENTRY_NAME("h!"), OP_HEAP_STORE);
-define_primitive(s, ENTRY_NAME("hc@"), OP_HEAP_CLOAD);
-define_primitive(s, ENTRY_NAME("hc!"), OP_HEAP_CSTORE);
+define_primitive(s, ENTRY_NAME("c@"), OP_HEAP_CLOAD);
+define_primitive(s, ENTRY_NAME("c!"), OP_HEAP_CSTORE);
 define_primitive(s, ENTRY_NAME("cell"), OP_CELL);
 define_primitive(s, ENTRY_NAME("here"), OP_HERE);
 define_primitive(s, ENTRY_NAME("&here"), OP_HERE_ADDR);
@@ -244,7 +235,6 @@ define_primitive(s, ENTRY_NAME("clear"), OP_CLEAR);
 // //  // A, B, C, I, J and K registers are state global
 define_register_primitive(A);
 define_register_primitive(B);
-define_register_primitive(C);
 define_register_primitive(I);
 define_register_primitive(J);
 define_register_primitive(K);
@@ -287,7 +277,6 @@ case OP_R_FETCH:
 #ifdef __USE_REGISTER
 define_register(A);
 define_register(B);
-define_register(C);
 define_register(I);
 define_register(J);
 define_register(K);

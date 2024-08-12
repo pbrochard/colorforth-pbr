@@ -2,11 +2,11 @@
 :buf? ^buf ddump cr ;
 
 ~
-key A buf hc!
-key B buf 1 + hc!
-key C buf 2 + hc!
-key D buf 3 + hc!
-key E buf 4 + hc!
+key A buf c!
+key B buf 1 + c!
+key C buf 2 + c!
+key D buf 3 + c!
+key E buf 4 + c!
 
 :test-cmove ^
    111 .s cr

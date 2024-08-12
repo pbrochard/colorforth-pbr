@@ -172,7 +172,6 @@ execute_(struct state *s, struct entry *entry)
 #ifdef __USE_REGISTER
   register cell A = 0;
   register cell B = 0;
-  register cell C = 0;
   register cell I = 0;
   register cell J = 0;
   register cell K = 0;

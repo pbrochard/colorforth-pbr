@@ -28,8 +28,8 @@ cls             clear and redraw board" ^prn cr ;
 
 :world ~w h * 2 * dalloc ,l ^;
 :world# ^h mod row  swap w mod + world + ;
-:world! ~( n x y - ) ^world# n-world @ size * + hc! ;
-:world@ ~( x y ) ^world# 1 n-world @ - size * + hc@ ;
+:world! ~( n x y - ) ^world# n-world @ size * + c! ;
+:world@ ~( x y ) ^world# 1 n-world @ - size * + c@ ;
 
 :<world-h> ^; :<world-v> ^;
 
