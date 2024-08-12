@@ -6,7 +6,7 @@
 :expected ~" expected.txt" aload variable ,;
 :number ~" numbers.txt" aload  cell + variable ,;
 
-:.number ^number @ c@ emit  number 1+! ,;
+:.number ^number @ pc@ emit  number 1+! ,;
 :.numbers ^.number 1- dup `.numbers ,if* ^drop ,;
 
 :nemit ^
@@ -14,7 +14,7 @@
    dup 10 = `cr ,if; ^
    6 .numbers ,;
 
-:treat ^expected @ c@ nemit drop  expected 1+! ,;
+:treat ^expected @ pc@ nemit drop  expected 1+! ,;
 :loop ^treat 1- dup `loop ,if* ^drop ,;
 
 :go ^

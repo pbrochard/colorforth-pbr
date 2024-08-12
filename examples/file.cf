@@ -17,7 +17,7 @@ s" This is a test" str2buf  s" test.txt" save drop
 ~
 buf c-pr cr
 
-key A buf cell 2 + + c!
+key A buf cell 2 + + pc!
 
 buf s" test.txt" file-size s" test2.txt"   save drop
 

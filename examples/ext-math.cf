@@ -1,4 +1,4 @@
-~1 echo c!
+~1 echo pc!
 $2.23 $3.45 ~f+ fdup
 f.s f.
 fdup f.s f* f.

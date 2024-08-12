@@ -8,7 +8,7 @@
 " abcdefghijklmnopqrstuvwxyz+-*/@!$?" dup
 :len ~@ constant ,;
 :chars ~cell + constant ,;
-:.c ^chars + c@ emit ,;
+:.c ^chars + pc@ emit ,;
 
 :cnts ~5 variables ,;
 :cnt ^cells cnts + ,;
