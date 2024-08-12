@@ -3,7 +3,7 @@
 :DIV_ZERO ^1 0 / ;
 
 :s
-:SEGFAULT ^0 0 ! ;
+:SEGFAULT ^0 0 p! ;
 
 :level4 ^4 . DIV_ZERO ;
 :level3 ^3 . level4 ;

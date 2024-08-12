@@ -72,8 +72,8 @@ case '(': {
 #define OP_WORDS                     (opcode_t) 0x30E76679                // words
 #define OP_EMIT                      (opcode_t) 0x9B01D09B                // emit
 #define OP_KEY                       (opcode_t) 0x485BCDF                 // key
-#define OP_LOAD                      (opcode_t) 0x400064C0                // @
-#define OP_STORE                     (opcode_t) 0x210033F3                // !
+#define OP_LOAD                      (opcode_t) 0x61152930                // p@
+#define OP_STORE                     (opcode_t) 0xC215C1E3                // p!
 #define OP_CLOAD                     (opcode_t) 0x72F4F1DB                // c@
 #define OP_CSTORE                    (opcode_t) 0xD1F58768                // c!
 #define OP_HEAP_LOAD                 (opcode_t) 0xB1021F68                // h@
@@ -188,8 +188,8 @@ define_primitive(s, ENTRY_NAME("bye"), OP_BYE);
 define_primitive(s, ENTRY_NAME("words"), OP_WORDS);
 define_primitive(s, ENTRY_NAME("emit"), OP_EMIT);
 define_primitive(s, ENTRY_NAME("key"), OP_KEY);
-define_primitive(s, ENTRY_NAME("@"), OP_LOAD);
-define_primitive(s, ENTRY_NAME("!"), OP_STORE);
+define_primitive(s, ENTRY_NAME("p@"), OP_LOAD);
+define_primitive(s, ENTRY_NAME("p!"), OP_STORE);
 define_primitive(s, ENTRY_NAME("c@"), OP_CLOAD);
 define_primitive(s, ENTRY_NAME("c!"), OP_CSTORE);
 define_primitive(s, ENTRY_NAME("h@"), OP_HEAP_LOAD);

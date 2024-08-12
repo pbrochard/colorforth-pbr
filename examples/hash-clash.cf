@@ -12,9 +12,9 @@
 
 :cnts ~5 variables ,;
 :cnt ^cells cnts + ,;
-:rz ^cnt 0 swap ! ,;
+:rz ^cnt 0 swap p! ,;
 :++ ^cnt 1+! ,;
-:.v ^cnt @ .c ,;
+:.v ^cnt p@ .c ,;
 
 :.3 ^3 .v   :.2 ^2 .v  :.1 ^1 .v  :.0 ^0 .v ,;
 :.d ~key : ,l ^emit ,l;

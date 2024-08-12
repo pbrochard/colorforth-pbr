@@ -57,7 +57,7 @@
 :ddump ^dup 160 + heap-size min 160 -  &heap dump ;
 
 ( alloc )
-:alloc ( n - a ) ^here swap over + &here ! ;
+:alloc ( n - a ) ^here swap over + &here p! ;
 
 :, ^cell alloc h! ;
 :c, ^1 alloc h! ;
@@ -76,7 +76,7 @@
 :variables ^cells dalloc ,l ;
 :[] ^cells + ;
 
-:? ^@ . ;
+:? ^p@ . ;
 :h? ^h@ . ;
 
 ~( mem move )
@@ -173,7 +173,7 @@
    dup dalloc            (allocate code on data heap)
    dup >R                (save dhere for word return)
    swap hcmove           (move code to data heap)
-   &here !               (restore here)
+   &here p!               (restore here)
    R> ;                  (leave dhere)
 
 :] ( - ) ^]] ,l ;

@@ -2,9 +2,9 @@
 
 ~buf .
 
-55 buf !  111 buf 10 + !
-buf @ .
-buf 10 + @ .
+55 buf p!  111 buf 10 + p!
+buf p@ .
+buf 10 + p@ .
 
 buf c-free
 
