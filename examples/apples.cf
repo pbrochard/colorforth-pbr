@@ -1,0 +1,23 @@
+:apples ~0 variable ^;
+
+~10 apples !
+apples @ .
+apples ?
+cr
+
+:apples& ~3 variables ^;
+:red ^0 ;
+:green ^1 ;
+:yellow ^2 ;
+
+:apples ^cells apples& + ;
+~
+11 red apples !
+25 green apples !
+13 yellow apples !
+
+red apples ?
+green apples ?
+yellow apples ?
+
+bye
