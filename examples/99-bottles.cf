@@ -1,7 +1,7 @@
 :sentences
    ~[[ c" no more bottles" ]] ,
-    [[ c" 1 bottle" ]] ,
-    [[ ^dup . ~c" bottles" ]] ,
+   ~[[ c" 1 bottle" ]] ,
+   ~[[ ^dup . ~c" bottles" ]] ,
 
 :.bottles ^dup 2 min cells 'sentences ^+ @ execute pr ;
 
