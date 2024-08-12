@@ -1,0 +1,21 @@
+:v ~77 ,
+
+~
+'v ~?
+100 'v ~!
+'v ~?
+
+:vars ~10 cells alloc
+
+~
+10 'vars ~!
+20 'vars ~1 [] !
+30 'vars ~2 [] !
+
+cr
+
+'vars ~?
+'vars ~1 [] ?
+'vars ~2 [] ?
+
+bye
