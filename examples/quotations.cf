@@ -12,7 +12,7 @@ swap execute execute cr
 
 :data ~[[ ^1 + . ~]] ,  [[ ^ 2 + . ~]] ,  [[ ^ 3 + . ~]] ,
 
-~10 'data ~0 cells + h@ execute
+~10 'data ~0 cells + @ execute
 cr .s
 
 1 [[ ^2 2 + . ~]] [[ ^3 . ~]] if-else

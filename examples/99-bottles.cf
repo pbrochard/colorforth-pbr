@@ -3,7 +3,7 @@
     [[ c" 1 bottle" ]] ,
     [[ ^dup . ~c" bottles" ]] ,
 
-:.bottles ^dup 2 min cells 'sentences ^+ h@ execute pr ;
+:.bottles ^dup 2 min cells 'sentences ^+ @ execute pr ;
 
 :.beer ^.bottles ~c"  of beer " ^pr ;
 :.wall ^.beer ~c" on the wall " ^prn ;

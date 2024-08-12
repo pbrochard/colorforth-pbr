@@ -20,9 +20,9 @@
 :my-var ~10 variable ^;
 
 ~'my-var ~see
-my-var h?
-100 my-var h!
-my-var h@ . cr cr
+my-var ?
+100 my-var !
+my-var @ . cr cr
 
 ~\ Loop example
 :hello ~c" Hello world!" ^prn ;

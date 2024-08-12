@@ -8,7 +8,7 @@
 :th3 ^10000 work ;
 :th4 ^10000 work ;
 
-~v h?
+~v ?
 `th0 ~0 thread/run
 `th1 ~1 thread/run
 `th2 ~2 thread/run
@@ -17,7 +17,7 @@
 
 thread/join-all
 
-cr v h? cr
+cr v ? cr
 s" v is less than 50000 caused by parallel concurent access" prn
 
 
@@ -30,7 +30,7 @@ s" Should count exactly 50000 because access to v is protected by lock" nprn
 :th3 ^10000 sem-work ;
 :th4 ^10000 sem-work ;
 
-~0 v h!  v h?
+~0 v !  v ?
 `th0 ~0 thread/run
 `th1 ~1 thread/run
 `th2 ~2 thread/run
@@ -39,9 +39,9 @@ s" Should count exactly 50000 because access to v is protected by lock" nprn
 
 thread/join-all
 
-v h? cr
+v ? cr
 
-~0 v h!  v h?
+~0 v !  v ?
 
 `th0 ~0 thread/run
 `th1 ~1 thread/run
@@ -51,6 +51,6 @@ v h? cr
 
 thread/join-all
 
-v h? cr
+v ? cr
 
 bye

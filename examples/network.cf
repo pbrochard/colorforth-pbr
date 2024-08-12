@@ -3,15 +3,15 @@
 
 :buffer ~1024 c-alloc ,l ^;
 
-:send ^sock h@ socket-send drop ;
-:send-nl ^10 sock h@ socket-send-char drop ;
-:recv ~( buffer -) ^1024 sock h@ socket-recv drop ;
+:send ^sock @ socket-send drop ;
+:send-nl ^10 sock @ socket-send-char drop ;
+:recv ~( buffer -) ^1024 sock @ socket-recv drop ;
 
 :main ^
-   8000 server-start .s server h!
+   8000 server-start .s server !
 
    ~c" Waiting for client connection" ^prn
-   server h@ server-accept .s sock h!
+   server @ server-accept .s sock !
 
    ~c" Sending lines to client" ^prn
    ~c" test on one line" ^send
@@ -25,7 +25,7 @@
 
    1 sleep
 
-   server h@ server-stop drop
+   server @ server-stop drop
    buffer c-free
    .s
 ;

@@ -31,15 +31,15 @@
    ~s" This is a test" dup sdl/text-size@ .s . . cr ,
    ^100 200  10 R 255 G 10 B  sdl/put-text
 
-   ball ball-x h@ ball-y h@ sdl/put-image
+   ball ball-x @ ball-y @ sdl/put-image
 
    sdl/present ;
 
 :move-ball-to ^
    snd/hk sdl/play-sound
-   sdl/mouse-x@ 25 - ball-x h! sdl/mouse-y@ 25 - ball-y h!  draw ;
+   sdl/mouse-x@ 25 - ball-x ! sdl/mouse-y@ 25 - ball-y !  draw ;
 
-:done! ^1 done h! ^
+:done! ^1 done ! ^
 
 :check-buttons ^
    1 sdl/button? 'move-ball-to ^if;
@@ -56,7 +56,7 @@
 
    check-buttons
 
-   ^done h@ 'sdl-loop ^if-not*
+   ^done @ 'sdl-loop ^if-not*
 ;
 
 

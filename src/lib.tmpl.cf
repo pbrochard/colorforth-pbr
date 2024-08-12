@@ -20,10 +20,10 @@
 :1+ ^1 ^+ ;
 :1- ^1 ^- ;
 
-:+! ^dup h@ rot + swap h! ;
-:1+! ^dup h@ 1+ swap h! ;
-:1-! ^dup h@ 1- swap h! ;
-:cell+! ^dup h@ cell + swap h! ;
+:+! ^dup @ rot + swap ! ;
+:1+! ^dup @ 1+ swap ! ;
+:1-! ^dup @ 1- swap ! ;
+:cell+! ^dup @ cell + swap ! ;
 
 :;; ^R> R> 2drop ;
 
@@ -59,25 +59,25 @@
 ( alloc )
 :alloc ( n - a ) ^here swap over + &here p! ;
 
-:, ^cell alloc h! ;
-:c, ^1 alloc h! ;
+:, ^cell alloc ! ;
+:c, ^1 alloc ! ;
 
 
 ~( variables )
 ~heap-size cell - :&dhere ~,l ^;
-~&dhere cell - &dhere h!
-:dhere ^&dhere h@ ;
+~&dhere cell - &dhere !
+:dhere ^&dhere @ ;
 
-:dalloc (n - a) ^dhere swap - dup &dhere h! ;
+:dalloc (n - a) ^dhere swap - dup &dhere ! ;
 
 :constant ^,l ;
-:variable ^cell dalloc dup ,l h! ;
+:variable ^cell dalloc dup ,l ! ;
 
 :variables ^cells dalloc ,l ;
 :[] ^cells + ;
 
-:? ^p@ . ;
-:h? ^h@ . ;
+:p? ^p@ . ;
+:? ^@ . ;
 
 ~( mem move )
 :cmove-heap-to-addr (src dst n) ^>R >R &heap R> &heap R> ;
@@ -106,7 +106,7 @@
    ^0 1 dalloc hc! (store 0)
    ^swap - dup dup >R (compute length)
    ^dalloc
-   ^R> cell dalloc h! (store length)
+   ^R> cell dalloc ! (store length)
    ^dup >R swap hcmove R> ;
 
 :."key ^dup  echo pc@ 'emit 'drop ^if-else ;
@@ -116,7 +116,7 @@
 
 :c" ^s" ,l ;
 
-:slength ^cell - h@ ;
+:slength ^cell - @ ;
 
 :pr (s - ) ^dup hc@ dup 0 = '2drop ^if; emit 1+ pr ;
 :prn ^pr cr ;
@@ -144,8 +144,8 @@
 ( eval )
 :ptr ~0 variable ^;
 :count ~0 variable ^;
-:loop ^ptr h@ hc@ parse  ptr 1+!  count 1-!  count h@ 'loop ^if* ;
-:eval ( string - ) ^clear-tib  dup ptr h!  slength  count h!  loop  32 parse ;
+:loop ^ptr @ hc@ parse  ptr 1+!  count 1-!  count @ 'loop ^if* ;
+:eval ( string - ) ^clear-tib  dup ptr !  slength  count !  loop  32 parse ;
 ~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
 
 ( files )

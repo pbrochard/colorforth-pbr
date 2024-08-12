@@ -6,11 +6,11 @@
 :max-tasks ^10 ;
 :tasks ^cells ~max-tasks variables ^+ ;
 
-:running? (n - f) ^tasks h@ ;
-:yield (n - ) ^R> swap tasks h! ;
+:running? (n - f) ^tasks @ ;
+:yield (n - ) ^R> swap tasks ! ;
 :resume (n -) ^
    dup running? 'drop ^if-not;
-   tasks dup  h@  >R 0 swap h! ;
+   tasks dup  @  >R 0 swap ! ;
 
 :await ^0 0
 :loop (f n - )

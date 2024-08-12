@@ -11,21 +11,21 @@
 :max-alt ~0 variable ^;
 
 :time-in-alt?! ^
-   time-in-alt h@ 'nop ^if;
-   dup N h@ < 'nop ^if-not;
-   n h@ 1+ time-in-alt h! ;
+   time-in-alt @ 'nop ^if;
+   dup N @ < 'nop ^if-not;
+   n @ 1+ time-in-alt ! ;
 
 :max-alt?! ^
-   dup max-alt h@ < 'nop ^if;
-   dup max-alt h! ;
+   dup max-alt @ < 'nop ^if;
+   dup max-alt ! ;
 
 :record ^dup .  time-in-alt?!  max-alt?!  n 1+! ;
 
 :resume ^
    cr cr
-   ~c"   Flying time: " ^pr  n h@ .
-   ~c"  |  Time in altitude: " ^pr  time-in-alt h@ .
-   ~c"  |  Maximum altitude: " ^pr  max-alt h@ .
+   ~c"   Flying time: " ^pr  n @ .
+   ~c"  |  Time in altitude: " ^pr  time-in-alt @ .
+   ~c"  |  Maximum altitude: " ^pr  max-alt @ .
    ~c" -----------------------" ^cr pr
    cr cr
 ;
@@ -38,10 +38,10 @@
 
 :loop ( n - ) ^record dup 1 = 'nop ^if; next loop ;
 
-:init ^N h!  -1 n h!  0 time-in-alt h!  0 max-alt h! ;
+:init ^N !  -1 n !  0 time-in-alt !  0 max-alt ! ;
 
 :sy
-:syracuse ( n - ) ^init  N h@ loop  resume ;
+:syracuse ( n - ) ^init  N @ loop  resume ;
 
 ~
 s" Usage: <N> sy(racuse)" nprn cr

@@ -4,10 +4,10 @@
 :tm ~time/start ^;
 
 :v1 ~0 variable ^;
-:v-inc ^v1 h@ 1+ v1 h! ;
+:v-inc ^v1 @ 1+ v1 ! ;
 :loop ^v-inc 1- dup 'loop ^if* ^drop ;
 
-:test ^nb loop v1 h@ . ;
+:test ^nb loop v1 @ . ;
 ~
 test
 tm time/end

@@ -76,8 +76,8 @@ case '(': {
 #define OP_STORE                     (opcode_t) 0xC215C1E3                // p!
 #define OP_CLOAD                     (opcode_t) 0xF6A62E2B                // pc@
 #define OP_CSTORE                    (opcode_t) 0x55A6C3B8                // pc!
-#define OP_HEAP_LOAD                 (opcode_t) 0xB1021F68                // h@
-#define OP_HEAP_STORE                (opcode_t) 0x520189DB                // h!
+#define OP_HEAP_LOAD                 (opcode_t) 0x400064C0                // @
+#define OP_HEAP_STORE                (opcode_t) 0x210033F3                // !
 #define OP_HEAP_CLOAD                (opcode_t) 0x800F2E13                // hc@
 #define OP_HEAP_CSTORE               (opcode_t) 0xDF0FC3A0                // hc!
 #define OP_CELL                      (opcode_t) 0x1415DDAC                // cell

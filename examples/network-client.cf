@@ -2,12 +2,12 @@
 
 :buffer ~1024 c-alloc ,l ^;
 
-:send ^sock h@ socket-send drop ;
-:send-nl ^10 sock h@ socket-send-char drop ;
-:recv ~( buffer -) ^1024 sock h@ socket-recv drop ;
+:send ^sock @ socket-send drop ;
+:send-nl ^10 sock @ socket-send-char drop ;
+:recv ~( buffer -) ^1024 sock @ socket-recv drop ;
 
 :main ^
-   ~c" 127.0.0.1" ^8000 client-start .s sock h!
+   ~c" 127.0.0.1" ^8000 client-start .s sock !
 
    buffer recv buffer dump
    buffer bpr cr
@@ -19,7 +19,7 @@
 
    ^1 sleep
 
-   sock h@ server-stop drop
+   sock @ server-stop drop
    buffer c-free
    .s
 ;

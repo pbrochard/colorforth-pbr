@@ -1,5 +1,5 @@
 ~
-40 width h!  20 height h!
+40 width !  20 height !
 
 5 .s + + + + /
 5 .s + + + + /
@@ -17,4 +17,4 @@
 + + + + + + + + + + / / /
 . . . P . . . . . /
 
-1 player dir h!
+1 player dir !
