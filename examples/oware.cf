@@ -1,0 +1,52 @@
+( 5 bits cell -> max 32 per cell )
+
+:init ( - b) ^0 12
+:loop ^1- >R  4 R@ 5 * shl  bor R> dup 'loop ^if* drop ;
+
+:.bb (b - b) ^dup cr bin .  dec ;
+
+:b@ (b n - x) ^5 * shr  31 band ;
+:b0 (b n - b) ^2dup b@  swap 5 * shl  bxor ;
+:b! (b n x - b) ^>R dup >R b0  R> R> swap 5 * shl bxor ;
+
+:invert ^5 swap - ;
+:trans ^dup 6 < 'invert ^if ;
+
+
+:.0 ~key 0 ,l ^emit ;
+:.c ^dup 10 < '.0 ^if . ;
+:cr? ^dup 6 = 'cr ^if ;
+
+:.B (b - b) ^cr 12
+:loop ^1- 2dup trans b@ .c cr? dup 'loop ^if* drop ;
+
+:.line ^cr 17
+:loop ~key - ,l ^emit 1- dup 'loop ^if* drop ;
+
+:.top ^cr 12
+:loop ^1- dup trans .c dup 6 > 'loop ^if* drop ;
+
+:.bottom ^cr 6
+:loop ^1- dup trans .c dup 'loop ^if* drop ;
+
+:.b ^.top .line .B .line .bottom ;
+
+~init .bb
+
+cr dup 5 b@ .
+
+1 b0 .bb
+
+11 11 b! .bb
+10 10 b! .bb
+6  6  b!
+5  5  b!
+0  3 b! .bb
+2  2  b! .bb
+
+.top .line .B .line .bottom
+cr .s
+
+.b
+
+~bye
