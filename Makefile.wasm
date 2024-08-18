@@ -9,17 +9,20 @@ SRC=wasm/main-wasm.c \
 	src/lib.c \
 	src/utils.c
 
-#	ext/load-ext.c \
-#	ext/os.c \
-#	ext/dict.c \
-#	ext/io.c \
-#	ext/parser.c \
-#	ext/time.c \
-#	ext/math.c \
-#	ext/ext-math.c
-#	ext/mp-math.c
-#	ext/threads.c
-#	ext/network.c
+INCLUDED_SRC=src/core.c \
+	src/lib.c \
+	ext/ext.c \
+	ext/parser.c \
+	ext/io.c \
+	ext/time.c \
+	ext/math.c \
+	ext/math-float.c \
+	ext/dict.c \
+	ext/os.c \
+	ext/threads.c \
+	ext/mp-math.c \
+	ext/network.c \
+	ext/sdl.c
 
 SRC_WASM=wasm/html_template/shell.html wasm/html_template/shell.js wasm/html_template/shell.css
 
@@ -38,7 +41,7 @@ ext/ext.c: ext/0_tmpl.c
 	cp ext/0_tmpl.c ext/ext.c
 	sed -i 's%\(#include "threads.c"\)%// \1%' ext/ext.c
 
-wasm/colorforth.html: Makefile.wasm $(SRC) $(SRC_H) $(SRC_WASM)
+wasm/colorforth.html: Makefile.wasm $(SRC) $(INCLUDED_SRC) $(SRC_H) $(SRC_WASM)
 	emcc.sh -o wasm/colorforth.html $(SRC) -O3 -s WASM=1 -s NO_EXIT_RUNTIME=1 --shell-file wasm/html_template/shell.html -Isrc -Iext -Iwasm
 
 clean:
