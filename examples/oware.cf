@@ -13,7 +13,7 @@
 :trans ^dup 6 < 'invert ^if ;
 
 
-:.0 ~key 0 ,l ^emit ;
+:.0 ~key   ,l ^emit ;
 :.c ^dup 10 < '.0 ^if . ;
 :cr? ^dup 6 = 'cr ^if ;
 
