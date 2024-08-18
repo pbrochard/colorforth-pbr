@@ -23,6 +23,9 @@
 #define OP_RAND                      (opcode_t) 0xE4758C3F                // rand
 #define OP_SRAND                     (opcode_t) 0x69BDC0A                 // srand
 #define OP_RANDOM                    (opcode_t) 0x5EB42A27                // random
+#define OP_B_OR                      (opcode_t) 0x340971FB                // bor
+#define OP_B_AND                     (opcode_t) 0x9A21396F                // band
+#define OP_B_XOR                     (opcode_t) 0x6A9C55E7                // bxor
 
 #endif /* __SECTION_HASH_DEF */
 
@@ -50,6 +53,9 @@ define_primitive(s, ENTRY_NAME("abs"),    OP_ABS); //, abs_fn);
 define_primitive(s, ENTRY_NAME("rand"),   OP_RAND); //, rand_fn);
 define_primitive(s, ENTRY_NAME("srand"),  OP_SRAND); //, srand_fn);
 define_primitive(s, ENTRY_NAME("random"), OP_RANDOM); //, random_fn);
+define_primitive(s, ENTRY_NAME("bor"),    OP_B_OR);
+define_primitive(s, ENTRY_NAME("band"),   OP_B_AND);
+define_primitive(s, ENTRY_NAME("bxor"),   OP_B_XOR);
 
 #endif /* __SECTION_WORD_DEF */
 
@@ -168,6 +174,25 @@ case OP_RANDOM: {
   PUSH1(p1 != 0 ? rand() % p1 : 0);
   break;
 }
+
+case OP_B_OR: {
+  POP2();
+  PUSH1(p2 | p1);
+  break;
+}
+
+ case OP_B_AND: {
+  POP2();
+  PUSH1(p2 & p1);
+  break;
+}
+
+case OP_B_XOR: {
+  POP2();
+  PUSH1(p2 ^ p1);
+  break;
+}
+
 
 #endif /* __SECTION_SWITCH */
 
