@@ -9,8 +9,8 @@
 #define OP_MOD                       (opcode_t) 0xD32A27E4                // mod
 #define OP_DIVMOD                    (opcode_t) 0x465A474B                // /mod
 #define OP_MUL_DIV                   (opcode_t) 0x4F683323                // */
-#define OP_LSHIFT                    (opcode_t) 0x346A9A70                // lshift
-#define OP_RSHIFT                    (opcode_t) 0xB6A4D846                // rshift
+#define OP_LSHIFT                    (opcode_t) 0x7E7CE40D                // shl
+#define OP_RSHIFT                    (opcode_t) 0x607CB4D3                // shr
 #define OP_SUP                       (opcode_t) 0x3E00619A                // >
 #define OP_INF_EQUAL                 (opcode_t) 0xBD946CEB                // <=
 #define OP_SUP_EQUAL                 (opcode_t) 0x4199B9E5                // >=
@@ -36,8 +36,8 @@ define_primitive(s, ENTRY_NAME("/"),      OP_DIV); //, div_fn);
 define_primitive(s, ENTRY_NAME("mod"),    OP_MOD); //, mod_fn);
 define_primitive(s, ENTRY_NAME("/mod"),   OP_DIVMOD); //, slash_mod_fn);
 define_primitive(s, ENTRY_NAME("*/"),     OP_MUL_DIV); //, start_slash_fn);
-define_primitive(s, ENTRY_NAME("lshift"), OP_LSHIFT); //, lshift_fn);
-define_primitive(s, ENTRY_NAME("rshift"), OP_RSHIFT); //, rshift_fn);
+define_primitive(s, ENTRY_NAME("shl"),    OP_LSHIFT); //, lshift_fn);
+define_primitive(s, ENTRY_NAME("shr"),    OP_RSHIFT); //, rshift_fn);
 define_primitive(s, ENTRY_NAME(">"),      OP_SUP); //, sup_fn);
 define_primitive(s, ENTRY_NAME("<="),     OP_INF_EQUAL); //, inf_equal_fn);
 define_primitive(s, ENTRY_NAME(">="),     OP_SUP_EQUAL); //, sup_equal_fn);
