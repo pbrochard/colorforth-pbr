@@ -31,6 +31,8 @@
 
 :.b ^.top .line .B .line .bottom ;
 
+:p (b n - b) ^2dup b@ .  b0 ;
+
 ~init .bb
 
 cr dup 5 b@ .
@@ -44,9 +46,9 @@ cr dup 5 b@ .
 0  3 b! .bb
 2  2  b! .bb
 
-.top .line .B .line .bottom
+.b
 cr .s
 
-.b
+0 p .b
 
 ~bye
