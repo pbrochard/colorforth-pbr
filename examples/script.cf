@@ -1,0 +1,8 @@
+#! /usr/bin/env cf
+~
+words cr
+
+s" Hello world!" prn
+2 2 + .
+
+bye
