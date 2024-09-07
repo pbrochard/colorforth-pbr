@@ -8,6 +8,7 @@
 :b@ (b n - x) ^5 * shr  31 band ;
 :b0 (b n - b) ^2dup b@  swap 5 * shl  bxor ;
 :b! (b n x - b) ^>R dup >R b0  R> R> swap 5 * shl bxor ;
+:b1+! (b n - b) ^2dup b@ 1+ b! ;
 
 :invert ^5 swap - ;
 :trans ^dup 6 < 'invert ^if ;
@@ -31,7 +32,7 @@
 
 :.b ^.top .line .B .line .bottom ;
 
-:p (b n - b) ^2dup b@ .  b0 ;
+:p (b n - b) ^dup >R 2dup b@ .  b0 R> .s drop ;
 
 ~init .bb
 
@@ -44,11 +45,13 @@ cr dup 5 b@ .
 6  6  b!
 5  5  b!
 0  3 b! .bb
-2  2  b! .bb
+2  3  b! .bb
 
 .b
 cr .s
 
-0 p .b
+11 b1+! .b cr
+
+2 p .b
 
 ~bye
