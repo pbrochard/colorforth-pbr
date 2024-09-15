@@ -53,18 +53,21 @@ case OP_SERVER_START: {
 
   if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
     PERROR("socket failed");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
     PERROR("socket failed");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
                  &opt, sizeof(opt))) {
     PERROR("setsockopt");
-    return;
+    PUSH(-1);
+    break;;
   }
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
@@ -72,17 +75,20 @@ case OP_SERVER_START: {
 
   if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0) {
     PERROR("bind failed");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   if (listen(server_fd, 3) < 0) {
     PERROR("listen");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   cf_printf(s, "Server started on port: %d\n", port);
 
   PUSH1(server_fd);
+  PUSH(0);
 
   break;
 }
@@ -99,7 +105,8 @@ case OP_CLIENT_START: {
 
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     PERROR("Socket creation error");
-    return;
+    PUSH(-1);
+    break;
   }
 
   memset(&serv_addr, '0', sizeof(serv_addr));
@@ -110,17 +117,20 @@ case OP_CLIENT_START: {
   // Convert IPv4 and IPv6 addresses from text to binary form
   if(inet_pton(AF_INET, host, &serv_addr.sin_addr) <= 0) {
     PERROR("Invalid address/ Address not supported");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
     PERROR("Connection Failed");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   cf_printf(s, "Client connected on %s on port %d\n", host, port);
 
   PUSH1(sock);
+  PUSH(0);
 
   break;
 }
@@ -131,12 +141,13 @@ case OP_SERVER_STOP: {
 
   if (close(fd)) {
     PERROR("socket close");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   cf_printf(s, "FD closed. Server stopped\n");
 
-  PUSH1(-1);
+  PUSH1(0);
 
   break;
 }
@@ -149,12 +160,14 @@ case OP_SERVER_NONBLOCKING: {
 
   if (status == -1){
     PERROR("calling fcntl");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   cf_printf(s, "FD made nonblocking\n");
 
   PUSH1(fd);
+  PUSH(0);
 
   break;
 }
@@ -169,12 +182,14 @@ case OP_SERVER_ACCEPT: {
 
   if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
     PERROR("accept");
-    return;
+    PUSH(-1);
+    break;;
   }
 
   cf_printf(s, "Connection accepted\n");
 
   PUSH1(new_socket);
+  PUSH(0);
 
   break;
 }
@@ -186,10 +201,11 @@ case OP_SOCKET_SEND: {
 
   if (send(socket, msg, strlen(msg), 0) < 0) {
     PERROR("send failed");
-    return;
+    PUSH(-1);
+    break;;
   }
 
-  PUSH1(-1);
+  PUSH1(0);
 
   break;
 }
@@ -201,10 +217,11 @@ case OP_SOCKET_SEND_CHAR: {
 
   if (send(socket, &c, 1, 0) < 0) {
     PERROR("send failed");
-    return;
+    PUSH(-1);
+    break;;
   }
 
-  PUSH1(-1);
+  PUSH1(0);
 
   break;
 }
@@ -219,14 +236,14 @@ case OP_SOCKET_RECV: {
 
   if (reslen < 0) {
     if (errno == EAGAIN) {
-      PUSH1(0);
-      return;
+      PUSH1(-1);
+      break;;
     }
     PERROR("recv failed");
-    return;
+    break;;
   }
 
-  PUSH1(-1);
+  PUSH1(0);
 
   break;
 }
