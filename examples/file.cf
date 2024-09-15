@@ -1,28 +1,29 @@
 ~\ File size
-s" examples.cf" file-size
+s" examples.cf" file-size catch
+
 s" examples.cf contains " pr . s" bytes." prn
 
-
 ~\ Load example
-s" included.cf" aload drop   dup dump
+s" included.cf" aload catch   dup dump
 
 s" --------" prn   dup c-pr   s" --------" prn
 
 c-free
 
 ~\ Save and reload example
-s" This is a test" str2buf  s" test.txt" save drop
+s" This is a test" str2buf  s" test.txt" save catch
 
-:buf ~s" test.txt" aload drop ,l ^;
+:buf ~s" test.txt" aload catch ,l ^;
 ~
+
 buf c-pr cr
 
 key A buf cell 2 + + pc!
 
-buf s" test.txt" file-size s" test2.txt"   save drop
+buf s" test.txt" file-size catch s" test2.txt"   save catch
 
 buf c-free
 
-s" test2.txt" aload drop dup dump dup c-pr c-free
+s" test2.txt" aload catch dup dump dup c-pr c-free
 
 bye

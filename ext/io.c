@@ -127,7 +127,7 @@ load_file(struct state *s)
     return;
   }
 
-  PUSH1(1);
+  PUSH1(0);
 
   fclose(fp);
 }
@@ -144,7 +144,7 @@ save_file(struct state *s)
 
   if (!fp)
   {
-    cf_printf(s, "Unable to read '%s'\n", filename);
+    cf_printf(s, "Unable to save '%s'\n", filename);
     PUSH1(-1);
     return;
   }
@@ -153,7 +153,7 @@ save_file(struct state *s)
 
   fclose(fp);
 
-  PUSH(1);
+  PUSH(0);
 }
 
 //void
