@@ -28,7 +28,8 @@
 
 :draw ^
    10 10 100 sdl/background
-   ~s" This is a test" dup sdl/text-size@ .s . . cr ,
+   ~s" This is a test" dup sdl/text-size@ .s . . cr ,l
+
    ^100 200  10 R 255 G 10 B  sdl/put-text
 
    ball ball-x @ ball-y @ sdl/put-image
