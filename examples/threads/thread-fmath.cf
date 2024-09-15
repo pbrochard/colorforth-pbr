@@ -6,10 +6,10 @@
 :th2 ~$50 ~[f,] ^fmath ;
 :th3 ~$55 ~[f,] ^fmath ;
 ~
-`th0 ~0 thread/run
-`th1 ~1 thread/run
-`th2 ~2 thread/run
-`th3 ~3 thread/run
+`th0 ~0 thread/run catch
+`th1 ~1 thread/run catch
+`th2 ~2 thread/run catch
+`th3 ~3 thread/run catch
 
 thread/join-all
 bye

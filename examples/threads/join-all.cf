@@ -3,9 +3,9 @@
 :th2 ~c" Thread 2 started" ^prn 3 sleep ~c" Thread 2 ended" ^prn ;
 
 ~
-`th0 ~0 thread/run
-`th1 ~1 thread/run
-`th2 ~2 thread/run
+`th0 ~0 thread/run catch
+`th1 ~1 thread/run catch
+`th2 ~2 thread/run catch
 
 thread/join-all
 

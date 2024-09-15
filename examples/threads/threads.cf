@@ -4,11 +4,11 @@
 :my-word3 ^5 2 + . my-word3 ;
 :my-word4 ^6 2 + . my-word4 ;
 ~
-`my-word0 ~0 thread/run
-`my-word1 ~1 thread/run
-`my-word2 ~2 thread/run
-`my-word3 ~3 thread/run
-`my-word4 ~4 thread/run
+`my-word0 ~0 thread/run catch
+`my-word1 ~1 thread/run catch
+`my-word2 ~2 thread/run catch
+`my-word3 ~3 thread/run catch
+`my-word4 ~4 thread/run catch
 
 5 sleep
 

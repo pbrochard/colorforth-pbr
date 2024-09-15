@@ -48,8 +48,8 @@ case OP_THREAD__RUN:
 
   if (n >= MAX_THREAD) {
     cf_printf(s, "Too many threads. At most %d allowed\n", MAX_THREAD);
-    PUSH1(-1);
-    return;
+    PUSH1(1);
+    break;
   }
 
   if (!initialized) {
@@ -68,6 +68,7 @@ case OP_THREAD__RUN:
   pthread_create(&thread_args[p1].pthread, NULL, perform_thread, (void *) &thread_args[p1]);
 
   PUSH1(n);
+  PUSH(0);
 
   break;
 }

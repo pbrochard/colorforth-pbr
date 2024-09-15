@@ -10,9 +10,9 @@
 :th4 ^15 250 4 thread ;
 
 ~
-`th1 ~0 thread/run 10 mssleep
-`th2 ~1 thread/run 10 mssleep
-`th3 ~2 thread/run 10 mssleep
+`th1 ~0 thread/run catch 10 mssleep
+`th2 ~1 thread/run catch 10 mssleep
+`th3 ~2 thread/run catch 10 mssleep
 `th4 ~3 thread/run
 
 thread/join-all
