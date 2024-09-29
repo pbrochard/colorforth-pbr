@@ -1,6 +1,8 @@
 // The author disclaims copyright to this source code.
 //
-// Extensions system: include only what you need
+// Extensions system: include only what you need.
+// ext/ext.c is build from the 0_tmpl.c template.
+// Edit only ext/ext.c to fit your needs.
 
 #ifndef __MINIMAL_BUILD
 
