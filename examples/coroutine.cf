@@ -1,4 +1,4 @@
-( Usage: colorforth src/coroutine.cf examples/coroutine.cf )
+( Usage: colorforth ext/coroutine.cf examples/coroutine.cf )
 :v1 ~0 variable ^;
 :v2 ~0 variable ^;
 :max1 ~10 variable ^;
