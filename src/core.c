@@ -199,8 +199,8 @@ define_primitive(s, ENTRY_NAME(",c"), OP_COMPILE);
 define_primitive(s, ENTRY_NAME(",l"), OP_COMPILE_LITERAL);
 
 define_primitive(s, ENTRY_NAME("c>"), OP_GET_ENTRY_CODE);
-define_primitive(s, ENTRY_NAME("call"), OP_EXECUTE);
-define_primitive(s, ENTRY_NAME("call*"), OP_EXECUTE_STAR);
+define_primitive(s, ENTRY_NAME("execute"), OP_EXECUTE);
+define_primitive(s, ENTRY_NAME("execute*"), OP_EXECUTE_STAR);
 
 define_primitive(s, ENTRY_NAME("if"), OP_IF);
 define_primitive(s, ENTRY_NAME("if*"), OP_IF_TAIL_CALL);
