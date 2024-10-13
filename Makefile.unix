@@ -98,7 +98,7 @@ uninstall:
 reconfig: uninstall install
 
 clean:
-	rm -f cf cf-unsafe store-test
+	rm -f colorforth colorforth-unsafe store-test
 
 mrproper: clean
 	rm -f conf.h src/lib.cf

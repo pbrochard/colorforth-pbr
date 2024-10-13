@@ -103,8 +103,6 @@ case '(': {
 #define OP_R_PUSH                    (opcode_t) 0x6299EDD8                // >R
 #define OP_R_POP                     (opcode_t) 0x3ECB51F8                // R>
 #define OP_R_FETCH                   (opcode_t) 0x6CCB9A62                // R@
-#define OP_CLEAR                     (opcode_t) 0x93C5A06D                // clear
-#define OP_RESET_STATE               (opcode_t) 0xEAA6ED6B                // reset-state
 
 // Register A
 #define OP_REG_A_LOAD                (opcode_t) 0x66A0AFE9                // A@
@@ -218,9 +216,6 @@ define_primitive(s, ENTRY_NAME(";"), OP_RETURN);
 define_primitive(s, ENTRY_NAME(">R"), OP_R_PUSH);
 define_primitive(s, ENTRY_NAME("R>"), OP_R_POP);
 define_primitive(s, ENTRY_NAME("R@"), OP_R_FETCH);
-
-define_primitive(s, ENTRY_NAME("clear"), OP_CLEAR);
-define_primitive(s, ENTRY_NAME("reset-state"), OP_RESET_STATE);
 
 #ifdef __USE_REGISTER
 
@@ -699,18 +694,6 @@ case OP_DOT_S:
 {
   dot_s(s, s->stack);
   break;
-}
-
-case OP_CLEAR:
-{
-  SP = -1;
-  break;
-}
-
-case OP_RESET_STATE:
-{
-  reset_state(s);
-  return;
 }
 
 #ifdef __USE_REGISTER

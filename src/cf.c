@@ -465,20 +465,3 @@ free_state(struct state *s)
 
   free(s);
 }
-
-void
-reset_state(struct state *s) {
-  s->done = 0;
-  s->stack->sp = -1;
-  s->r_stack->sp = -1;
-  s->color = execute;
-  s->str_stream = NULL;
-  if (s->file_stream) {
-    fclose(s->file_stream);
-    s->file_stream = NULL;
-  }
-  clear_tib(s);
-  s->echo_on = 0;
-  parse_from_string(s, " ~");
-  s->echo_on = 1;
-}

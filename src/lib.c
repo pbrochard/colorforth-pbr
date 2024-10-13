@@ -1,12 +1,14 @@
 // The author disclaims copyright to this source code.
 
+#ifndef __MINIMAL_BUILD
+
 /**********************************************************************************
  *   HASH DEF
  *********************************************************************************/
 #ifdef __SECTION_HASH_DEF
 
-#ifndef __MINIMAL_BUILD
-
+#define OP_CLEAR                     (opcode_t) 0x93C5A06D                // clear
+#define OP_RESET_STATE               (opcode_t) 0xEAA6ED6B                // reset-state
 #define OP_HASH                      (opcode_t) 0x3475B2F0                // hash
 #define OP_BASE                      (opcode_t) 0x7D3CE245                // base
 #define OP_ENTRY_IS                  (opcode_t) 0xDB70432B                // is!
@@ -17,8 +19,6 @@
 #define OP_DOT_STACKTRACE            (opcode_t) 0xC6A520A7                // .stacktrace
 #define OP_DOT_FULL_STACKTRACE       (opcode_t) 0x306C1267                // .full-stacktrace
 
-#endif /* __MINIMAL_BUILD */
-
 #endif /* __SECTION_HASH_DEF */
 
 
@@ -27,8 +27,8 @@
  *********************************************************************************/
 #ifdef __SECTION_WORD_DEF
 
-#ifndef __MINIMAL_BUILD
-
+define_primitive(s, ENTRY_NAME("clear"), OP_CLEAR);
+define_primitive(s, ENTRY_NAME("reset-state"), OP_RESET_STATE);
 define_primitive(s, ENTRY_NAME("hash"), OP_HASH);
 define_primitive(s, ENTRY_NAME("base"), OP_BASE);
 define_primitive(s, ENTRY_NAME("is!"), OP_ENTRY_IS);
@@ -36,8 +36,6 @@ define_primitive(s, ENTRY_NAME("c>is!"), OP_ENTRY_C_IS);
 define_primitive(s, ENTRY_NAME("entry/hide"), OP_ENTRY_HIDE);
 define_primitive(s, ENTRY_NAME(".stacktrace"), OP_DOT_STACKTRACE);
 define_primitive(s, ENTRY_NAME(".full-stacktrace"), OP_DOT_FULL_STACKTRACE);
-
-#endif /* __MINIMAL_BUILD */
 
 #endif /* __SECTION_WORD_DEF */
 
@@ -47,7 +45,17 @@ define_primitive(s, ENTRY_NAME(".full-stacktrace"), OP_DOT_FULL_STACKTRACE);
  *********************************************************************************/
 #ifdef __SECTION_SWITCH
 
-#ifndef __MINIMAL_BUILD
+case OP_CLEAR:
+{
+  SP = -1;
+  break;
+}
+
+case OP_RESET_STATE:
+{
+  reset_state(s);
+  return;
+}
 
 case OP_HASH: {
   POP1();
@@ -97,8 +105,6 @@ case OP_DOT_FULL_STACKTRACE: {
   break;
 }
 
-#endif /* __MINIMAL_BUILD */
-
 #endif /* __SECTION_SWITCH */
 
 
@@ -107,9 +113,24 @@ case OP_DOT_FULL_STACKTRACE: {
  *********************************************************************************/
 #ifdef __SECTION_FUNCTION
 
-#ifndef __MINIMAL_BUILD
-
 extern hash_t hash(char *str);
+
+void
+reset_state(struct state *s) {
+  s->done = 0;
+  s->stack->sp = -1;
+  s->r_stack->sp = -1;
+  s->color = execute;
+  s->str_stream = NULL;
+  if (s->file_stream) {
+    fclose(s->file_stream);
+    s->file_stream = NULL;
+  }
+  clear_tib(s);
+  s->echo_on = 0;
+  parse_from_string(s, " ~");
+  s->echo_on = 1;
+}
 
 void
 hash_fn (struct state *s)
@@ -169,6 +190,6 @@ parse_from_file(struct state *s, char *filename)
   parse_space(s);
 }
 
-#endif /* __MINIMAL_BUILD */
-
 #endif /* __SECTION_FUNCTION */
+
+#endif /* __MINIMAL_BUILD */
