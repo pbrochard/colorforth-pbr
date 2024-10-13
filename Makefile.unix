@@ -4,7 +4,7 @@ default: colorforth
 
 .PHONY: optim_cpl
 
-SRC=src/main.c src/cf.c \
+SRC=src/cf.c \
 	src/cf-stdio.c \
 	src/color.c \
 	src/utils.c
@@ -55,11 +55,11 @@ lib.cf: src/lib.tmpl.cf
 	[ -f ~/.config/colorforth.cf ] && cp ~/.config/colorforth.cf ~/.config/colorforth.bak.cf || true
 	cp src/lib.tmpl.cf ~/.config/colorforth.cf
 
-colorforth: Makefile conf.h $(SRC) $(INCLUDED_SRC) $(SRC_H)
-	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
+colorforth: Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
+	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
 colorforth-unsafe: Makefile $(SRC) $(SRC_H)
-	gcc -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe $(SRC) $(EXTRA_CLIBS)
+	gcc -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
 
 optimize: colorforth
 	@#readelf -l colorforth
@@ -84,6 +84,9 @@ dump: colorforth
 dumpelf: colorforth
 	readelf -a colorforth | less
 
+store-test: src/store-test.c $(SRC) $(SRC_H)
+	gcc $(FLAGS) $(EXTRA_CFLAGS) -o store-test src/store-test.c $(SRC) $(EXTRA_CLIBS)
+
 cleanelf: colorforth
 	termux-elf-cleaner colorforth
 
@@ -95,7 +98,7 @@ uninstall:
 reconfig: uninstall install
 
 clean:
-	rm -f cf cf-unsafe
+	rm -f cf cf-unsafe store-test
 
 mrproper: clean
 	rm -f conf.h src/lib.cf

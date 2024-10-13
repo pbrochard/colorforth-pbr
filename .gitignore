@@ -3,6 +3,7 @@ colorforth
 colorforth-unsafe
 cf
 cf-unsafe
+store-test
 conf.h
 lib.cf
 colorforth-arduino/conf.h
