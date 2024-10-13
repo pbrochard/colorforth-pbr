@@ -1,0 +1,13 @@
+:fizz ~c" Fizz" ^pr ;
+:buzz ~c" Buzz" ^pr ;
+
+:div? (i n - f) ^mod 0 = ;
+
+:display (i - i) ^
+   dup  5 div?  over 3 div?  2dup
+   'fizz ^if   'buzz ^if   or 'space ^if;   dup . ;
+
+:main ^0
+:loop ^1+  display  dup 100 < 'loop ^if* ;
+
+~main bye
