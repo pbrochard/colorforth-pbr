@@ -67,8 +67,8 @@ optimize: colorforth
 	strip --strip-all colorforth
 	strip -R.comment -R.note -R.eh_frame_hdr -R.eh_frame -R.note.ABI-tag -R.jcr \
 	colorforth
-	objcopy -I elf64-x86-64 -O elf64-x86-64 --section-alignment 512 cf cf
-	@#xcc -std=c99 -Os -Wno-missing-braces -target=XS1-L16A-128-QF124-C10 cf.c -o colorforth.xe
+	objcopy -I elf64-x86-64 -O elf64-x86-64 --section-alignment 512 colorforth colorforth
+	@#xcc -std=c99 -Os -Wno-missing-braces -target=XS1-L16A-128-QF124-C10 colorforth.c -o colorforth.xe
 
 optimize-unsafe: colorforth-unsafe
 	@#readelf -l colorforth-unsafe
