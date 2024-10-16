@@ -20,7 +20,7 @@ typedef long cell;
 // #define __SHOW_MISSING_HASH
 
 // Enable hashed names: reduce memory size but break words/see/disasemble
-#define __KEEP_ENTRY_NAMES
+// #define __KEEP_ENTRY_NAMES
 
 #ifndef __MINIMAL_BUILD
 

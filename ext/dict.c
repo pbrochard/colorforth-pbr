@@ -150,7 +150,7 @@ see(struct state *s, cell entry_index)
   cf_printf(s, "\n");
 #else
   cf_printf(s, "Hashed names. Nothing to see!\n");
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
 }
 
 void
@@ -162,7 +162,7 @@ disassemble_dict(struct state *s, struct dictionary *dict)
    }
 #else
    cf_printf(s, "Hashed names. Nothing to see!\n");
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
  }
 
 void

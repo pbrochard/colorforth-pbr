@@ -15,7 +15,7 @@
 #define ENTRY_NAME(name) (name)
 #else
 #define ENTRY_NAME(name) (NULL)
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
 
 #define __SECTION_HASH_DEF
 #include "core.c"
@@ -66,7 +66,7 @@ define_primitive(struct state *s, char name[] __attribute__((unused)), hash_t ha
   entry->name_len = strlen(NON_NULL(name));
   entry->name = cf_calloc(s, 1, entry->name_len + 1, PRIMITIVE_ERROR);
   memcpy(entry->name, NON_NULL(name), entry->name_len);
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
 
 #ifdef __SHOW_MISSING_HASH
 #ifdef __KEEP_ENTRY_NAMES
@@ -81,8 +81,8 @@ define_primitive(struct state *s, char name[] __attribute__((unused)), hash_t ha
   free(up_name);
 #else
   cf_printf(s, "%-20lX %lX\n", entry->opcode, hashed_name);
-#endif
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
+#endif /* __SHOW_MISSING_HASH */
 }
 
 /**
@@ -108,7 +108,7 @@ define(struct state *s)
   // TODO
   //if (check_entry(s, entry)) display_clash_found(s, 1);
 #endif /* __LIVE_CHECK_DICT */
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
 
   entry->offset = s->here;
   entry->mode = CALL;

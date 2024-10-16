@@ -36,7 +36,7 @@ struct entry
 #ifdef __KEEP_ENTRY_NAMES
   char *name;
   size_t name_len;
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
   // offset to find code in the heap
   cell offset;
 };

@@ -89,7 +89,7 @@ case OP_ENTRY_HIDE: {
   free(entry->name);
   entry->name = NULL;
   entry->name_len = 0;
-#endif
+#endif /* __KEEP_ENTRY_NAMES */
 
   break;
 }
