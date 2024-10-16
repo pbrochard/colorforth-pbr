@@ -238,7 +238,7 @@ define_register_primitive(K);
 
 define_primitive(s, ENTRY_NAME("IJK>R"), OP_IJK_TO_R);
 define_primitive(s, ENTRY_NAME("R>KJI"), OP_R_TO_KJI);
-#endif
+#endif /* __USE_REGISTER */
 
 #endif /* __SECTION_WORD_DEF */
 
