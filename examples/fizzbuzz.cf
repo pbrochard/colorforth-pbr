@@ -1,3 +1,27 @@
+( FizzBuzz v1 )
+
+:fizz ~c" Fizz " ^pr ;
+:buzz ~c" Buzz " ^pr ;
+:fizzbuzz ~c" FizzBuzz " ^pr ;
+
+:div? (i n - i f) ^over swap mod 0 = ;
+
+:display (i - i)^
+   15 div? 'fizzbuzz ^if;
+   3 div?  'fizz ^if;
+   5 div?  'buzz ^if;
+   dup .
+;
+
+:fizzbuzz ^0
+:loop ^1+  display  dup 100 < 'loop ^if* ;
+
+~fizzbuzz
+
+
+
+( FizzBuzz v2 )
+
 :fizz ~c" Fizz" ^pr ;
 :buzz ~c" Buzz" ^pr ;
 
@@ -10,7 +34,38 @@
    dup .
 ;
 
-:main ^0
+:fizzbuzz ^0
 :loop ^1+  display  dup 100 < 'loop ^if* ;
 
-~main bye
+~cr cr fizzbuzz
+
+
+
+( FizzBuzz v3 )
+
+:div? (i n - f) ^mod 0 = ;
+
+:fizz? (i - f) ^3 div?  dup  'fizz ^if ;
+:buzz? (i - f) ^5 div?  dup  'buzz ^if ;
+:number? (i f f -) ^or 'space ^if;  dup . ;
+
+:fizzbuzz ^0
+:loop ^1+  dup fizz?  over buzz?  number?  dup 100 < 'loop ^if* ;
+
+~cr cr fizzbuzz
+
+
+
+( FizzBuzz v4 )
+
+:div? (i n - f) ^mod 0 = ;
+
+:maybe? (i n xt - f) ^>R div? dup R> if ;
+:number? (i f f -) ^or 'space ^if;  dup . ;
+
+:fizzbuzz ^0
+:loop ^1+  dup 3 'fizz ^maybe?  over 5 'buzz ^maybe?  number?  dup 100 < 'loop ^if* ;
+
+~cr cr fizzbuzz
+
+bye
