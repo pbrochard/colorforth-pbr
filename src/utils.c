@@ -241,7 +241,7 @@ dump_words(struct state *s, struct dictionary *dict)
 void
 dump_words(struct state *s, struct dictionary *dict __attribute__((unused)))
 {
-  // cf_printf(s, "...\n");
+  cf_printf(s, "...\n");
 }
 #endif /* __KEEP_ENTRY_NAMES */
 
