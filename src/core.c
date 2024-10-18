@@ -72,10 +72,6 @@ case '(': {
 #define OP_WORDS                     (opcode_t) 0x30E76679                // words
 #define OP_EMIT                      (opcode_t) 0x9B01D09B                // emit
 #define OP_KEY                       (opcode_t) 0x485BCDF                 // key
-#define OP_LOAD                      (opcode_t) 0x61152930                // p@
-#define OP_STORE                     (opcode_t) 0xC215C1E3                // p!
-#define OP_CLOAD                     (opcode_t) 0xF6A62E2B                // pc@
-#define OP_CSTORE                    (opcode_t) 0x55A6C3B8                // pc!
 #define OP_HEAP_LOAD                 (opcode_t) 0x400064C0                // @
 #define OP_HEAP_STORE                (opcode_t) 0x210033F3                // !
 #define OP_HEAP_CLOAD                (opcode_t) 0x72F4F1DB                // c@
@@ -178,10 +174,6 @@ define_primitive(s, ENTRY_NAME("bye"), OP_BYE);
 define_primitive(s, ENTRY_NAME("words"), OP_WORDS);
 define_primitive(s, ENTRY_NAME("emit"), OP_EMIT);
 define_primitive(s, ENTRY_NAME("key"), OP_KEY);
-define_primitive(s, ENTRY_NAME("p@"), OP_LOAD);
-define_primitive(s, ENTRY_NAME("p!"), OP_STORE);
-define_primitive(s, ENTRY_NAME("pc@"), OP_CLOAD);
-define_primitive(s, ENTRY_NAME("pc!"), OP_CSTORE);
 define_primitive(s, ENTRY_NAME("@"), OP_HEAP_LOAD);
 define_primitive(s, ENTRY_NAME("!"), OP_HEAP_STORE);
 define_primitive(s, ENTRY_NAME("c@"), OP_HEAP_CLOAD);
@@ -336,38 +328,6 @@ case OP_NIP:
   ENSURE_STACK_MIN(2);
   SP -= 1;
   CELLS[SP] = CELLS[SP + 1];
-  break;
-}
-
-case OP_LOAD:
-{
-  ENSURE_STACK_MIN(1);
-  CELLS[SP] = *(cell*) CELLS[SP];
-  break;
-}
-
-case OP_STORE:
-{
-  ENSURE_STACK_MIN(2);
-  cell *ptr = (cell*) CELLS[SP];
-  *ptr = CELLS[SP - 1];
-  SP -= 2;
-  break;
-}
-
-case OP_CLOAD:
-{
-  ENSURE_STACK_MIN(1);
-  CELLS[SP] = *(char*) CELLS[SP];
-  break;
-}
-
-case OP_CSTORE:
-{
-  ENSURE_STACK_MIN(2);
-  char *ptr = (char*) CELLS[SP];
-  *ptr = CELLS[SP - 1];
-  SP -= 2;
   break;
 }
 
