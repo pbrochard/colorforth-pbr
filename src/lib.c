@@ -114,6 +114,7 @@ case OP_DOT_FULL_STACKTRACE: {
 #ifdef __SECTION_FUNCTION
 
 extern hash_t hash(char *str);
+void execute(struct state *s);
 
 void
 reset_state(struct state *s) {
