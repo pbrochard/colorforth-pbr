@@ -22,7 +22,8 @@ INCLUDED_SRC=src/core.c \
 	ext/threads.c \
 	ext/mp-math.c \
 	ext/network.c \
-	ext/sdl.c
+	ext/sdl.c \
+	src/saved-state.c
 
 
 SRC_H=src/cf.h \

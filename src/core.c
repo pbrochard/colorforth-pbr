@@ -81,7 +81,9 @@ case '(': {
 #define OP_HERE_ADDR                 (opcode_t) 0xAE504314                // &here
 #define OP_HEAP                      (opcode_t) 0x89705C80                // &heap
 #define OP_HEAP_SIZE                 (opcode_t) 0xC2A05C60                // heap-size
+#define OP_DICT_SIZE                 (opcode_t) 0x86696E6E                // dict-size
 #define OP_LATEST                    (opcode_t) 0xA307AFAB                // latest
+#define OP_DICT_ENTRIES_ADDR         (opcode_t) 0x35B18C06                // &dict
 #define OP_COMPILE                   (opcode_t) 0x6B6CDC65                // ,c
 #define OP_COMPILE_LITERAL           (opcode_t) 0x6C6CDDF8                // ,l
 #define OP_GET_ENTRY_CODE            (opcode_t) 0xC0F56CA5                // c>
@@ -183,7 +185,9 @@ define_primitive(s, ENTRY_NAME("here"), OP_HERE);
 define_primitive(s, ENTRY_NAME("&here"), OP_HERE_ADDR);
 define_primitive(s, ENTRY_NAME("&heap"), OP_HEAP);
 define_primitive(s, ENTRY_NAME("heap-size"), OP_HEAP_SIZE);
+define_primitive(s, ENTRY_NAME("dict-size"), OP_DICT_SIZE);
 define_primitive(s, ENTRY_NAME("latest"), OP_LATEST);
+define_primitive(s, ENTRY_NAME("&dict"), OP_DICT_ENTRIES_ADDR);
 
 define_primitive(s, ENTRY_NAME(",c"), OP_COMPILE);
 define_primitive(s, ENTRY_NAME(",l"), OP_COMPILE_LITERAL);
@@ -600,10 +604,24 @@ case OP_HEAP_SIZE:
   break;
 }
 
+case OP_DICT_SIZE:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH((cell) DICT_SIZE * sizeof(struct entry));
+  break;
+}
+
 case OP_LATEST:
 {
   ENSURE_STACK_MAX(1);
   PUSH(s->dict.latest);
+  break;
+}
+
+case OP_DICT_ENTRIES_ADDR:
+{
+  ENSURE_STACK_MAX(1);
+  PUSH((cell) ((char*) s->dict.entries));
   break;
 }
 

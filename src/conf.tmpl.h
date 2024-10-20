@@ -6,7 +6,17 @@
 typedef long cell;
 #define CELL_FMT "%ld"
 
+// #define STATE_FILE "src/saved-state.c"
+
+// Enable colors in the terminal
+#define __ECHO_COLOR
+
+#ifndef STATE_FILE
+
 #define config_file ".config/colorforth.cf"
+
+#endif /* STATE_FILE */
+
 
 // Uncomment for a minimal build with only mandatory extensions
 // Build with:
@@ -33,9 +43,6 @@ typedef long cell;
 #ifdef __CHECK_DICT
 #define __LIVE_CHECK_DICT
 #endif /* __CHECK_DICT */
-
-// Enable colors in the terminal
-#define __ECHO_COLOR
 
 // Enable exception
 #define __EXCEPTION
