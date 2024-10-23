@@ -50,14 +50,6 @@ reset_terminal_(void)
   printf("%s", COLOR_CLEAR);
 }
 
-void
-init_color_fns (void)
-{
-  echo_color = echo_color_;
-  init_terminal = init_terminal_;
-  reset_terminal = reset_terminal_;
-}
-
 #endif /* __ECHO_COLOR */
 
 void
@@ -73,6 +65,18 @@ init_terminal_no_(void)
 void
 reset_terminal_no_(void)
 {
+}
+
+
+
+void
+init_color_fns (void)
+{
+#ifdef __ECHO_COLOR
+  echo_color = echo_color_;
+  init_terminal = init_terminal_;
+  reset_terminal = reset_terminal_;
+#endif /* __ECHO_COLOR */
 }
 
 
