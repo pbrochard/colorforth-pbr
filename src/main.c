@@ -48,11 +48,18 @@ parse_command_line(struct state *s, int argc, char *argv[])
   s->echo_on = 0;
 
   char nextIsEval = 0;
+  char hasColor = 1;
   for (int i = 1; i < argc; i++)
   {
     if (memcmp(argv[i], "-e", 2) == 0)
     {
       nextIsEval = 1;
+      continue;
+    }
+
+    if (memcmp(argv[i], "-d", 2) == 0)
+    {
+      hasColor = 0;
       continue;
     }
 
@@ -68,8 +75,7 @@ parse_command_line(struct state *s, int argc, char *argv[])
     parse_from_file(s, argv[i]);
   }
 
-  parse_colorforth(s, '~');
-  s->echo_on = 1;
+  if (hasColor) init_color_fns();
 }
 
 #ifdef __EXCEPTION
@@ -122,7 +128,7 @@ main(int argc, char *argv[])
     return 0;
   }
 
-  init_terminal();
+  init_no_color_fns();
 
   s = colorforth_newstate();
 
@@ -134,6 +140,11 @@ main(int argc, char *argv[])
 
   parse_home_lib(s, argc, argv);
   parse_command_line(s, argc, argv);
+
+  init_terminal();
+
+  parse_colorforth(s, '~');
+  s->echo_on = 1;
 
 #ifdef __EXCEPTION
   install_sigaction(&handler);

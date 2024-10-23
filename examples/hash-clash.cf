@@ -3,7 +3,7 @@
 ~\ Usage:
 ~\   cf examples/hash-clash.cf | cf
 ~\ For long words, increase DICT_SIZE to 4000000
-~\ and disable __LIVE_CHECK_DICT and __ECHO_COLOR in conf.h
+~\ and disable __LIVE_CHECK_DICT in conf.h
 
 " abcdefghijklmnopqrstuvwxyz+-*/@!$?" dup
 :len ~@ constant ,;
