@@ -7,7 +7,7 @@
 
 struct termios old_tio;
 
-void (*echo_color)();
+void (*echo_color)(struct state *s, int c, char *color);
 void (*init_terminal)(void);
 void (*reset_terminal)(void);
 
@@ -50,7 +50,7 @@ reset_terminal_(void)
 }
 
 void
-echo_color_no_(struct state *s, int c)
+echo_color_no_(struct state *s, int c, char *color)
 {
 }
 
