@@ -2,7 +2,8 @@
 #ifndef __ECHO_COLOR_H
 #define __ECHO_COLOR_H
 
-#ifdef __ECHO_COLOR
+extern void init_color_fns(void);
+extern void init_no_color_fns(void);
 
 #define COLOR_RED      "\x1B[01;91m"
 #define COLOR_MAGENTA  "\x1B[01;95m"
@@ -13,25 +14,9 @@
 #define COLOR_WHITE    "\x1B[01;37m"
 #define COLOR_CLEAR    "\x1B[0m"
 
-extern void echo_color(struct state *state, int c, char *color);
-extern void init_terminal(void);
-extern void reset_terminal(void);
-
-#else
-
-#define COLOR_RED      ""
-#define COLOR_MAGENTA  ""
-#define COLOR_GREEN    ""
-#define COLOR_YELLOW   ""
-#define COLOR_BLUE     ""
-#define COLOR_CYAN     ""
-#define COLOR_WHITE    ""
-#define COLOR_CLEAR    ""
-
-#define echo_color(state, c, color)
-#define init_terminal()
-#define reset_terminal()
-
-#endif
+//extern void (*echo_color)(struct state *state, int c, char *color);
+extern void (*echo_color)();
+extern void (*init_terminal)(void);
+extern void (*reset_terminal)(void);
 
 #endif /* __ECHO_COLOR_H */
