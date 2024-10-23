@@ -34,6 +34,9 @@ typedef long cell;
 #define __LIVE_CHECK_DICT
 #endif /* __CHECK_DICT */
 
+// Enable colors in the terminal
+#define __ECHO_COLOR
+
 // Enable exception
 #define __EXCEPTION
 

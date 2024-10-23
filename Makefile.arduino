@@ -8,6 +8,7 @@ src/conf.tmpl.h:
 	sed -i 's/CELL_FMT "%ld"/CELL_FMT "%d"/' arduino/conf.h
 	sed -i 's%\(#define __KEEP_ENTRY_NAMES\)%// \1%' arduino/conf.h
 	sed -i 's%\(#define __USE_REGISTER\)%// \1%' arduino/conf.h
+	sed -i 's%\(#define __ECHO_COLOR\)%// \1%' arduino/conf.h
 	sed -i 's%\(#define __EXTENDED_MATH\)%// \1%' arduino/conf.h
 	sed -i 's%\(#define FSTACK_SIZE.*\)%// \1%' arduino/conf.h
 	sed -i 's%\(.*double number_t\)%// \1%' arduino/conf.h

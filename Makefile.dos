@@ -35,6 +35,7 @@ conf.h: src\conftm~1.h
 	copy src\conftm~1.h conf.h
 
 patch4dos: conf.h
+	sed -i "s%#define __ECHO_COLOR%//#define __ECHO_COLOR%g" conf.h
 	sed -i "s%#define config_file%//##define config_file%g" conf.h
 	sed -i "s%#define __EXCEPTION%//#define ___EXCEPTION%g" conf.h
 	sed -i "s%#define __EXTENDED_MATH%//#define __EXTENDED_MATH%g" conf.h
