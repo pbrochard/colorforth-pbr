@@ -12,12 +12,12 @@ cf_print_cell(struct state *s, cell cell)
   {
     case 16:
     {
-      cf_printf(s, "$%lX", cell);
+      cf_printf(s, "0x%02lX", cell);
       break;
     }
     case 2:
     {
-      cf_putchar(s, '#');
+      cf_putchar(s, 'b');
       if (cell == 0)
       {
         cf_printf(s, "0 ");
