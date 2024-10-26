@@ -11,3 +11,4 @@ colorforth-arduino/conf.h
 ext/ext.c
 arduino/build/
 arduino/sketch.yaml
+/src/saved-state.c
