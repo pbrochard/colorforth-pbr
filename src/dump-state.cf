@@ -1,0 +1,33 @@
+~here latest
+
+:s-latest ~,l ^;
+:s-here ~,l ^;
+
+:cr? (c - c) ^dup 25 mod 0 = 'cr ^if ;
+
+:dump-heap ^-1
+:loop ^1+ dup c@ . ~key , ,l ^emit cr?  dup heap-size 1- < 'loop ^if* ;
+
+:dump-dict ^-1
+:loop ^1+ dup &dict + pc@ . ~key , ,l ^emit cr?  dup dict-size 1- < 'loop ^if* ;
+
+:dump-entry-names ^-1
+:loop ^1+ ^34 emit dup .entry-name 34 emit 44 emit cr?  dup s-latest < 'loop ^if* ;
+
+~
+." cell state_latest = " s-latest . ." ;" cr
+." cell state_here =  "  s-here . ." ;" cr
+
+." char *state_entry_names[] = {" cr
+dump-entry-names
+." };" cr
+
+." unsigned char state_entries[DICT_SIZE * sizeof(struct entry)] = {" cr
+dump-dict
+." };" cr
+
+." unsigned char state_heap[HEAP_SIZE] = {" cr
+~dump-heap
+." };" cr
+
+~bye
