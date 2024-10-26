@@ -19,30 +19,6 @@ extern void reset_state(struct state *s);
 extern void show_full_stacktrace(struct state *s);
 
 void
-parse_home_lib(struct state *s, int argc, char *argv[]) {
-#ifdef config_file
-  for (int i = 1; i < argc; i++)
-  {
-    if (memcmp(argv[i], "-n", 2) == 0) return;
-  }
-
-  char *filename = calloc(1024, sizeof(char));
-
-  s->echo_on = 0;
-
-  strcat(filename, getenv("HOME"));
-  strcat(filename, "/");
-  strcat(filename, config_file);
-
-  parse_from_file(s, filename);
-
-  free(filename);
-
-  s->echo_on = 1;
-#endif
-}
-
-void
 parse_command_line(struct state *s, int argc, char *argv[])
 {
   s->echo_on = 0;
@@ -138,7 +114,6 @@ main(int argc, char *argv[])
   install_sigaction(&handler0);
 #endif /* __EXCEPTION */
 
-  parse_home_lib(s, argc, argv);
   parse_command_line(s, argc, argv);
 
   init_terminal();

@@ -2,7 +2,7 @@
 
 default: colorforth
 
-.PHONY: optim_cpl embed
+.PHONY: optim_cpl full
 
 SRC=src/cf.c \
 	src/cf-stdio.c \
@@ -49,20 +49,17 @@ conf.h: src/conf.tmpl.h
 ext/ext.c: ext/0_tmpl.c
 	cp ext/0_tmpl.c ext/ext.c
 
-lib.cf: src/lib.tmpl.cf
-	[ -f ~/.config/colorforth.bak.cf ] && echo "Backup file '~/.config/colorforth.bak.cf' exists. Exiting" && exit 1 || true
-	mkdir -p ~/.config
-	[ -f ~/.config/colorforth.cf ] && cp ~/.config/colorforth.cf ~/.config/colorforth.bak.cf || true
-	cp src/lib.tmpl.cf ~/.config/colorforth.cf
+src/lib.cf: src/lib.tmpl.cf
+	cp src/lib.tmpl.cf src/lib.cf
 
-colorforth: Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
+colorforth: Makefile conf.h src/main.c src/lib.cf $(SRC) $(INCLUDED_SRC) $(SRC_H)
 	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
 colorforth-unsafe: Makefile $(SRC) $(SRC_H)
 	gcc -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
 
-embed: clean colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
-	./colorforth -d src/dump-state.cf > src/saved-state.c
+full: clean colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
+	./colorforth -d src/lib.cf src/dump-state.cf > src/saved-state.c
 	make EXTRA_CFLAGS=-D__FROM_STATE_FILE clean colorforth
 
 optimize: colorforth
@@ -90,8 +87,6 @@ dumpelf: colorforth
 
 cleanelf: colorforth
 	termux-elf-cleaner colorforth
-
-install: colorforth lib.cf
 
 uninstall:
 	rm -f ~/.config/colorforth.cf ~/.config/colorforth.bak.cf

@@ -10,6 +10,20 @@
 ### 2 + 2 = 5 joke
 [![asciicast](https://asciinema.org/a/4Pj6f2zWerSnvbOEDZOoDFH38.svg)](https://asciinema.org/a/4Pj6f2zWerSnvbOEDZOoDFH38)
 
+### Building
+
+- Base version
+
+```
+make
+```
+
+- Full version with `src/lib.cf` included
+
+```
+make full
+```
+
 ### Heap layout
 
 ```
