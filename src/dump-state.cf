@@ -1,3 +1,6 @@
+~\ Use `make full` to dump the current state into src/saved-state.c
+~\ and recompile colorforth with the saved state embeded
+
 ~here latest
 
 :s-latest ~,l ^;
