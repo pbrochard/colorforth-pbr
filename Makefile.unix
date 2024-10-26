@@ -2,7 +2,7 @@
 
 default: colorforth
 
-.PHONY: optim_cpl
+.PHONY: optim_cpl embed
 
 SRC=src/cf.c \
 	src/cf-stdio.c \
@@ -61,6 +61,10 @@ colorforth: Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
 colorforth-unsafe: Makefile $(SRC) $(SRC_H)
 	gcc -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
 
+embed: clean colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
+	./colorforth -d src/dump-state.cf > src/saved-state.c
+	make EXTRA_CFLAGS=-D__FROM_STATE_FILE clean colorforth
+
 optimize: colorforth
 	@#readelf -l colorforth
 	@# required: .gnu.version .gnu.version_r
@@ -84,9 +88,6 @@ dump: colorforth
 dumpelf: colorforth
 	readelf -a colorforth | less
 
-store-test: src/store-test.c $(SRC) $(SRC_H)
-	gcc $(FLAGS) $(EXTRA_CFLAGS) -o store-test src/store-test.c $(SRC) $(EXTRA_CLIBS)
-
 cleanelf: colorforth
 	termux-elf-cleaner colorforth
 
@@ -98,7 +99,10 @@ uninstall:
 reconfig: uninstall install
 
 clean:
-	rm -f colorforth colorforth-unsafe store-test
+	rm -f colorforth colorforth-unsafe
 
-mrproper: clean
+clean-state:
+	rm -f src/saved-state.c
+
+mrproper: clean clean-state
 	rm -f conf.h src/lib.cf

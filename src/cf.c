@@ -35,6 +35,8 @@ extern void display_clash_found(struct state *s, char clash_found);
 #undef __SECTION_FUNCTION
 
 
+#ifndef __FROM_STATE_FILE
+
 // 'hashed_name' is 'hash(name)' or 0x0 if names are kept
 // 'name' must be null-terminated.
 static void
@@ -84,6 +86,8 @@ define_primitive(struct state *s, char name[] __attribute__((unused)), hash_t ha
 #endif /* __KEEP_ENTRY_NAMES */
 #endif /* __SHOW_MISSING_HASH */
 }
+
+#endif /* __FROM_STATE_FILE */
 
 /**
  *
@@ -404,6 +408,11 @@ parse_from_string(struct state *s, char *str)
   parse_space(s);
 }
 
+
+#ifdef __FROM_STATE_FILE
+#include "src/saved-state.c"
+#endif /* __FROM_STATE_FILE */
+
 struct state*
 colorforth_newstate(void)
 {
@@ -418,25 +427,46 @@ colorforth_newstate(void)
   s->r_stack = cf_calloc(s, 1, sizeof(struct stack), RSTACK_ERROR);
   init_stack(s->r_stack, R_STACK_SIZE, RSTACK_INIT_ERROR);
 
+#ifndef __FROM_STATE_FILE
   s->dict.entries = cf_calloc(s, DICT_SIZE, sizeof(struct entry), DICT_ERROR);
   s->dict.latest = -1;
+
+  /* for (long unsigned int i = 0 ; i < DICT_SIZE * sizeof(struct entry); i++) { */
+  /*   // printf("i=%ld dict=%s\n", i, (int ((char*)s->dict.entries) + i); */
+  /*   printf("i=%ld dict=%d\n", i, *(s->dict.entries + i)); */
+  /* } */
 
   s->heap = cf_calloc(s, 1, HEAP_SIZE, HEAP_ERROR);
   s->here = 0;
   STORE(OP_NOP, opcode_t);
   STORE(OP_RETURN, opcode_t);
 
-  s->done = 0;
-  s->echo_on = 0;
-
-  s->str_stream = NULL;
-  s->file_stream = NULL;
-
 #define __SECTION_WORD_DEF
 #include "core.c"
 #include "ext.c"
 #include "lib.c"
 #undef __SECTION_WORD_DEF
+
+#else /* __FROM_STATE_FILE */
+  s->heap = state_heap;
+  s->here = state_here;
+
+  s->dict.entries = (struct entry *) state_entries;
+  s->dict.latest = state_latest;
+
+#ifdef __KEEP_ENTRY_NAMES
+  for (int i = 0; i <= state_latest; i++) {
+    s->dict.entries[i].name = state_entry_names[i];
+    s->dict.entries[i].name_len = strlen(s->dict.entries[i].name);
+  }
+#endif /* __KEEP_ENTRY_NAMES */
+#endif /* __FROM_STATE_FILE */
+
+  s->done = 0;
+  s->echo_on = 0;
+
+  s->str_stream = NULL;
+  s->file_stream = NULL;
 
   s->color = execute;
   echo_color(s, '~', COLOR_YELLOW);
@@ -448,9 +478,11 @@ colorforth_newstate(void)
 void
 free_state(struct state *s)
 {
+#ifndef __FROM_STATE_FILE
   free(s->heap);
 
   free_dictionary(&s->dict);
+#endif /* __FROM_STATE_FILE */
 
   free_stack(s->r_stack);
   free_stack(s->stack);

@@ -6,6 +6,7 @@
 #ifdef __SECTION_HASH_DEF
 
 #define OP_SEE                       (opcode_t) 0x519873B3                // see
+#define OP_PRINY_ENTRY_NAME          (opcode_t) 0x438DE81E                // .entry-name
 #define OP_DISASSEMBLE               (opcode_t) 0xF9B7D344                // disassemble
 #define OP_FULLROOM                  (opcode_t) 0x85D1BFBA                // fullroom
 #define OP_ENTRY__PATCH              (opcode_t) 0x8AC21565                // entry/patch
@@ -20,6 +21,7 @@
 #ifdef __SECTION_WORD_DEF
 
 define_primitive(s, ENTRY_NAME("see"),         OP_SEE); //, see_fn);
+define_primitive(s, ENTRY_NAME(".entry-name"),  OP_PRINY_ENTRY_NAME);
 define_primitive(s, ENTRY_NAME("disassemble"), OP_DISASSEMBLE); //, disassemble);
 define_primitive(s, ENTRY_NAME("fullroom"),    OP_FULLROOM); //, fullroom);
 define_primitive(s, ENTRY_NAME("entry/patch"), OP_ENTRY__PATCH); //, patch_entry);
@@ -38,6 +40,14 @@ case OP_SEE: {
   cell entry_offset = p1;
   cell entry_index = find_entry_by_offset(&s->dict, entry_offset);
   see(s, entry_index);
+  break;
+}
+
+case OP_PRINY_ENTRY_NAME: {
+  POP1();
+  char escaped[TIB_SIZE] = "";
+
+  cf_printf(s, "%s", escape_string(s->dict.entries[p1].name, escaped));
   break;
 }
 
@@ -177,8 +187,8 @@ fullroom(struct state *s) {
   cf_printf(s, "-------- ROOM -------------------------------------------\n");
   cf_printf(s, "Cell size is %u bytes / %u bits\n", (unsigned int) sizeof(cell), (unsigned int) sizeof(cell) * 8);
 
-  cf_printf(s, "The circular stack size is %d cells\n", s->stack->lim + 1);
-  cf_printf(s, "The circular return stack size is %d cells\n", s->r_stack->lim + 1);
+  cf_printf(s, "The stack size is %d cells\n", s->stack->lim + 1);
+  cf_printf(s, "The return stack size is %d cells\n", s->r_stack->lim + 1);
   cf_printf(s, "Maximm length of a word is %d chars\n", TIB_SIZE);
 
   cf_printf(s, "--\n");
@@ -191,6 +201,24 @@ fullroom(struct state *s) {
   cf_printf(s, "There is %u / %d (%u%%) bytes used on the heap\n", used, HEAP_SIZE,
             (used*100/HEAP_SIZE));
   cf_printf(s, "---------------------------------------------------------\n");
+}
+
+char *
+escape_string(char *src, char *dst) {
+  if (src == NULL) return dst;
+
+  int i, j = 0;
+
+  for (i = 0; src[i] != '\0'; i++) {
+    if (src[i] == '"' || src[i] == '\\') {
+      dst[j++] = '\\';
+    }
+    dst[j++] = src[i];
+  }
+
+  dst[j] = '\0';
+
+  return dst;
 }
 
 // void
