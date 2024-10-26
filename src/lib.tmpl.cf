@@ -101,6 +101,9 @@
   `1- `cmove-advance ^is!
   cmove-loop ;
 
+~\ Runtime strings
+:." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;
+
 ~( Zero terminated + counted strings )
 :"done ^drop
    ^0 1 dalloc c! (store 0)

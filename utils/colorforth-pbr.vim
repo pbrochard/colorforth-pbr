@@ -21,7 +21,7 @@ syn match colorForthComment "\~\\.*$"
 syn region colorForthBlockComment   start="(" end=")" fold contains=colorForthBlockComment
 
 syn region colorForthDefine start=":" end=" " contains=ALL
-syn region colorForthString start=/[cs]"/ end=/"/
+syn region colorForthString start=/[cs.]"/ end=/"/
 syn region colorForthTick start="'" end="[:~('`^]" contains=ALL
 syn region colorForthTickEntry start="`" end="[:~('`^]" contains=ALL
 syn region colorForthCompile start="\^" end="[:~('`\\]" contains=ALL
