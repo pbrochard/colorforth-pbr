@@ -14,8 +14,7 @@ extern void init_no_color_fns(void);
 #define COLOR_WHITE    "\x1B[01;37m"
 #define COLOR_CLEAR    "\x1B[0m"
 
-//extern void (*echo_color)(struct state *state, int c, char *color);
-extern void (*echo_color)();
+extern void (*echo_color)(struct state *state, int c, char *color);
 extern void (*init_terminal)(void);
 extern void (*reset_terminal)(void);
 
