@@ -2,7 +2,11 @@
 
 default: colorforth
 
+all: colorforth
+
 .PHONY: optim_cpl full
+
+CC=gcc
 
 SRC=src/cf.c \
 	src/cf-stdio.c \
@@ -53,10 +57,10 @@ src/lib.cf: src/lib.tmpl.cf
 	cp src/lib.tmpl.cf src/lib.cf
 
 colorforth: Makefile conf.h src/main.c src/lib.cf $(SRC) $(INCLUDED_SRC) $(SRC_H)
-	gcc $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
+	$(CC) $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
 colorforth-unsafe: Makefile $(SRC) $(SRC_H)
-	gcc -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
+	$(CC) -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
 
 full: clean colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
 	./colorforth -d src/lib.cf src/dump-state.cf > src/saved-state.c
