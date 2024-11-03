@@ -1,0 +1,49 @@
+:N ^10000000 ;
+
+:.delta ^swap over swap - 10000 * swap /
+  dup 100 / swap over 100 * - swap . ~key . ,l ^emit . ~key % ,l ^emit cr ;
+
+:raw ^0
+:loop ^2 2 + drop  1+ dup N < 'loop ^if* drop ;
+
+:p1 ^2 2 + drop ;
+:w/call ^0
+:loop ^p1 1+ dup N < 'loop ^if* drop ;
+
+~
+:t1 ~time/start ^;
+~raw
+t1 time/end? dup .time/end
+
+:t2 ~time/start ^;
+~w/call
+t2 time/end? dup .time/end
+
+.delta cr
+
+
+
+:raw ^0
+:loop ^2 2 +   3 3 *   4 4 -  5 5 / + + +  drop   1+ dup N < 'loop ^if* drop ;
+
+:p1 ^2 2 + ;
+:p2 ^3 3 * ;
+:p3 ^4 4 - ;
+:p4 ^5 5 / ;
+:p5 ^+ + +  drop ;
+:p6 ^1+ dup N < ;
+:w/call ^0
+:loop ^p1 p2 p3 p4 p5 p6 'loop ^if* drop ;
+
+~
+:t1 ~time/start ^;
+~raw
+t1 time/end? dup .time/end
+
+:t2 ~time/start ^;
+~w/call
+t2 time/end? dup .time/end
+
+.delta
+
+bye
