@@ -137,7 +137,9 @@
 
 ( time )
 :time/start ^utime ,l ;
-:time/end ^utime swap - 1000 / . ~c" ms elapsed" ^prn ;
+:time/end? ^utime swap - 1000 / ;
+:.time/end ^. ~c" ms elapsed" ^prn ;
+:time/end ^time/end? .time/end ;
 
 ( hash )
 :hash" ^s" hash ;
