@@ -84,22 +84,22 @@
 
 :cmove-advance ^ 1+ ;
 
-:cmove-loop ^
+:pcmove-loop ^
    >R   swap dup pc@  >R  cmove-advance
    swap dup R>   swap pc! cmove-advance
-   R> 1- dup 'cmove-loop ^if* 2drop drop
+   R> 1- dup 'pcmove-loop ^if* 2drop drop
 ;
 
-:hcmove ( hsrc hdst n) ^cmove-heap-to-addr
-:cmove ( src dst n - ) ^
+:cmove ( hsrc hdst n) ^cmove-heap-to-addr
+:pcmove ( src dst n - ) ^
    `1+ `cmove-advance ^is!
-   cmove-loop ;
+   pcmove-loop ;
 
-:hcmove> ( hsrc hdst n) ^cmove-heap-to-addr
-:cmove> ( src dst n - ) ^
+:cmove> ( hsrc hdst n) ^cmove-heap-to-addr
+:pcmove> ( src dst n - ) ^
   1-  >R  R@  +  swap  R@  +  swap  R>  1+
   `1- `cmove-advance ^is!
-  cmove-loop ;
+  pcmove-loop ;
 
 ~\ Runtime strings
 :." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;
@@ -110,7 +110,7 @@
    ^swap - dup dup >R (compute length)
    ^dalloc
    ^R> cell dalloc ! (store length)
-   ^dup >R swap hcmove R> ;
+   ^dup >R swap cmove R> ;
 
 :."key ^dup  echo pc@ 'emit 'drop ^if-else ;
 
@@ -181,8 +181,8 @@
    here over -           (compute code lenght)
    dup dalloc            (allocate code on data heap)
    dup >R                (save dhere for word return)
-   swap hcmove           (move code to data heap)
-   &here p!               (restore here)
+   swap cmove            (move code to data heap)
+   &here p!              (restore here)
    R> ;                  (leave dhere)
 
 :] ( - ) ^]] ,l ;
