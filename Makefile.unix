@@ -35,6 +35,9 @@ SRC_H=src/cf.h \
 	src/color.h \
 	src/utils.h
 
+SRC_CF=src-cf/lib.tmpl.cf \
+	src-cf/dump-state.cf
+
 FLAGS=-fPIE -std=gnu99 -O3 -Wall -Werror -Wextra -pedantic \
 	-s -Wno-missing-braces -Wno-missing-field-initializers -Wno-unused-parameter \
 	-I. -Isrc -Iext
@@ -53,17 +56,17 @@ conf.h: src/conf.tmpl.h
 ext/ext.c: ext/0_tmpl.c
 	cp ext/0_tmpl.c ext/ext.c
 
-src/lib.cf: src/lib.tmpl.cf
-	cp src/lib.tmpl.cf src/lib.cf
+src-cf/lib.cf: src-cf/lib.tmpl.cf
+	cp src-cf/lib.tmpl.cf src-cf/lib.cf
 
-colorforth: Makefile conf.h src/main.c src/lib.cf $(SRC) $(INCLUDED_SRC) $(SRC_H)
+colorforth: Makefile conf.h src/main.c src-cf/lib.cf $(SRC) $(INCLUDED_SRC) $(SRC_H)
 	$(CC) $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
 colorforth-unsafe: Makefile $(SRC) $(SRC_H)
 	$(CC) -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
 
-full: clean colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
-	./colorforth -d src/lib.cf src/dump-state.cf > src/saved-state.c
+full: clean colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H) $(SRC_CF)
+	./colorforth -d src-cf/lib.cf src-cf/dump-state.cf > src/saved-state.c
 	make EXTRA_CFLAGS=-D__FROM_STATE_FILE clean colorforth
 
 optimize: colorforth
@@ -104,4 +107,4 @@ clean-state:
 	rm -f src/saved-state.c
 
 mrproper: clean clean-state
-	rm -f conf.h src/lib.cf
+	rm -f conf.h src-cf/lib.cf
