@@ -1,0 +1,26 @@
+~\ Runtime strings
+:." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;
+
+~( Zero terminated + counted strings )
+:"done ^drop
+   ^0 1 dalloc c! (store 0)
+   ^swap - dup dup >R (compute length)
+   ^dalloc
+   ^R> cell dalloc ! (store length)
+   ^dup >R swap cmove R> ;
+
+:."key ^dup  echo pc@ 'emit 'drop ^if-else ;
+
+:s" ^here dup dup
+:"loop ^key ."key dup ~key " ,l ^= '"done ^if; over c! 1+ "loop ;
+
+:c" ^s" ,l ;
+
+:slength ^cell - @ ;
+
+:pr (s - ) ^dup c@ dup 0 = '2drop ^if; emit 1+ pr ;
+:prn ^pr cr ;
+:npr ^cr pr ;
+:nprn ^cr pr cr ;
+
+:bpr (a - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ bpr ;

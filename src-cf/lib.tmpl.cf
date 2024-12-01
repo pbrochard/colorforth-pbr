@@ -101,89 +101,8 @@
   `1- `cmove-advance ^is!
   pcmove-loop ;
 
-~\ Runtime strings
-:." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;
-
-~( Zero terminated + counted strings )
-:"done ^drop
-   ^0 1 dalloc c! (store 0)
-   ^swap - dup dup >R (compute length)
-   ^dalloc
-   ^R> cell dalloc ! (store length)
-   ^dup >R swap cmove R> ;
-
-:."key ^dup  echo pc@ 'emit 'drop ^if-else ;
-
-:s" ^here dup dup
-:"loop ^key ."key dup ~key " ,l ^= '"done ^if; over c! 1+ "loop ;
-
-:c" ^s" ,l ;
-
-:slength ^cell - @ ;
-
-:pr (s - ) ^dup c@ dup 0 = '2drop ^if; emit 1+ pr ;
-:prn ^pr cr ;
-:npr ^cr pr ;
-:nprn ^cr pr cr ;
-
-:bpr (a - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ bpr ;
-
-
 ( math )
 :sign/0 ^drop 0 ;   :sign/1 ^1 ;   :sign/-1 ^-1 ;
 :sign ^dup 'sign/0 ^if-not; ^0 < 'sign/-1 'sign/1 ^if-else ;
 ~`sign/0 ~entry/hide `sign/1 ~entry/hide `sign/-1 ~entry/hide
-
-
-( time )
-:time/start ^utime ,l ;
-:time/end? ^utime swap - 1000 / ;
-:.time/end ^. ~c" ms elapsed" ^prn ;
-:time/end ^time/end? .time/end ;
-
-( hash )
-:hash" ^s" hash ;
-:.hash" ^base pc@  hash" hex cr . cr base pc! ;
-
-
-( eval )
-:ptr ~0 variable ^;
-:count ~0 variable ^;
-:loop ^ptr @ c@ parse  ptr 1+!  count 1-!  count @ 'loop ^if* ;
-:eval ( string - ) ^clear-tib  dup ptr !  slength  count !  loop  32 parse ;
-~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
-
-( exceptions )
-:catched ~c" !!Error catched!!" ^prn reset-state ;
-:catch ( f - ) 'catched ^if ;
-
-( files )
-:aload ( filename - buf ) ^
-   dup file-size catch 1024 max 2 *  c-alloc
-   dup rot load ;
-
-:c-pr (s - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ c-pr ;
-
-:str2buf (s - ptr len) ^dup &heap swap slength ;
-
-(
-  quotations
-
-  syntax:
-    ~[[ ^code ~]]   leave q on the stack
-    ~[ ^code ~]     used in compile mode to compile a quotation
-)
-:[
-:[[ ^here ;
-
-:]] ( - q ) ^dup         (save here for restoration)
-   '; ^,c                (compile a return)
-   here over -           (compute code lenght)
-   dup dalloc            (allocate code on data heap)
-   dup >R                (save dhere for word return)
-   swap cmove            (move code to data heap)
-   &here p!              (restore here)
-   R> ;                  (leave dhere)
-
-:] ( - ) ^]] ,l ;
 ~

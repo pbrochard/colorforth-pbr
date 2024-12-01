@@ -1,0 +1,30 @@
+( time )
+:time/start ^utime ,l ;
+:time/end? ^utime swap - 1000 / ;
+:.time/end ^. ~c" ms elapsed" ^prn ;
+:time/end ^time/end? .time/end ;
+
+( hash )
+:hash" ^s" hash ;
+:.hash" ^base pc@  hash" hex cr . cr base pc! ;
+
+
+( eval )
+:ptr ~0 variable ^;
+:count ~0 variable ^;
+:loop ^ptr @ c@ parse  ptr 1+!  count 1-!  count @ 'loop ^if* ;
+:eval ( string - ) ^clear-tib  dup ptr !  slength  count !  loop  32 parse ;
+~'ptr ~entry/hide  'count ~entry/hide  'loop ~entry/hide
+
+( exceptions )
+:catched ~c" !!Error catched!!" ^prn reset-state ;
+:catch ( f - ) 'catched ^if ;
+
+( files )
+:aload ( filename - buf ) ^
+   dup file-size catch 1024 max 2 *  c-alloc
+   dup rot load ;
+
+:c-pr (s - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ c-pr ;
+
+:str2buf (s - ptr len) ^dup &heap swap slength ;
