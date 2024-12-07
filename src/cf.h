@@ -213,8 +213,8 @@ extern void *cf_calloc(struct state *state, size_t nmemb, size_t size, unsigned 
 #define ENSURE_STACK_MIN(x)
 #define ENSURE_STACK_MAX(x)
 
-#define ENSURE_STACK_MIN(x)
-#define ENSURE_STACK_MAX(x)
+#define ENSURE_R_STACK_MIN(x)
+#define ENSURE_R_STACK_MAX(x)
 #endif
 
 #define POP() CELLS[SP]; SP -= 1

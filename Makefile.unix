@@ -1,5 +1,12 @@
 #-*- Makefile -*-
 
+# Use EXTRA_CF to embed additional colorForth source in the full build,
+#   EXTRA_CFLAGS=-DUNSAFE_MODE to unsafe colorForth
+#
+# Example:
+#   make EXTRA_CF=my-def.cf full
+#   make EXTRA_CFLAGS=-DUNSAFE_MODE
+
 default: colorforth
 
 all: colorforth
@@ -65,12 +72,9 @@ src-cf/lib-full.cf: $(SRC_CF) $(EXTRA_CF) src-cf/dump-state.cf
 colorforth: Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
 	$(CC) $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
-colorforth-unsafe: Makefile $(SRC) $(SRC_H)
-	$(CC) -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
-
 full: clean-state colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H) src-cf/lib-full.cf
 	./colorforth -d src-cf/lib-full.cf > src/saved-state.c
-	make EXTRA_CFLAGS=-D__FROM_STATE_FILE clean colorforth
+	$(MAKE) EXTRA_CFLAGS="$(EXTRA_CFLAGS) -D__FROM_STATE_FILE" clean colorforth
 
 optimize:
 	@#readelf -l colorforth
@@ -79,14 +83,6 @@ optimize:
 	strip -R.comment -R.note -R.eh_frame_hdr -R.eh_frame -R.note.ABI-tag -R.jcr colorforth
 	objcopy -I elf64-x86-64 -O elf64-x86-64 --section-alignment 512 colorforth colorforth
 	@#xcc -std=c99 -Os -Wno-missing-braces -target=XS1-L16A-128-QF124-C10 colorforth.c -o colorforth.xe
-
-optimize-unsafe: colorforth-unsafe
-	@#readelf -l colorforth-unsafe
-	@# required: .gnu.version .gnu.version_r
-	strip --strip-all colorforth-unsafe
-	strip -R.comment -R.note -R.eh_frame_hdr -R.eh_frame -R.note.ABI-tag -R.jcr \
-	colorforth-unsafe
-	objcopy -I elf64-x86-64 -O elf64-x86-64 --section-alignment 512 colorforth-unsafe colorforth-unsafe
 
 dump: colorforth
 	 objdump -d -M intel colorforth | less
@@ -98,7 +94,7 @@ cleanelf: colorforth
 	termux-elf-cleaner colorforth
 
 clean:
-	rm -f colorforth colorforth-unsafe
+	rm -f colorforth
 
 clean-state: clean
 	rm -f src/saved-state.c src-cf/lib-full.cf
