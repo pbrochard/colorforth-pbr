@@ -35,10 +35,10 @@ SRC_H=src/cf.h \
 	src/color.h \
 	src/utils.h
 
-SRC_CF=	src-cf/string.cf \
+SRC_CF= src-cf/lib.cf \
+	src-cf/string.cf \
 	src-cf/utils.cf \
-	src-cf/quotation.cf \
-	src-cf/dump-state.cf
+	src-cf/quotation.cf
 
 
 FLAGS=-fPIE -std=gnu99 -O3 -Wall -Werror -Wextra -pedantic \
@@ -59,25 +59,24 @@ conf.h: src/conf.tmpl.h
 ext/ext.c: ext/0_tmpl.c
 	cp ext/0_tmpl.c ext/ext.c
 
-src-cf/lib.cf: src-cf/lib.tmpl.cf
-	cp src-cf/lib.tmpl.cf src-cf/lib.cf
+src-cf/lib-full.cf: $(SRC_CF) $(EXTRA_CF) src-cf/dump-state.cf
+	cat $(SRC_CF) $(EXTRA_CF) src-cf/dump-state.cf > src-cf/lib-full.cf
 
-colorforth: Makefile conf.h src/main.c src-cf/lib.cf $(SRC) $(INCLUDED_SRC) $(SRC_H)
+colorforth: Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
 	$(CC) $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
 
 colorforth-unsafe: Makefile $(SRC) $(SRC_H)
 	$(CC) -DUNSAFE_MODE=1 $(FLAGS) $(EXTRA_CFLAGS) -o colorforth-unsafe src/main.c $(SRC) $(EXTRA_CLIBS)
 
-full: clean colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H) src-cf/lib.cf $(SRC_CF)
-	./colorforth -d src-cf/lib.cf $(SRC_CF)  > src/saved-state.c
+full: clean-state colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H) src-cf/lib-full.cf
+	./colorforth -d src-cf/lib-full.cf > src/saved-state.c
 	make EXTRA_CFLAGS=-D__FROM_STATE_FILE clean colorforth
 
-optimize: colorforth
+optimize:
 	@#readelf -l colorforth
 	@# required: .gnu.version .gnu.version_r
 	strip --strip-all colorforth
-	strip -R.comment -R.note -R.eh_frame_hdr -R.eh_frame -R.note.ABI-tag -R.jcr \
-	colorforth
+	strip -R.comment -R.note -R.eh_frame_hdr -R.eh_frame -R.note.ABI-tag -R.jcr colorforth
 	objcopy -I elf64-x86-64 -O elf64-x86-64 --section-alignment 512 colorforth colorforth
 	@#xcc -std=c99 -Os -Wno-missing-braces -target=XS1-L16A-128-QF124-C10 colorforth.c -o colorforth.xe
 
@@ -98,16 +97,11 @@ dumpelf: colorforth
 cleanelf: colorforth
 	termux-elf-cleaner colorforth
 
-uninstall:
-	rm -f ~/.config/colorforth.cf ~/.config/colorforth.bak.cf
-
-reconfig: uninstall install
-
 clean:
 	rm -f colorforth colorforth-unsafe
 
-clean-state:
-	rm -f src/saved-state.c
+clean-state: clean
+	rm -f src/saved-state.c src-cf/lib-full.cf
 
 mrproper: clean clean-state
-	rm -f conf.h src-cf/lib.cf
+	rm -f conf.h

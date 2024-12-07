@@ -5,7 +5,7 @@ cf
 cf-unsafe
 store-test
 conf.h
-lib.cf
+lib-full.cf
 colorforth-arduino/conf.h
 *.hex
 ext/ext.c
