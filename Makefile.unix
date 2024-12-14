@@ -57,6 +57,8 @@ EXTRA_CLIBS=-lgmp -lpthread
 # uncomment the line below if you want to include SDL words
 #SDL_FLAGS=`sdl2-config --cflags --libs` -I.  -lSDL2_image -lSDL2_ttf -lSDL2_mixer -fPIC
 
+BUILD_ARGS=$(FLAGS) $(EXTRA_CFLAGS) src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
+
 optim_cpl:
 	$(eval EXTRA_CFLAGS := -Wl,--build-id=none -Wl,--gc-sections -Wl,-zcommon-page-size=64 -zmax-page-size=4096)
 
@@ -66,15 +68,19 @@ conf.h: src/conf.tmpl.h
 ext/ext.c: ext/0_tmpl.c
 	cp ext/0_tmpl.c ext/ext.c
 
+colorforth-base: Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
+	$(CC) $(BUILD_ARGS) -o colorforth-base
+
+
 src-cf/lib-full.cf: $(SRC_CF) $(EXTRA_CF) src-cf/dump-state.cf
 	cat $(SRC_CF) $(EXTRA_CF) src-cf/dump-state.cf > src-cf/lib-full.cf
 
-colorforth: Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H)
-	$(CC) $(FLAGS) $(EXTRA_CFLAGS) -o colorforth src/main.c $(SRC) $(EXTRA_CLIBS) $(SDL_FLAGS)
+src/saved-state.c: colorforth-base src-cf/lib-full.cf
+	./colorforth-base -d src-cf/lib-full.cf > src/saved-state.c
 
-full: clean-state colorforth Makefile conf.h src/main.c $(SRC) $(INCLUDED_SRC) $(SRC_H) src-cf/lib-full.cf
-	./colorforth -d src-cf/lib-full.cf > src/saved-state.c
-	$(MAKE) EXTRA_CFLAGS="$(EXTRA_CFLAGS) -D__FROM_STATE_FILE" clean colorforth
+colorforth: src/saved-state.c
+	$(CC) $(BUILD_ARGS) -D__FROM_STATE_FILE -o colorforth
+
 
 optimize:
 	@#readelf -l colorforth
@@ -94,9 +100,9 @@ cleanelf: colorforth
 	termux-elf-cleaner colorforth
 
 clean:
-	rm -f colorforth
+	rm -f colorforth-base colorforth
 
-clean-state: clean
+clean-state:
 	rm -f src/saved-state.c src-cf/lib-full.cf
 
 mrproper: clean clean-state
