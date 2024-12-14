@@ -42,7 +42,7 @@ ext/ext.c: ext/0_tmpl.c
 	sed -i 's%\(#include "threads.c"\)%// \1%' ext/ext.c
 
 wasm/colorforth.html: Makefile.wasm $(SRC) $(INCLUDED_SRC) $(SRC_H) $(SRC_WASM)
-	emcc.sh -o wasm/colorforth.html $(SRC) -O3 -s WASM=1 -s NO_EXIT_RUNTIME=1 --shell-file wasm/html_template/shell.html -Isrc -Iext -Iwasm
+	emcc.sh -o wasm/colorforth.html $(SRC) -O3 -s WASM=1 -s NO_EXIT_RUNTIME=1 -D__ECHO_COLOR --shell-file wasm/html_template/shell.html -Isrc -Iext -Iwasm
 
 clean:
 	rm -f wasm/colorforth.html wasm/colorforth.wasm

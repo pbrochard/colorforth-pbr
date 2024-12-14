@@ -24,18 +24,12 @@ parse_command_line(struct state *s, int argc, char *argv[])
   s->echo_on = 0;
 
   char nextIsEval = 0;
-  char hasColor = 1;
+
   for (int i = 1; i < argc; i++)
   {
     if (memcmp(argv[i], "-e", 2) == 0)
     {
       nextIsEval = 1;
-      continue;
-    }
-
-    if (memcmp(argv[i], "-d", 2) == 0)
-    {
-      hasColor = 0;
       continue;
     }
 
@@ -50,8 +44,6 @@ parse_command_line(struct state *s, int argc, char *argv[])
 
     parse_from_file(s, argv[i]);
   }
-
-  if (hasColor) init_color_fns();
 }
 
 #ifdef __EXCEPTION
@@ -103,8 +95,6 @@ main(int argc, char *argv[])
     printf("0x%X", hash(argv[2]));
     return 0;
   }
-
-  init_no_color_fns();
 
   s = colorforth_newstate();
 

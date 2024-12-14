@@ -76,10 +76,10 @@ src-cf/lib-full.cf: $(SRC_CF) $(EXTRA_CF) src-cf/dump-state.cf
 	cat $(SRC_CF) $(EXTRA_CF) src-cf/dump-state.cf > src-cf/lib-full.cf
 
 src/saved-state.c: colorforth-base src-cf/lib-full.cf
-	./colorforth-base -d src-cf/lib-full.cf > src/saved-state.c
+	./colorforth-base src-cf/lib-full.cf > src/saved-state.c
 
 colorforth: src/saved-state.c
-	$(CC) $(BUILD_ARGS) -D__FROM_STATE_FILE -o colorforth
+	$(CC) $(BUILD_ARGS) -D__FROM_STATE_FILE -D__ECHO_COLOR -o colorforth
 
 
 optimize:

@@ -15,7 +15,6 @@ void parse_cf(int c) {
 int
 main(int argc, char *argv[])
 {
-  init_color_fns();
   s = colorforth_newstate();
   cf_printf(s, "This is a colorForth inspired implementation\n");
   cf_printf(s, "   source code: https://github.com/pbrochard/colorforth-pbr\n");

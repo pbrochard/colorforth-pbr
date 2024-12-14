@@ -7,7 +7,7 @@ typedef long cell;
 #define CELL_FMT "%ld"
 
 // Enable colors in the terminal
-#define __ECHO_COLOR
+// #define __ECHO_COLOR
 
 // Uncomment for a minimal build with only mandatory extensions
 // Build with:

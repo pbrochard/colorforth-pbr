@@ -1,21 +1,18 @@
 // The author disclaims copyright to this source code.
 #include "cf.h"
-
-void (*echo_color)(struct state *s, int c, char *color);
-void (*init_terminal)(void);
-void (*reset_terminal)(void);
+#include "cf-stdio.h"
 
 #ifdef __ECHO_COLOR
-
-#include "cf-stdio.h"
 #include <unistd.h>
 #include <termios.h>
 
 struct termios old_tio;
+#endif /* __ECHO_COLOR */
 
 void
-echo_color_(struct state *s, int c, char *color)
+echo_color(struct state *s, int c, char *color)
 {
+#ifdef __ECHO_COLOR
   if (s->echo_on)
   {
     if (color)
@@ -31,59 +28,31 @@ echo_color_(struct state *s, int c, char *color)
   {
     cf_printf(s, "%s", color);
   }
+#else
+  if (s->echo_on)
+  {
+    cf_printf(s, "%c", c);
+  }
+#endif /* __ECHO_COLOR */
 }
 
 void
-init_terminal_(void)
+init_terminal(void)
 {
+#ifdef __ECHO_COLOR
   struct termios new_tio;
   tcgetattr(STDIN_FILENO,&old_tio);
   new_tio=old_tio;
   new_tio.c_lflag &=(~ICANON & ~ECHO);
   tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
-}
-
-void
-reset_terminal_(void)
-{
-  tcsetattr(STDIN_FILENO,TCSANOW,&old_tio);
-  printf("%s", COLOR_CLEAR);
-}
-
 #endif /* __ECHO_COLOR */
-
-void
-echo_color_no_(struct state *s, int c, char *color)
-{
 }
 
 void
-init_terminal_no_(void)
-{
-}
-
-void
-reset_terminal_no_(void)
-{
-}
-
-
-
-void
-init_color_fns (void)
+reset_terminal(void)
 {
 #ifdef __ECHO_COLOR
-  echo_color = echo_color_;
-  init_terminal = init_terminal_;
-  reset_terminal = reset_terminal_;
+  tcsetattr(STDIN_FILENO,TCSANOW,&old_tio);
+  printf("%s", COLOR_CLEAR);
 #endif /* __ECHO_COLOR */
-}
-
-
-void
-init_no_color_fns (void)
-{
-  echo_color = echo_color_no_;
-  init_terminal = init_terminal_no_;
-  reset_terminal = reset_terminal_no_;
 }
