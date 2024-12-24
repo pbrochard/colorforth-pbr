@@ -1,0 +1,21 @@
+:v ~10 ,
+:a! 'v ^! ;
+:a@ 'v ^@ ;
+
+:v ~15 ,
+:b! 'v ^! ;
+:b@ 'v ^@ ;
+
+:v ~25 ,
+:c! ~'v ~,l ^! ;
+:c@ ~'v ~,l ^@ ;
+~
+a@ .  b@ .  c@ . cr
+55 a!  78 b!  111 c!
+a@ . b@ . c@ . cr cr
+
+'a@ ~see 'a! ~see
+'b@ ~see 'b! ~see
+'c@ ~see 'c! ~see
+
+bye
