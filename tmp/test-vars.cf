@@ -1,0 +1,40 @@
+~
+dhere &heap @ .
+
+~100 dalloc dhere &heap @ .
+.s
+
+:x ~100 var ^;
+
+:klm '+ ^,c ;
+
+:tt ~klm ^ ;
+
+~'klm ~see
+'tt ~see
+
+~2 3 tt .
+
+~x
+~x @ .
+~111 x ! x ?
+
+'x ~see
+
+dhere &heap ?
+
+:arr ~100 vars ^;
+
+~dhere &heap ?
+
+65 arr 2 + pc!
+111 arr 10 [] !
+112 arr 9 [] !
+
+333 arr 3 []  !
+
+arr 10 cells + ?
+
+arr dump
+
+~bye

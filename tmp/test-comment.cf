@@ -1,0 +1,10 @@
+( this ((((is a) comm)))ent )
+
+:test (n n - n+n ) ^+ ;
+
+(:a comment)
+
+~10 20 test .
+( a comment )
+
+bye

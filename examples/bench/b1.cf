@@ -1,0 +1,7 @@
+:cnt ~1000 variable ^;
+:v ~1 variable ^;
+
+:go ^v @  cnt @ dup *  +   v !
+  cnt @ 1- dup cnt ! 'go ^if* v @ . ;
+
+~go bye

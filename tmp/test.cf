@@ -1,0 +1,106 @@
+:yes ^2222 . ;
+:plouf ^5555 . ;
+:no ^333 'yes yes ^.s  execute execute ;
+
+:tt 'yes ^execute `yes ^c> execute yes ;
+
+~tt
+
+~`yes 'plouf ~c>is
+
+~tt
+
+~bye
+
+~'yes ~execute `yes ~c> .s execute* execute* execute* execute .s bye
+
+~'yes yes ~.s  execute execute
+~no .s
+
+~bye
+
+:yes ^111 I! I@ . I++ I@ . ;
+:no ^333 . ;
+
+~yes bye
+
+:definer ^,ll ,l ,c ;
+:definer ^,ll ,l ,c ;
+
+:plouf '+ ~2 2 ~definer ^;
+:plouf2 '- ~2 5 ~definer ^;
+
+
+:cmpl ^2 ,l  3 ,l  5 ,l '+ ^,c '* ^,c ;
+
+~plouf . plouf2 . words bye
+
+~'yes ~c> .s c>execute* c>execute* c>execute* c>execute* c>execute*  .s
+~bye
+
+~'yes ~execute* execute* execute* execute* .s
+
+~bye
+
+~'plouf 'yes ~c> .s c>is
+
+~plouf
+
+~bye
+:tt ^.s `words ^.s execute .s ;
+
+~tt
+
+~bye
+
+:yes ^222  ;
+:no ^111 ;
+
+:tt ^2 . 1 `tt ^if-not* 3 . ;
+
+~tt
+
+
+~bye
+
+:tt `yes `no ^if-else . ;
+
+~1 tt
+0 tt
+~bye
+
+:tt `yes ^if-not; 333 .s ;
+~0 tt .s
+~0 'yes ~if-not; 444 .s
+
+~bye
+
+:tt `yes ^if-not; 3333 ;
+
+~0 tt .s .
+
+~bye
+
+:d1 ^1 .s ;
+:d2 ^2 .s ;
+:d3 ^3 .s ;
+:d4 ^4 .s ;
+
+:x ^d1 d2 d3 d4 ;
+
+~x .s
+
+
+:x3 ^3 .s ;
+:x2 ^2 .s x3 x3 x3 ;
+:x1 ^1 .s x2 ;
+
+~x1 .s
+bye
+
+
+:tt ^>R drop R> ;
+
+~2 3 .s tt .s
+
+~bye
