@@ -1,0 +1,7 @@
+%
+111 .s
+
+&heap + dump
+.s
+
+cr cr words bye

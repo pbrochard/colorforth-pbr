@@ -1,0 +1,4 @@
+~
+-96 dup dup dec . bin . hex .
+-96 dup dup dec .8 bin .8 hex .8
+bye

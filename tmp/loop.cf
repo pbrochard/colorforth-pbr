@@ -1,0 +1,30 @@
+( test (another comment ) plouf 
+   ( go go go )
+)
+
+'test ^plouf plag plif
+
+~\ One line comment
+
+%
+:l ^I@ . ; :tt ^plouf plouf ;
+~'l ~10 times
+
+s" test test" :tt ^plouf ; ~prn
+
+:l1 ^cr K@ . ~c" plouf" toto ^J@ . I@ . ;
+:l2 'l1 ^3 times  cr ;
+:l3 'l2 ^3 times cr ;
+
+:test ^
+   111 I! 222 J! 333 K!
+   'l3 ^3 times .s
+   I@ . J@ . K@ . ;
+
+~'l3 ~3 times .s
+
+`fun `fun ~see
+
+~test .s
+
+~\ bye

@@ -1,0 +1,8 @@
+:cnt ~1000 ,
+:v ~1 ,
+
+:go ~'v ~,l ^@  ~'cnt ~,l ^@ dup *  +   ~'v ~,l ^!
+  ~'cnt ~,l ^@ 1- dup ~'cnt ~,l ^! 'go ^if* ~'v ~,l ^@ . ;
+;
+
+~go bye

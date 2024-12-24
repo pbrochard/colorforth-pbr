@@ -1,0 +1,9 @@
+:bench ~c" hyperfine -N --warmup 1  \
+                    'rlwrap cf b1.cf' \
+                    'rlwrap cf b2.cf' \
+                    'rlwrap cf b3.cf' \
+                    'rlwrap gforth b-base.fs' \
+                    "
+       ^system ;
+
+~bench bye
