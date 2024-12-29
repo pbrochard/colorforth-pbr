@@ -45,4 +45,14 @@
    addr @ p@ len @ - dup addr @ p! (new len)
    addr @ + cell + 0 swap pc! (0 terminated)
    addr @ ;
+
+
+:s/insert (a pos len - a)^len ! pos ! addr !
+   addr @ cell + pos @ + (src)
+   dup len @ +  (dst)
+   addr @ p@ pos @ - (n)
+   pcmove>
+   addr @ p@ len @ + dup addr @ p! (new len)
+   addr @ + cell + 0 swap pc! (0 terminated)
+   addr @ ;
 ~`addr ~entry/hide `pos ~entry/hide `len ~entry/hide
