@@ -72,6 +72,7 @@
 
 :constant ^,l ;
 :variable ^cell dalloc dup ,l ! ;
+:var ^0 variable ;
 
 :variables ^cells dalloc ,l ;
 :[] ^cells + ;
