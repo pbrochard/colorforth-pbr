@@ -1,17 +1,37 @@
-:.slength ^space slength . ;
+s" Hello world! "  .s
+
+s+" Another "
+s+" world!"
+
+dup s/count s/type cr .s
+
+s+"  Again another "
+s+" world!" s/count s/type- cr .s
+
+
+:my-string ~c" A test" ^;
+~
+.s my-string .s pr cr
+
+:long ~s" Hello world"   s+" ! Again "   s+" a string!" s, ^pr ;
+
+~long
+
+
+:.s/length ^space @ . ;
 
 :hello ~c" Hello " ^;
 :world ~c" new world!" ^;
 
 ~
-hello pr  hello .slength
-world dup npr   .slength
+hello pr  hello .s/length
+world dup npr   .s/length
 
 hello npr world prn
 
-s" Another test..." nprn
-s" End!" dup prn
+s" Another test..." .s ppr
+s" End!" dup ppr
 
-cell - ddump
+dump
 
 bye

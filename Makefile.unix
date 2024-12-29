@@ -42,7 +42,7 @@ SRC_H=src/cf.h \
 	src/color.h \
 	src/utils.h
 
-SRC_CF= src-cf/lib.cf \
+SRC_CF=src-cf/lib.cf \
 	src-cf/string.cf \
 	src-cf/utils.cf \
 	src-cf/quotation.cf

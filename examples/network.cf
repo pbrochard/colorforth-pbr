@@ -21,7 +21,7 @@
 
    ~c" Waiting from client" ^prn
    buffer recv
-   cr buffer dump cr buffer bpr cr
+   cr buffer dump cr buffer pr0 cr
 
    1 sleep
 

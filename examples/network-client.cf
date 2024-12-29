@@ -10,9 +10,9 @@
    ~c" 127.0.0.1" ^8000 client-start .s catch sock !
 
    buffer recv buffer dump
-   buffer bpr cr
+   buffer pr0 cr
    2 sleep
-   buffer recv buffer bpr cr
+   buffer recv buffer pr0 cr
    2 sleep
 
    ~c" Hello from client!" ^send send-nl

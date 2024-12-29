@@ -1,26 +1,35 @@
-~\ Runtime strings
-:." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;
-
 ~( Zero terminated + counted strings )
-:"done ^drop
-   ^0 1 dalloc c! (store 0)
-   ^swap - dup dup >R (compute length)
-   ^dalloc
-   ^R> cell dalloc ! (store length)
-   ^dup >R swap cmove R> ;
+:s/length (a - n) ^@ ;
+:s/count (a - a n) ^dup p@ swap cell + swap ;
+:s/uncount (a n - a)  ^drop cell - ;
+:s/type (a n -) ^swap dup pc@ emit 1+ swap 1- dup 0 = '2drop ^if; s/type ;
+:s/type- (a n -) ^2dup s/type s/uncount c-free ;
 
-:."key ^dup  echo pc@ 'emit 'drop ^if-else ;
+:.s/key ^dup  echo pc@ 'emit 'drop ^if-else ;
+:s/store ^over pc! 1+ ;
 
-:s" ^here dup dup
-:"loop ^key ."key dup ~key " ,l ^= '"done ^if; over c! 1+ "loop ;
+:s/done ^drop over cell + - over p! ;
 
-:c" ^s" ,l ;
+:s" ^1024
+:ns" (n - a) ^c-alloc dup cell +
+:s/loop ^key .s/key dup ~key " ,l ^= 's/done ^if; s/store s/loop ;
 
-:slength ^cell - @ ;
+:s+" (a - a) ^dup s/count + s/loop ;
 
-:pr (s - ) ^dup c@ dup 0 = '2drop ^if; emit 1+ pr ;
+:s, (a -) ^dup 0 1 dalloc c! (store 0)
+  dup p@ cell + dup dalloc dup ,l
+  &heap swap pcmove c-free ;
+
+:c" ^s" s, ;
+
+:pr ^&heap
+:ppr ^s/count s/type ;
+
 :prn ^pr cr ;
 :npr ^cr pr ;
 :nprn ^cr pr cr ;
 
-:bpr (a - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ bpr ;
+:pr0 (a - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ pr0 ;
+
+~\ Runtime strings
+:." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;

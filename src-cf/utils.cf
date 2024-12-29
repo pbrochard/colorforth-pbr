@@ -13,7 +13,7 @@
 :ptr ~0 variable ^;
 :count ~0 variable ^;
 :loop ^ptr @ c@ parse  ptr 1+!  count 1-!  count @ 'loop ^if* ;
-:eval ( string - ) ^clear-tib  dup ptr !  slength  count !  loop  32 parse ;
+:eval ( string - ) ^clear-tib  dup ptr !  s/length  count !  loop  32 parse ;
 ~`ptr ~entry/hide  `count ~entry/hide  `loop ~entry/hide
 
 ( exceptions )
@@ -27,4 +27,4 @@
 
 :c-pr (s - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ c-pr ;
 
-:str2buf (s - ptr len) ^dup &heap swap slength ;
+:str2buf (s - ptr len) ^dup &heap swap s/length ;

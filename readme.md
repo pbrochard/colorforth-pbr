@@ -15,29 +15,29 @@
 - Base version
 
 ```
-make
+make colorforth-base
 ```
 
 - Full version with `src/lib.cf` included
 
 ```
-make full
+make
 ```
 
 ### Heap layout
 
 ```
 &heap
-|                                                                                  &dhere
-|                                                                                    |
-v                                                                                    v
-code...;|code....;|code...;| ...FREE...  |quotation...;|string...0|array...|var|var|dhere|
-^        ^         ^        ^           ^ ^             ^          ^        ^   ^   |     ^
-|        |         |        |           | |             |          |        |   |   |     |
-|        |         |        \-> here    \-+-------------+----------+--------+---+---/     |
-|        |         \-> entry            | |             |          |        |   |         |
-|        \-> entry                      | \-> quotation |          \-> var  |   \-> var   |
-\-> entry                               |               \-> string          \-> var       |
-                                        \-> dhere                                         |
-                                                                            End of Heap <-/
+|                                                                                       &dhere
+|                                                                                       |
+v                                                                                       v
+code...;|code....;|code...;| ...FREE...  |quotation...;|len.string...0|array...|var|var|dhere|
+^        ^         ^        ^           ^ ^             ^              ^        ^   ^   |     ^
+|        |         |        |           | |             |              |        |   |   |     |
+|        |         |        \-> here    \-+-------------+--------------+--------+---+---/     |
+|        |         \-> entry            | |             |              |        |   |         |
+|        \-> entry                      | \-> quotation |              \-> var  |   \-> var   |
+\-> entry                               |               \-> string              \-> var       |
+                                        \-> dhere                                             |
+                                                                                End of Heap <-/
 ```
