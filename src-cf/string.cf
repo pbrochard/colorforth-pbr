@@ -36,23 +36,21 @@
 
 ~( string operations )
 :addr ~var ^; :pos ~var ^; :len ~var ^;
-:s/cut (a pos len - a) ^len ! pos ! addr !
-   addr @ cell + pos @ + (dst)
-   dup len @ +  (src)
-   swap (src dst)
-   addr @ p@ pos @ - len @ - (n)
-   pcmove
-   addr @ p@ len @ - dup addr @ p! (new len)
+
+:locals! ^len ! pos ! addr ! ;
+:p1-p2@ ^ addr @ cell + pos @ + (p1)
+   dup len @ +  (p2) ;
+:base-n@ ^addr @ p@ pos @ - ;
+:terminate (xt - a) ^>R addr @ p@ len @ R> execute dup addr @ p! (new len)
    addr @ + cell + 0 swap pc! (0 terminated)
    addr @ ;
 
+:s/insert (a pos len - a)^locals!
+   p1-p2@  base-n@  pcmove> '+ ^terminate ;
 
-:s/insert (a pos len - a)^len ! pos ! addr !
-   addr @ cell + pos @ + (src)
-   dup len @ +  (dst)
-   addr @ p@ pos @ - (n)
-   pcmove>
-   addr @ p@ len @ + dup addr @ p! (new len)
-   addr @ + cell + 0 swap pc! (0 terminated)
-   addr @ ;
+:s/cut (a pos len - a) ^locals!
+   p1-p2@ swap   base-n@ len @ -  pcmove '- ^terminate ;
+
 ~`addr ~entry/hide `pos ~entry/hide `len ~entry/hide
+~`locals! ~entry/hide `p1-p2@ ~entry/hide
+~`base-n@ ~entry/hide `terminate ~entry/hide
