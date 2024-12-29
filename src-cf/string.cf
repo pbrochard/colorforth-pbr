@@ -31,5 +31,18 @@
 
 :pr0 (a - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ pr0 ;
 
-~\ Runtime strings
+~( Runtime strings )
 :." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;
+
+~( string operations )
+:addr ~var ^; :pos ~var ^; :len ~var ^;
+:s/cut (a pos len - a) ^len ! pos ! addr !
+   addr @ cell + pos @ + (dst)
+   dup len @ +  (src)
+   swap (src dst)
+   addr @ p@ pos @ - len @ - (n)
+   pcmove
+   addr @ p@ len @ - dup addr @ p! (new len)
+   addr @ + cell + 0 swap pc! (0 terminated)
+   addr @ ;
+~`addr ~entry/hide `pos ~entry/hide `len ~entry/hide

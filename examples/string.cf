@@ -34,4 +34,7 @@ s" End!" dup ppr
 
 dump
 
+s" Hello world! A long big string" dup ppr cr
+15 9 s/cut ppr cr
+
 bye
