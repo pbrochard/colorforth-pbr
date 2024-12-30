@@ -13,7 +13,7 @@
 #define OP_BASE                      (opcode_t) 0x7D3CE245                // base
 #define OP_ENTRY_IS                  (opcode_t) 0xDB70432B                // is!
 #define OP_ENTRY_C_IS                (opcode_t) 0xBBBFB2BC                // c>is!
-#define OP_ENTRY_HIDE                (opcode_t) 0x7C95E439                // entry/hide
+#define OP_ENTRY_HIDE                (opcode_t) 0xE2F5D6F0                // e/hide
 #define OP_ROOM                      (opcode_t) 0xE48409A3                // room
 #define OP_DROP_ROOM                 (opcode_t) 0xC57E1E23                // drop-room
 #define OP_DOT_STACKTRACE            (opcode_t) 0xC6A520A7                // .stacktrace
@@ -33,7 +33,7 @@ define_primitive(s, ENTRY_NAME("hash"), OP_HASH);
 define_primitive(s, ENTRY_NAME("base"), OP_BASE);
 define_primitive(s, ENTRY_NAME("is!"), OP_ENTRY_IS);
 define_primitive(s, ENTRY_NAME("c>is!"), OP_ENTRY_C_IS);
-define_primitive(s, ENTRY_NAME("entry/hide"), OP_ENTRY_HIDE);
+define_primitive(s, ENTRY_NAME("e/hide"), OP_ENTRY_HIDE);
 define_primitive(s, ENTRY_NAME(".stacktrace"), OP_DOT_STACKTRACE);
 define_primitive(s, ENTRY_NAME(".full-stacktrace"), OP_DOT_FULL_STACKTRACE);
 

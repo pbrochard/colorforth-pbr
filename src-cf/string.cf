@@ -59,6 +59,6 @@
 
 :s/ccopy ^>R s/count R> s/copy ;
 
-~`addr ~entry/hide `pos ~entry/hide `len ~entry/hide `addr2 ~entry/hide
-~`locals! ~entry/hide `p1-p2@ ~entry/hide
-~`base-n@ ~entry/hide `terminate ~entry/hide
+~`addr ~e/hide `pos ~e/hide `len ~e/hide `addr2 ~e/hide
+~`locals! ~e/hide `p1-p2@ ~e/hide
+~`base-n@ ~e/hide `terminate ~e/hide

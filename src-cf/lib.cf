@@ -38,7 +38,7 @@
 ~( loop )
 :times-loop ~( xt - xt ) ^I-- execute* I@ 'times-loop ^if* ;
 :times ~( xt n - ) ^I>R I! IJK>R times-loop R>KJI R>I drop ;
-~`times-loop ~entry/hide
+~`times-loop ~e/hide
 
 ~( dump word )
 :emit. ^drop 46 emit ;
@@ -51,8 +51,8 @@
 
 :<dump> ~( a xt -) ^>R dup 159 I@ - cr? + pc@ .c  R> ;
 :dump ~( a - ) ^'<dump> ^160 times drop cr cr ;
-~`emit. ~entry/hide `v-emit ~entry/hide `.c ~entry/hide
-`cr? ~entry/hide `<dump> ~entry/hide
+~`emit. ~e/hide `v-emit ~e/hide `.c ~e/hide
+`cr? ~e/hide `<dump> ~e/hide
 
 :ddump ^dup 160 + heap-size min 160 -  &heap dump ;
 
@@ -105,5 +105,5 @@
 ( math )
 :sign/0 ^drop 0 ;   :sign/1 ^1 ;   :sign/-1 ^-1 ;
 :sign ^dup 'sign/0 ^if-not; ^0 < 'sign/-1 'sign/1 ^if-else ;
-~`sign/0 ~entry/hide `sign/1 ~entry/hide `sign/-1 ~entry/hide
+~`sign/0 ~e/hide `sign/1 ~e/hide `sign/-1 ~e/hide
 ~
