@@ -20,7 +20,7 @@ cf_print_cell(struct state *s, cell cell)
       cf_putchar(s, 'b');
       if (cell == 0)
       {
-        cf_printf(s, "0 ");
+        cf_printf(s, "0");
       } else {
         int i = CF_CHAR_BIT * sizeof cell;
         char output = 0;

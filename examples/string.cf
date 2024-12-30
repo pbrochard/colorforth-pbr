@@ -2,7 +2,12 @@
 s" Hello world! "  .s
 
 s+" Another "
-s+" world!"
+s+" world! "
+
+s+" n = " 100 sn+
+s+" , n16 = "  100 hex sn+ dec
+s+" , n2 = "  100 bin sn+ dec
+s+" , 02 = "  0 bin sn+ dec
 
 dup s/count s/type cr .s
 

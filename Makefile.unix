@@ -30,6 +30,7 @@ INCLUDED_SRC=src/core.c \
 	ext/math-float.c \
 	ext/dict.c \
 	ext/os.c \
+	ext/string.c \
 	ext/threads.c \
 	ext/mp-math.c \
 	ext/network.c \

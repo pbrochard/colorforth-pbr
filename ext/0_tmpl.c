@@ -13,6 +13,7 @@
 #include "time.c"
 #include "dict.c"
 #include "os.c"
+#include "string.c"
 #include "threads.c"
 #include "mp-math.c"
 #include "network.c"
