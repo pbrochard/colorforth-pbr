@@ -1,3 +1,4 @@
+~
 s" Hello world! "  .s
 
 s+" Another "
@@ -15,7 +16,7 @@ s+" world!" s/count s/type- cr .s
 
 :long ~s" Hello world"   s+" ! Again "   s+" a string!" s, ^pr ;
 
-~long
+~long cr
 
 
 :.s/length ^space @ . ;
@@ -29,14 +30,16 @@ world dup npr   .s/length
 
 hello npr world prn
 
-s" Another test..." .s ppr
-s" End!" dup ppr
+s" Another test..." .s dup ppr c-free cr
+s" End!" ppr- cr
 
-dump
-
+cr ." * string operations" cr
 s" Hello world! A long big string" dup ppr cr
-15 9 s/cut dup dup ppr cr dump
+9 15 s/cut dup ppr cr
+6 13 s/insert dup ppr cr
+s" HELLO " s/count 13 s/copy dup ppr cr
+s" WORLD" 6 s/ccopy ppr- cr
 
-13 6 s/insert dup dup ppr cr dump
+.s
 
 bye

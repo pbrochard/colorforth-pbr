@@ -25,6 +25,8 @@
 :pr ^&heap
 :ppr ^s/count s/type ;
 
+:ppr- ^s/count s/type- ;
+
 :prn ^pr cr ;
 :npr ^cr pr ;
 :nprn ^cr pr cr ;
@@ -35,9 +37,9 @@
 :." ^key dup ~key " ,l ^= 'drop ^if; emit ." ;
 
 ~( string operations )
-:addr ~var ^; :pos ~var ^; :len ~var ^;
+:addr ~var ^; :pos ~var ^; :len ~var ^; :addr2 ~var ^;
 
-:locals! ^len ! pos ! addr ! ;
+:locals! ^pos ! len ! addr ! ;
 :p1-p2@ ^ addr @ cell + pos @ + (p1)
    dup len @ +  (p2) ;
 :base-n@ ^addr @ p@ pos @ - ;
@@ -45,12 +47,18 @@
    addr @ + cell + 0 swap pc! (0 terminated)
    addr @ ;
 
-:s/insert (a pos len - a)^locals!
+:s/insert (a len pos - a) ^locals!
    p1-p2@  base-n@  pcmove> '+ ^terminate ;
 
-:s/cut (a pos len - a) ^locals!
+:s/cut (a len pos - a) ^locals!
    p1-p2@ swap   base-n@ len @ -  pcmove '- ^terminate ;
 
-~`addr ~entry/hide `pos ~entry/hide `len ~entry/hide
+:s/copy (a a len pos - a) ^pos ! len ! addr2 ! addr !
+   addr2 @   addr @ cell + pos @ +   len @   pcmove>
+   addr @ ;
+
+:s/ccopy ^>R s/count R> s/copy ;
+
+~`addr ~entry/hide `pos ~entry/hide `len ~entry/hide `addr2 ~entry/hide
 ~`locals! ~entry/hide `p1-p2@ ~entry/hide
 ~`base-n@ ~entry/hide `terminate ~entry/hide
