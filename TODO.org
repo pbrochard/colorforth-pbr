@@ -1,10 +1,11 @@
-* string
+* DONE string
    - pad -> buffer
   - new pad on each string init
   - s"  +"  ,s + word to end string
   - formatter s" test" +f" %s"
 
     b" This is" b+" a string" 123 b"test=%ld"+  btype  bdup bprint :to-store ~,b ^;
+
 * exec
   - exec" ls" - bstdoud bstderr (to be freed)
   => launch" ls" read-out pclose
@@ -27,9 +28,10 @@
   /* close */
   pclose(fp);
 
+* regex ??? match + test. libpcre => regex.h
+
 * network repl
 * http repl (send html+js over network look at htmx and libhttp)
-* regex ??? match + test. libpcre => regex.h
 
 * DONE use a function pointer for color + remove color compile directive
 dump entrie name or null => word to access entrie name reference
