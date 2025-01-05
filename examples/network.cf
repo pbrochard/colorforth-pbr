@@ -14,9 +14,9 @@
    server @ server-accept .s catch sock !
 
    ~c" Sending lines to client" ^prn
-   ~c" test on one line" ^send
+   ~c" test on one line" ^&heap send
    2 sleep
-   ~c" test on a second line" ^send
+   ~c" test on a second line" ^&heap send
    1 sleep
 
    ~c" Waiting from client" ^prn

@@ -7,7 +7,7 @@
 :recv ~( buffer -) ^1024 sock @ socket-recv catch ;
 
 :main ^
-   ~c" 127.0.0.1" ^8000 client-start .s catch sock !
+   ~c" 127.0.0.1" ^&heap 8000 client-start .s catch sock !
 
    buffer recv buffer dump
    buffer pr0 cr
@@ -15,7 +15,7 @@
    buffer recv buffer pr0 cr
    2 sleep
 
-   ~c" Hello from client!" ^send send-nl
+   ~c" Hello from client!" ^&heap send send-nl
 
    ^1 sleep
 

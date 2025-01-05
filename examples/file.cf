@@ -1,12 +1,12 @@
 ~\ File size
 s" examples.cf" file-size catch
 
-s" examples.cf contains " pr . s" bytes." prn
+s" examples.cf contains " ppr . s" bytes." ppr cr
 
 ~\ Load example
 s" included.cf" aload catch   dup dump
 
-s" --------" prn   dup c-pr   s" --------" prn
+s" --------" ppr cr   dup c-pr   s" --------" ppr cr
 
 c-free
 

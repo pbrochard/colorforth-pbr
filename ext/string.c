@@ -73,7 +73,7 @@ case OP_SN_PLUS:
  *********************************************************************************/
 #ifdef __SECTION_FUNCTION
 
-#define CFSTRING2C(str) (&HEAP(str + sizeof(cell), char))
-#define CFSTRINGLEN(str) (HEAP(str, cell))
+#define CFSTRING2C(str) ((char *)(str + sizeof(cell)))
+#define CFSTRINGLEN(str) (str)
 
 #endif /* __SECTION_FUNCTION */

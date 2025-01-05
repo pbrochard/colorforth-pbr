@@ -27,4 +27,4 @@
 
 :c-pr (s - ) ^dup pc@ dup 0 = '2drop ^if; emit 1+ c-pr ;
 
-:str2buf (s - ptr len) ^dup &heap swap s/length ;
+:str2buf (s - ptr len) ^s/count ;
