@@ -1,6 +1,7 @@
 ### Discontinued
 
-This C version is discontinued. Do not expect too many more commits.
+This C version is discontinued.
+Do not expect too many more commits.
 A complete rewrite from scratch in assembly continues at https://git.sr.ht/~hocwp/painterForth
 
 [WebAssembly port](https://pbrochard.github.io/colorforth-pbr/wasm/colorforth.html)
