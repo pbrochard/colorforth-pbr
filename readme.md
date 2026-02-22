@@ -4,6 +4,8 @@ This C version is discontinued.
 Do not expect too many more commits.  
 A complete rewrite from scratch in assembly continues at https://git.sr.ht/~hocwp/painterForth
 
+Many many thanks @ers35 for the original code! It helped me a lot to clarify what I wanted!
+
 [WebAssembly port](https://pbrochard.github.io/colorforth-pbr/wasm/colorforth.html)
 
 ![](doc/99-bottles-color.png?raw=true) ![](doc/99-bottles-prefix-color.png?raw=true) ![](doc/99-bottles-nocolor.png?raw=true)
