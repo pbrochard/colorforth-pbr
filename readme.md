@@ -4,7 +4,7 @@ This C version is discontinued.
 Do not expect too many more commits.  
 A complete rewrite from scratch in assembly continues at https://git.sr.ht/~hocwp/painterForth
 
-Many many thanks @ers35 for the original code! It helped me a lot to clarify what I wanted!
+Many many thanks [@ers35](https://github.com/ers35) for the original code! It helped me a lot to clarify what I wanted!
 
 [WebAssembly port](https://pbrochard.github.io/colorforth-pbr/wasm/colorforth.html)
 
